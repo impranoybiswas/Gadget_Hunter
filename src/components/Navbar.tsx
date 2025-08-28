@@ -33,7 +33,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex">
-            <Link className="btn" href="/auth/login">Login</Link>
+            <Link className="btn btn-primary" href="/auth/login">Login</Link>
         </div>
       </section>
 
