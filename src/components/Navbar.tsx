@@ -15,7 +15,7 @@ const navLink = [
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
   return (
-    <nav className="w-full h-16 fixed border-b border-primary flex items-center justify-center px-4 md:px-10 lg:px-20 z-50 bg-white">
+    <nav className="w-full h-16 fixed top-0 left-0 border-b border-primary flex items-center justify-center px-4 md:px-10 lg:px-20 z-50 bg-white">
       {/* Desktop Section */}
       <section className="w-full hidden lg:flex items-center justify-between">
     
