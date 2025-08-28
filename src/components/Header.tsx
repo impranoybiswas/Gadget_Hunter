@@ -2,6 +2,8 @@
 import React from 'react'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import Marquee from 'react-fast-marquee';
+import Image from 'next/image';
 
 export default function Header() {
   return (
@@ -30,6 +32,11 @@ export default function Header() {
         </div>
 
         </div>
+        <div className='py-5 bg-white rounded' >
+      <Marquee speed={60} gradient={false}>
+        <Image src="/assets/brand_title.png" alt="logo" width={1000} height={2000}/>
+      </Marquee>
+    </div>
       
       
       
