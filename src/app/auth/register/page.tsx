@@ -72,8 +72,8 @@ export default function RegisterPage() {
         await signIn("credentials", { redirect: false, email, password });
         router.push("/auth/profile");
       }
-    } catch (error: any) {
-      if (error.response?.status === 400) toast.error("User already exists");
+    } catch (error: unknown) {
+      if ((error as { response: { status: number } }).response?.status === 400) toast.error("User already exists");
       else toast.error("Something went wrong");
     }
   };

@@ -34,7 +34,7 @@ export async function PATCH(req: NextRequest) {
       }
   
       const users = await getUsersCollection();
-      const updateData: any = { name, gender };
+      const updateData: { name?: string; gender?: string; image?: string } = { name, gender };
       if (image) updateData.image = image;
   
       const result = await users.updateOne({ email }, { $set: updateData });

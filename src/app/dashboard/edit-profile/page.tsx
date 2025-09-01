@@ -74,9 +74,9 @@ export default function ProfilePage() {
       if (!res.ok) throw new Error(data.error || "Failed to update profile");
 
       toast.success("Profile updated successfully!");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err.message || "Something went wrong");
+      toast.error((err as Error).message || "Something went wrong");
     } finally {
       setLoading(false);
     }

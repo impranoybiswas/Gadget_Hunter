@@ -37,7 +37,7 @@ export async function PATCH(request: NextRequest) {
 
     const { name, gender, image } = await request.json();
 
-    const updateData: any = {};
+    const updateData: { name?: string; gender?: string; image?: string } = {};
     if (name) updateData.name = name;
     if (gender) updateData.gender = gender;
     if (image) updateData.image = image;
