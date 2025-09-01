@@ -12,10 +12,10 @@ export default function Section({
   className?: string;
 }) {
   return (
-    <section className={`${className} w-full flex flex-col`}>
-      <h1 className="text-2xl md:text-3xl lg:text-4xl">{title}</h1>
-      <p className="text-base md:text-xl lg:text-2xl opacity-70">{subtitle}</p>
-      {children}
+    <section className={`w-full flex flex-col items-center`}>
+      {title && <h1 className="text-xl md:text-2xl lg:text-3xl mb-3">{title}</h1>}
+      {subtitle && <p className="text-sm md:text-base lg:text-lg opacity-70 mb-6">{subtitle}</p>}
+      <div className={`${className} w-full`}>{children}</div>
     </section>
   );
 }
