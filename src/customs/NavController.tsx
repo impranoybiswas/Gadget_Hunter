@@ -78,6 +78,7 @@ export const UserAvatar = () => {
       <div className="flex flex-col gap-2 p-4">
         <h1 className="text-sm font-semibold">{data.name}</h1>
         <p className="text-xs">{data.email}</p>
+        <Link href={"/dashboard"} className="hover:text-secondary transition-all duration-300 ease-in-out flex items-center gap-2 hover:gap-3"><span className="text-base font-semibold">Dashboard</span><FaArrowRight /></Link>
       </div>
     </DropDown>
   );
