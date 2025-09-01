@@ -4,7 +4,7 @@ import { getProductsCollection } from "../../collection";
 
 
 //__________GET Single Data
-export async function GET(request: NextRequest, context: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: Awaited<{ id: string }> }) {
   try {
     const collection = await getProductsCollection();
     const { id } = context.params;
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, context: { params: { id: string 
 }
 
 //__________PATCH Data
-export async function PATCH(request: NextRequest, context: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, context: { params: Awaited<{ id: string }> }) {
   try {
     const collection = await getProductsCollection();
     const { id } = context.params;
@@ -31,7 +31,7 @@ export async function PATCH(request: NextRequest, context: { params: { id: strin
 }
 
 //__________DELETE Data
-export async function DELETE(request: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context: { params: Awaited<{ id: string }> }) {
   try {
     const collection = await getProductsCollection();
     const {id} = context.params;
