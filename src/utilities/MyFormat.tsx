@@ -1,2 +1,2 @@
 "use client";
-export const formattedDate = new Date().toLocaleDateString();
+export const formattedDate = () => new Date().toISOString();
