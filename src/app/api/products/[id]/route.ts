@@ -4,10 +4,11 @@ import { getProductsCollection } from "../../collection";
 
 
 //__________GET Single Data
-export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
   try {
     const collection = await getProductsCollection();
-    const product = await collection.findOne({ _id: new ObjectId(params.id) });
+    const { id } = context.params;
+    const product = await collection.findOne({ _id: new ObjectId(id) });
     return new NextResponse(JSON.stringify(product), { status: 200 });
   } catch (error) {
     console.error("Error fetching product:", error);
@@ -16,11 +17,12 @@ export async function GET(_: NextRequest, { params }: { params: { id: string } }
 }
 
 //__________PATCH Data
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, context: { params: { id: string } }) {
   try {
     const collection = await getProductsCollection();
+    const { id } = context.params;
     const data = await request.json();
-    const result = await collection.updateOne({ _id: new ObjectId(params.id) }, { $set: data });
+    const result = await collection.updateOne({ _id: new ObjectId(id) }, { $set: data });
     return new NextResponse(JSON.stringify(result), { status: 200 });
   } catch (error) {
     console.error("Error updating product:", error);
@@ -29,10 +31,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 //__________DELETE Data
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context: { params: { id: string } }) {
   try {
     const collection = await getProductsCollection();
-    const result = await collection.deleteOne({ _id: new ObjectId(params.id) });
+    const {id} = context.params;
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
     return new NextResponse(JSON.stringify(result), { status: 200 });
   } catch (error) {
     console.error("Error deleting product:", error);
