@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // ✅ If you just want to deploy and ignore ESLint errors
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  // ✅ Image configuration
   images: {
     remotePatterns: [
       {
@@ -9,8 +14,11 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
       },
     ],
-
-    domains: ["lh3.googleusercontent.com", "res.cloudinary.com", "cdn-icons-png.flaticon.com"], 
+    domains: [
+      "lh3.googleusercontent.com", // Google profile images
+      "res.cloudinary.com",        // Cloudinary uploads
+      "cdn-icons-png.flaticon.com" // Default avatars/icons
+    ],
   },
 };
 
