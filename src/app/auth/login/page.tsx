@@ -12,7 +12,7 @@ export default function LoginPage() {
 
   const { status } = useSession();
   if (status === "loading") return <Loading/>;
-  if (status === "authenticated") return router.push("/auth/profile");
+  
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

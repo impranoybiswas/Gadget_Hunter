@@ -4,29 +4,6 @@ import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import { getUsersCollection } from "@/app/api/collection";
 import { formattedDate } from "@/utilities/MyFormat";
-import { ObjectId } from "mongodb";
-
-// --- Type augmentations ---
-import type { DefaultSession } from "next-auth";
-import type { JWT } from "next-auth/jwt";
-
-// Extend session user
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string;
-      email: string;
-      role?: string;
-    } & DefaultSession["user"];
-  }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    _id?: string;
-    email?: string;
-  }
-}
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -37,31 +14,31 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        // Step 1: Check if email & password exist
         if (!credentials?.email || !credentials.password) {
           throw new Error("Email and password required");
         }
 
         const users = await getUsersCollection();
 
-        const user = await users.findOne<{ 
-          _id: ObjectId; 
-          email: string; 
-          password: string; 
-        }>({ email: credentials.email });
-
+        // Step 2: Find user by email
+        const user = await users.findOne({ email: credentials.email });
         if (!user) throw new Error("No user found");
 
+        // Step 3: Check password
         const isPasswordCorrect = await bcrypt.compare(
           credentials.password,
           user.password
         );
         if (!isPasswordCorrect) throw new Error("Wrong password");
 
+        // Step 4: Update last login
         await users.updateOne(
           { _id: user._id },
-          { $set: { lastSignInAt: formattedDate() } }
+          { $set: { lastSignInAt: formattedDate } }
         );
 
+        // Step 5: Return minimal user object
         return {
           id: user._id.toString(),
           email: user.email,
@@ -90,9 +67,10 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token._id = (user as { id: string }).id || token.sub;
-        token._email = user.email;
+        token.id = user.id || token.sub;
+        token.email = user.email || "";
       }
+
       return token;
     },
 
@@ -104,29 +82,34 @@ export const authOptions: AuthOptions = {
       return session;
     },
 
+    // Google signIn hook
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         const users = await getUsersCollection();
+
+        // check if user exists
         const existingUser = await users.findOne({ email: user.email });
 
         if (!existingUser) {
+          // নতুন user insert
           await users.insertOne({
             email: user.email,
             provider: "google",
             name: user.name,
             image: user.image,
             role: "user",
-            createdAt: formattedDate(),
-            lastSignInAt: formattedDate(),
+            createdAt: formattedDate,
+            lastSignInAt: formattedDate,
           });
         } else {
+          // user last login update
           await users.updateOne(
             { _id: existingUser._id },
-            { $set: { lastSignInAt: formattedDate() } }
+            { $set: { lastSignInAt: formattedDate } }
           );
         }
       }
-      return true;
+      return true; 
     },
   },
 

@@ -17,6 +17,7 @@ const fetchUser = async (email: string) => {
 
 export function useUserData() {
   const { data: session, status } = useSession();
+
   const email = session?.user?.email;
 
   const query = useQuery({

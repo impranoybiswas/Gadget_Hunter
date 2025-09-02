@@ -1,2 +1,5 @@
 "use client";
-export const formattedDate = () => new Date().toISOString();
+export const formattedDate = (): string => {
+    const date = new Date();
+    return date.toISOString();
+  };
