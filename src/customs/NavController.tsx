@@ -70,7 +70,7 @@ export const UserAvatar = () => {
       label={
         <IconButtton
           icon={
-            <Image className="object-cover" src={data.image} alt="avatar" width={100} height={100} />
+            <Image className="object-cover" src={data.image || ""} alt="avatar" width={100} height={100} />
           }
         />
       }

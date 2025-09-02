@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUsersCollection } from "../collection";
-
+import { getUsersCollection } from "../../../libs/collection";
 
 //Get Single User
 export async function GET(request: NextRequest) {
@@ -25,7 +24,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-
 //Edit User Data
 export async function PATCH(request: NextRequest) {
   try {
@@ -47,7 +45,10 @@ export async function PATCH(request: NextRequest) {
     }
 
     const users = await getUsersCollection();
-    const result = await users.updateOne({ email: queryEmail }, { $set: updateData });
+    const result = await users.updateOne(
+      { email: queryEmail },
+      { $set: updateData }
+    );
 
     if (result.matchedCount === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

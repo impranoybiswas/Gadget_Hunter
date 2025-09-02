@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUsersCollection } from "../../collection";
+import { getUsersCollection } from "../../../../libs/collection";
 import bcrypt from "bcryptjs";
 import { formattedDate } from "@/utilities/MyFormat";
 

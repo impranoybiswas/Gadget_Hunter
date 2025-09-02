@@ -2,7 +2,7 @@ import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
-import { getUsersCollection } from "@/app/api/collection";
+import { getUsersCollection } from "@/libs/collection";
 import { formattedDate } from "@/utilities/MyFormat";
 
 export const authOptions: AuthOptions = {
@@ -107,8 +107,8 @@ export const authOptions: AuthOptions = {
             provider: "google",
             image: user.image,
             role: "user",
-            createdAt: formattedDate(),     
-            lastSignInAt: formattedDate(),  
+            createdAt: formattedDate(),
+            lastSignInAt: formattedDate(),
           });
         } else {
           // Step 3: Update lastSignInAt for existing user

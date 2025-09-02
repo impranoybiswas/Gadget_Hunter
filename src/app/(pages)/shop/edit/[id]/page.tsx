@@ -1,13 +1,13 @@
 "use client";
-import { useProduct, useUpdateProduct } from "@/hooks/useProducts";
+import { useGetProduct, useUpdateProduct } from "@/hooks/useProducts";
 import React from "react";
 
 export default function ProductEdit({ params }: { params: { id: string } }) {
   const id = params.id;
 
-  const { data: product, isLoading } = useProduct(id);
+  const { data: product, isLoading } = useGetProduct(id);
 
-  const {mutate} = useUpdateProduct();
+  const { mutate } = useUpdateProduct();
   return (
     <div className="mt-30">
       {id}
@@ -20,12 +20,11 @@ export default function ProductEdit({ params }: { params: { id: string } }) {
             const form = e.target as HTMLFormElement;
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
-            
 
-            mutate({ 
-              ...product, 
-              name: data.name as string, 
-              price: Number(data.price) 
+            mutate({
+              ...product,
+              name: data.name as string,
+              price: Number(data.price),
             });
           }}
           className="flex gap-2 mb-6"

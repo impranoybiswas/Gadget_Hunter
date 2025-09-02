@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
-import { getProductsCollection } from "../../collection";
-
+import { getProductsCollection } from "../../../../libs/collection";
 
 //__________GET Single Data
-export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const collection = await getProductsCollection();
     const { id } = await context.params;
@@ -17,12 +19,18 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 }
 
 //__________PATCH Data
-export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const collection = await getProductsCollection();
     const { id } = await context.params;
     const data = await request.json();
-    const result = await collection.updateOne({ _id: new ObjectId(id) }, { $set: data });
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: data }
+    );
     return new NextResponse(JSON.stringify(result), { status: 200 });
   } catch (error) {
     console.error("Error updating product:", error);
@@ -31,10 +39,13 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
 }
 
 //__________DELETE Data
-export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const collection = await getProductsCollection();
-    const {id} = await context.params;
+    const { id } = await context.params;
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
     return new NextResponse(JSON.stringify(result), { status: 200 });
   } catch (error) {

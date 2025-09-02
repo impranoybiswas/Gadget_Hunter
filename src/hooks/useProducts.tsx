@@ -14,7 +14,7 @@ const fetchProducts = async (): Promise<Product[]> => {
   return res.data;
 };
 
-export function useProducts() {
+export function useGetProducts() {
   return useQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
@@ -27,7 +27,7 @@ const fetchProduct = async (id: string) => {
   return res.data;
 };
 
-export function useProduct(id: string) {
+export function useGetProduct(id: string) {
   return useQuery({
     queryKey: ["product", id],
     queryFn: () => fetchProduct(id),
@@ -51,7 +51,7 @@ export function useAddProduct() {
 }
 
 // UPDATE product
-const updateProduct = async ({_id, name, price}: Product) => {
+const updateProduct = async ({ _id, name, price }: Product) => {
   const res = await axiosApi.patch(`/products/${_id}`, { name, price });
   return res.data;
 };

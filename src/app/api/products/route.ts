@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getProductsCollection } from "../collection";
-
+import { getProductsCollection } from "../../../libs/collection";
 
 //__________GET Data
 export async function GET() {
@@ -26,4 +25,3 @@ export async function POST(request: NextRequest) {
     return new NextResponse("Error creating product", { status: 500 });
   }
 }
-

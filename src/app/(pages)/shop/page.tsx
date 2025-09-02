@@ -1,10 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { useProducts, useAddProduct, useDeleteProduct } from "@/hooks/useProducts";
+import {
+  useGetProducts,
+  useAddProduct,
+  useDeleteProduct,
+} from "@/hooks/useProducts";
 import Link from "next/link";
 
 export default function ProductsPage() {
-  const { data: products, isLoading } = useProducts();
+  const { data: products, isLoading } = useGetProducts();
   const addProduct = useAddProduct();
   const deleteProduct = useDeleteProduct();
 
@@ -59,7 +63,8 @@ export default function ProductsPage() {
             >
               Delete
             </button>
-            <Link href={`/products/edit/${p._id}`}>Edit</Link>
+            <Link href={`/shop/edit/${p._id}`}>Edit</Link>
+            <Link href={`/shop/${p._id}`}>View</Link>
           </li>
         ))}
       </ul>
