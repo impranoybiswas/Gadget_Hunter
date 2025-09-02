@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
-import { getProductsCollection } from "../../../../libs/collection";
+import { getItemsCollection } from "@/libs/collection";
+
 
 //__________GET Single Data
 export async function GET(
@@ -8,7 +9,7 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const collection = await getProductsCollection();
+    const collection = await getItemsCollection();
     const { id } = await context.params;
     const product = await collection.findOne({ _id: new ObjectId(id) });
     return new NextResponse(JSON.stringify(product), { status: 200 });
@@ -24,7 +25,7 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const collection = await getProductsCollection();
+    const collection = await getItemsCollection();
     const { id } = await context.params;
     const data = await request.json();
     const result = await collection.updateOne(
@@ -44,7 +45,7 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const collection = await getProductsCollection();
+    const collection = await getItemsCollection();
     const { id } = await context.params;
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
     return new NextResponse(JSON.stringify(result), { status: 200 });

@@ -1,13 +1,13 @@
 "use client";
-import { useGetProduct, useUpdateProduct } from "@/hooks/useProducts";
+import { useGetitem, useUpdateItem } from "@/hooks/useItems";
 import React from "react";
 
 export default function ProductEdit({ params }: { params: { id: string } }) {
   const id = params.id;
 
-  const { data: product, isLoading } = useGetProduct(id);
+  const { data: product, isLoading } = useGetitem(id);
 
-  const { mutate } = useUpdateProduct();
+  const { mutate } = useUpdateItem();
   return (
     <div className="mt-30">
       {id}

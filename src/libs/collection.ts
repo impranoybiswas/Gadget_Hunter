@@ -1,6 +1,6 @@
 import { getCollection } from "@/libs/connectDB";
 
-export async function getProductsCollection() {
+export async function getItemsCollection() {
   const collection = await getCollection("products");
   if (!collection) {
     throw new Error("Failed to connect to collection");
