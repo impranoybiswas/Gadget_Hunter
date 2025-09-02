@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import Layout from "../components/DashboardLayout";
 import { useUserData } from "@/hooks/useUserData";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import Button from "@/ui/Button";
+import DashboardLayout from "../components/DashboardLayout";
 
 export default function ProfilePage() {
-  const { data: user, isLoading, session, status } = useUserData();
+  const { data: user } = useUserData();
   const { email, name: currentName, gender: currentGender, image: currentImage } = user || {};
   const [name, setName] = useState(currentName);
   const [gender, setGender] = useState(currentGender);
@@ -82,13 +82,10 @@ export default function ProfilePage() {
     }
   };
   return (
-    <Layout>
+    <DashboardLayout>
           <section className="p-4 flex flex-col gap-4">
             <h1 className="text-2xl p-4 rounded-sm bg-primary text-white uppercase">Profile</h1>
-            {
-            (!user || isLoading) ? (
-              <div className="w-full h-100 flex items-center justify-center"><div className="loading text-primary loading-ring loading-xl" /></div>
-            ) : (
+           
               
               <form
               onSubmit={handleSubmit}
@@ -140,9 +137,8 @@ export default function ProfilePage() {
               {/* Submit button */}
               <Button type="submit" label={loading ? "Updating..." : "Update Profile"} />
             </form>
-            )
-          }
+          
           </section>
-        </Layout>
+        </DashboardLayout>
   );
 }

@@ -58,7 +58,7 @@ export default function RegisterPage() {
       name,
       email,
       password,
-      image,
+      image : image || "",
       gender,
     };
 

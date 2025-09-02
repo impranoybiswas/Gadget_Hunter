@@ -7,6 +7,7 @@ import { formattedDate } from "@/utilities/MyFormat";
 
 export const authOptions: AuthOptions = {
   providers: [
+    // --- Email/Password login ---
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -14,29 +15,36 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // Step 1: Check if email & password exist
         if (!credentials?.email || !credentials.password) {
-          throw new Error("Email and password required");
+          throw new Error("Email and password are required");
         }
 
         const users = await getUsersCollection();
 
-        // Step 2: Find user by email
+        // Step 1: Find user by email
         const user = await users.findOne({ email: credentials.email });
-        if (!user) throw new Error("No user found");
+        if (!user) throw new Error("No user found with this email");
 
-        // Step 3: Check password
+        // Step 2: Verify password
         const isPasswordCorrect = await bcrypt.compare(
           credentials.password,
           user.password
         );
-        if (!isPasswordCorrect) throw new Error("Wrong password");
+        if (!isPasswordCorrect) throw new Error("Incorrect password");
 
-        // Step 4: Update last login
+        // Step 3: Update lastSignInAt every login
         await users.updateOne(
           { _id: user._id },
-          { $set: { lastSignInAt: formattedDate } }
+          { $set: { lastSignInAt: formattedDate() } }
         );
+
+        // Step 4: If createdAt is missing (edge case), set it
+        if (!user.createdAt) {
+          await users.updateOne(
+            { _id: user._id },
+            { $set: { createdAt: formattedDate() } }
+          );
+        }
 
         // Step 5: Return minimal user object
         return {
@@ -46,6 +54,7 @@ export const authOptions: AuthOptions = {
       },
     }),
 
+    // --- Google OAuth login ---
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -60,20 +69,20 @@ export const authOptions: AuthOptions = {
     }),
   ],
 
-  session: {
-    strategy: "jwt",
-  },
+  // Use JWT session strategy
+  session: { strategy: "jwt" },
 
   callbacks: {
+    // Attach user ID and email to JWT token
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id || token.sub;
         token.email = user.email || "";
       }
-
       return token;
     },
 
+    // Attach token info to session
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
@@ -82,34 +91,36 @@ export const authOptions: AuthOptions = {
       return session;
     },
 
-    // Google signIn hook
+    // Google Sign-In handler
     async signIn({ user, account }) {
-      if (account?.provider === "google") {
-        const users = await getUsersCollection();
+      const users = await getUsersCollection();
 
-        // check if user exists
+      if (account?.provider === "google") {
+        // Step 1: Check if user already exists
         const existingUser = await users.findOne({ email: user.email });
 
         if (!existingUser) {
-          // নতুন user insert
+          // Step 2: Insert new Google user
           await users.insertOne({
+            name: user.name,
             email: user.email,
             provider: "google",
-            name: user.name,
             image: user.image,
             role: "user",
-            createdAt: formattedDate,
-            lastSignInAt: formattedDate,
+            createdAt: formattedDate(),     
+            lastSignInAt: formattedDate(),  
           });
         } else {
-          // user last login update
+          // Step 3: Update lastSignInAt for existing user
           await users.updateOne(
             { _id: existingUser._id },
-            { $set: { lastSignInAt: formattedDate } }
+            { $set: { lastSignInAt: formattedDate() } }
           );
         }
       }
-      return true; 
+
+      // For Credentials login, lastSignInAt already updated in authorize()
+      return true;
     },
   },
 

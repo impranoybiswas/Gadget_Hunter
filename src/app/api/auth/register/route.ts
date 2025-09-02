@@ -26,8 +26,8 @@ export async function POST(request: NextRequest) {
       image,
       gender,
       role: "user",
-      createdAt: formattedDate,
-      lastSignInAt: formattedDate,
+      createdAt: formattedDate(),
+      lastSignInAt: formattedDate(),
     });
 
     return NextResponse.json(

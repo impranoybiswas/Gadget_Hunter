@@ -4,19 +4,32 @@ import Navbar from "./Navbar";
 import { useUserData } from "@/hooks/useUserData";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default function DashboardLayout({children,}: {children: React.ReactNode}) {
-  const {session, status} = useUserData();
-  const router = useRouter()
-  if (!session) return router.push("/auth/login");
-  if (status === "loading") return <Loading/>;
+type LayoutProps = {
+  children: React.ReactNode;
+};
+
+export default function DashboardLayout({ children }: LayoutProps) {
+  const { session, status, isLoading } = useUserData();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status !== "loading") {
+      if (!session) {
+        router.push("/auth/login");
+      }
+    }
+  }, [session, status, router]);
+
+  if (status === "loading" || !session || isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex">
-      {/* <Sidebar /> */}
       <Sidebar />
-      {/* Main Content */}
       <main className="flex-1 min-h-screen">
-        {/* Navbar */}
         <Navbar />
         {children}
       </main>
