@@ -51,14 +51,17 @@ export default function Header() {
           <div className="w-full h-1/2 rounded bg-teal-600" />
         </div>
       </div>
-      <div className="py-2 bg-white rounded mt-5">
+      <div className="py-2 bg-white rounded mt-5 h-10">
         <Marquee speed={60} gradient={false}>
-          <Image
-            src="/assets/brand_title.png"
-            alt="logo"
-            width={1000}
-            height={2000}
-          />
+          <div className="relative w-full h-full">
+            <Image
+              src="/assets/brand_title.png"
+              alt="logo"
+              width={1000}
+              height={1000}
+              className="w-full h-full"
+            />
+          </div>
         </Marquee>
       </div>
     </header>

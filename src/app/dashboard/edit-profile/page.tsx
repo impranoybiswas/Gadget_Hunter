@@ -85,8 +85,6 @@ export default function ProfilePage() {
     <DashboardLayout>
           <section className="p-4 flex flex-col gap-4">
             <h1 className="text-2xl p-4 rounded-sm bg-primary text-white uppercase">Profile</h1>
-           
-              
               <form
               onSubmit={handleSubmit}
               className="flex w-full relative flex-col gap-4 bg-blue-100 p-4 rounded-sm"

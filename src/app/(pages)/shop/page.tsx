@@ -100,7 +100,7 @@ export default function ShopPage() {
             </span>
             <div className="flex gap-3">
               <button
-                onClick={() => deleteProduct.mutate(p._id)}
+                onClick={() => deleteProduct.mutate(p._id!)}
                 className="text-red-600"
               >
                 Delete
