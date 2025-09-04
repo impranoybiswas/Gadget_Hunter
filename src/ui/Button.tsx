@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 export default function Button({
   onClick,
   type,
+  disabled,
   leftIcon,
   rightIcon,
   label,
@@ -10,6 +11,7 @@ export default function Button({
 }: {
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   label?: string;
@@ -20,6 +22,7 @@ export default function Button({
       onClick={onClick}
       className={`${className} bg-primary hover:bg-secondary rounded-sm h-10 px-5 flex items-center justify-center gap-2 group text-white cursor-pointer transition-all duration-300 ease-in-out`}
       type={type}
+      disabled={disabled}
     >
       <span className="group-hover:scale-110 transition-all duration-300 ease-in-out">
         {leftIcon}

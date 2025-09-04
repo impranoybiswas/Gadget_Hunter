@@ -1,24 +1,22 @@
 "use client";
+import SiteTitle from "@/customs/SiteTitle";
 import { useUserData } from "@/hooks/useUserData";
 import Drawer from "@/ui/Drawer";
 import Image from "next/image";
 import { LuMenu } from "react-icons/lu";
-import { MdDashboard } from "react-icons/md";
 
 export default function Navbar() {
-  const { data: user, isLoading } = useUserData();
+  const { currentUser, isLoading } = useUserData();
   return (
-    <nav className="h-16 flex items-center justify-center gap-2 bg-gray-900 border-b border-gray-700 text-white p-4 z-50">
+    <nav className="fixed top-0 right-0 w-full h-16 flex items-center justify-between gap-2 bg-gray-900 border-b border-gray-700 text-white p-4 z-50">
       <div className="text-2xl size-10 flex md:hidden items-center justify-center">
         <Drawer label={<LuMenu />} className="bg-gray-900">
           Hello
         </Drawer>
       </div>
 
-      <div className="flex-1 flex items-center gap-2 font-semibold text-lg">
-        <MdDashboard />
-        DASHBOARD
-      </div>
+      <SiteTitle className="text-xl"/>
+
       <div className="flex items-center gap-2">
         {isLoading ? (
           <span className="loading loading-dots loading-md" />
@@ -26,7 +24,7 @@ export default function Navbar() {
           <>
             <Image
               src={
-                user?.image ||
+                currentUser?.image ||
                 "https://cdn-icons-png.flaticon.com/512/149/149071.png"
               }
               alt="avatar"
@@ -35,8 +33,8 @@ export default function Navbar() {
               className="size-8 rounded-full object-cover"
             />
             <div className="hidden md:flex flex-col">
-              <span className="text-sm font-semibold">{user?.name}</span>
-              <span className="text-xs opacity-70">{user?.email}</span>
+              <span className="text-sm font-semibold">{currentUser?.name}</span>
+              <span className="text-xs opacity-70">{currentUser?.email}</span>
             </div>
           </>
         )}

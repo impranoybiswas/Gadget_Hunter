@@ -1,8 +1,10 @@
-import React from 'react'
-import DashboardLayout from './components/DashboardLayout'
+import React from "react";
 
-export default function DashboardNotFound() {
+
+export default function NotFound() {
   return (
-    <DashboardLayout>NotFound</DashboardLayout>
-  )
+
+      <p className="text-lg font-medium">Dashboard 404 Error</p>
+   
+  );
 }

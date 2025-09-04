@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/loading";
 import { useUserData } from "@/hooks/useUserData";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
@@ -15,7 +16,7 @@ export default function ProtectedLayout({
   children,
   protectedFor,
 }: ProtectedLayoutProps) {
-  const { session, status, data: user } = useUserData();
+  const { session, status, currentUser } = useUserData();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -31,18 +32,18 @@ export default function ProtectedLayout({
       return;
     }
   
-    if (!user) return; // wait until user data is loaded
+    if (!currentUser) return; // wait until user data is loaded
   
     // role check based on hierarchy
     const requiredIndex = roleHierarchy.indexOf(protectedFor);
-    const userIndex = roleHierarchy.indexOf(user.role);
+    const userIndex = roleHierarchy.indexOf(currentUser.role);
   
     if (userIndex === -1 || userIndex < requiredIndex) {
       router.push("/access-denied");
     }
-  }, [protectedFor, session, status, user, router, callbackUrl]);
+  }, [protectedFor, session, status, currentUser, router, callbackUrl]);
 
-  if (protectedFor && status === "loading") return <p>Loading...</p>;
+  if (protectedFor && status === "loading") return <Loading/>;
   if (protectedFor && !session) return null;
 
   return <>{children}</>;

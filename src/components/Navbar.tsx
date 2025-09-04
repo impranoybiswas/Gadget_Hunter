@@ -1,10 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { use } from "react";
 import SiteTitle from "@/customs/SiteTitle";
 import Link from "next/link";
-import { CgMenuRight } from "react-icons/cg";
-import { useRouter } from "next/navigation";
 import NavController from "@/customs/NavController";
+import Drawer from "@/ui/Drawer";
+import { IoClose } from "react-icons/io5";
+import { HiMenuAlt3 } from "react-icons/hi";
+import ThemeToggler from "./ThemeToggler";
+import { useUserData } from "@/hooks/useUserData";
+import Image from "next/image";
 
 const navLink = [
   { name: "Home", href: "/" },
@@ -15,10 +19,9 @@ const navLink = [
 ];
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  const {session, currentUser} = useUserData();
   return (
-    <nav className="w-full h-16 fixed top-0 left-0 z-50 border-b border-primary flex items-center justify-center px-4 md:px-10 lg:px-20  bg-base-100">
+    <nav className="w-full h-16 fixed top-0 left-0 z-50 border-b flex items-center justify-center px-4 md:px-10 lg:px-20  bg-base-100">
       {/* Desktop Section */}
       <section className="w-full hidden lg:flex items-center justify-between bg-base-100 h-full">
         <SiteTitle className="flex-1" />
@@ -37,28 +40,30 @@ export default function Navbar() {
       </section>
 
       {/* Mobile Section */}
-      <section className="w-full flex lg:hidden items-center justify-between">
-        <SiteTitle />
+      <section className="w-full flex lg:hidden items-center justify-between gap-2">
+        <SiteTitle className="flex-1 text-xl" />
 
-        <CgMenuRight
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-2xl font-semibold"
-        />
-        <div
-          className={`flex flex-col gap-4 w-40 p-5 flex-1 absolute top-16 right-0 -z-1 bg-primary text-white transition-all duration-500 ease-in-out ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+        {
+(session && currentUser) && (
+  <Image className="object-cover size-6 rounded-full border" src={currentUser.image || ""} alt="avatar" width={100} height={100} />
+)
+        }
+
+        <ThemeToggler className="text-2xl font-semibold"/>
+
+        <Drawer
+          label={<HiMenuAlt3 className="text-2xl font-semibold" />}
+          lebelClose={<IoClose className="text-2xl font-semibold" />}
+          className="bg-gray-900 text-white"
         >
+          <div className="flex flex-col gap-3 items-end text-2xl tracking-[2px] uppercase">
           {navLink.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-xl font-semibold"
-            >
+            <Link key={link.name} href={link.href}>
               {link.name}
             </Link>
           ))}
-        </div>
+          </div>
+        </Drawer>
       </section>
     </nav>
   );

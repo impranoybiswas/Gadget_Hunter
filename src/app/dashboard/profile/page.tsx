@@ -1,30 +1,73 @@
 "use client";
 import React from "react";
-import DashboardLayout from "../components/DashboardLayout";
 import { useUserData } from "@/hooks/useUserData";
 import Image from "next/image";
 
 export default function ProfilePage() {
-  const { data: user } = useUserData();
+  const { currentUser, isLoading } = useUserData();
+
+  if (isLoading) {
+    return (
+      <section className="p-6 flex justify-center items-center">
+        <p className="text-gray-500 text-lg">Loading profile...</p>
+      </section>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <section className="p-6 flex justify-center items-center">
+        <p className="text-red-500 text-lg">No profile data available.</p>
+      </section>
+    );
+  }
+
+  const { name, email, gender, image } = currentUser;
 
   return (
-    <DashboardLayout>
-      <section className="p-4 flex flex-col gap-4">
-        <h1 className="text-2xl p-4 rounded-sm bg-primary text-white uppercase">Profile</h1>
-        
-          
-        <div className="flex w-full relative flex-col md:flex-row gap-4 bg-blue-100 p-4 rounded-sm">
-        <Image src={user?.image || ""} className="rounded-sm size-30 md:size-50 lg:size-60 border border-primary object-cover" alt="avatar" width={100} height={100} />
+    <section className="max-w-3xl mx-auto p-6">
+      {/* Title */}
+      <h1 className="text-3xl font-semibold mb-6 text-gray-800 border-b pb-2">
+        My Profile
+      </h1>
 
-          <div className="flex flex-col gap-2">
-          <div className="text-lg"><b>Name :</b> {user?.name}</div>
-          <div className="text-lg"><b>Email :</b> {user?.email}</div>
-          <div className="text-lg"><b>Gender :</b> {user?.gender}</div>
+      {/* Card */}
+      <div className="flex flex-col md:flex-row items-start gap-6 bg-white rounded-lg shadow-md p-6 border">
+        {/* Profile Image */}
+        <div className="flex-shrink-0">
+          <Image
+            src={image || "/images/avatar-placeholder.png"}
+            alt={name || "User avatar"}
+            width={160}
+            height={160}
+            className="rounded-lg border object-cover w-40 h-40 bg-gray-100"
+          />
+        </div>
+
+        {/* Profile Info */}
+        <div className="flex flex-col gap-4 text-gray-700 flex-1">
+          <div>
+            <span className="block text-sm font-medium text-gray-500">
+              Name
+            </span>
+            <p className="text-lg font-semibold">{name || "N/A"}</p>
           </div>
 
+          <div>
+            <span className="block text-sm font-medium text-gray-500">
+              Email
+            </span>
+            <p className="text-lg font-semibold">{email || "N/A"}</p>
+          </div>
+
+          <div>
+            <span className="block text-sm font-medium text-gray-500">
+              Gender
+            </span>
+            <p className="text-lg font-semibold">{gender || "N/A"}</p>
+          </div>
         </div>
-      
-      </section>
-    </DashboardLayout>
+      </div>
+    </section>
   );
 }

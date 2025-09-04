@@ -1,11 +1,15 @@
 "use client";
+
 import React from "react";
-import DashboardLayout from "../components/DashboardLayout";
 import { useForm } from "react-hook-form";
 import { useAddItem } from "@/hooks/useItems";
 import { Product } from "@/types/product";
 import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
 
+/**
+ * Type definition for form fields.
+ * Matches Product + file inputs.
+ */
 type ProductFormValues = {
   name: string;
   brand: string;
@@ -14,7 +18,7 @@ type ProductFormValues = {
   category: string;
   warranty: string;
   description: string;
-  isBrandNew: string; // string from radio, convert to boolean
+  isBrandNew: string; // radio: "true" | "false"
   thumbnail: FileList;
   image1: FileList;
   image2: FileList;
@@ -22,13 +26,21 @@ type ProductFormValues = {
 };
 
 export default function AddProduct() {
+  // react-hook-form setup
   const { register, handleSubmit, reset } = useForm<ProductFormValues>();
-  const addProduct = useAddItem();
-  console.log("add product", addProduct);
 
-  // use your custom Cloudinary hook
+  // mutation hook for API call
+  const addProduct = useAddItem();
+
+  // custom hook for uploading images to Cloudinary
   const { uploadImage, loading } = useCloudinaryUpload("products");
 
+  /**
+   * Handles form submission.
+   * 1. Upload images to Cloudinary
+   * 2. Build product object
+   * 3. Send to backend
+   */
   const onSubmit = async (data: ProductFormValues) => {
     try {
       // Upload thumbnail
@@ -37,7 +49,7 @@ export default function AddProduct() {
         thumbnailUrl = (await uploadImage(data.thumbnail[0])) || "";
       }
 
-      // Upload images
+      // Upload other images
       const imagesUrls: string[] = [];
       for (const key of ["image1", "image2", "image3"] as const) {
         if (data[key]?.[0]) {
@@ -46,7 +58,7 @@ export default function AddProduct() {
         }
       }
 
-      // Build Product object
+      // Build product object
       const product: Product = {
         name: data.name,
         brand: data.brand,
@@ -60,71 +72,121 @@ export default function AddProduct() {
         images: imagesUrls,
       };
 
-      // Send to backend via hook
+      // Call backend mutation
       addProduct.mutate(product);
+
+      // Reset form after successful submission
       reset();
     } catch (err) {
-      console.error(err);
+      console.error("❌ Error while adding product:", err);
     }
   };
 
   return (
-    <DashboardLayout>
-      <section className="p-4 flex flex-col gap-4">
-        <h1 className="text-2xl p-4 rounded-sm bg-primary text-white uppercase">
-          Add Product
-        </h1>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4 p-4 border rounded"
-        >
-          <input {...register("name")} placeholder="Product Name" className="border p-2 w-full" />
-          <input {...register("brand")} placeholder="Brand" className="border p-2 w-full" />
-          <input {...register("price", { valueAsNumber: true })} type="number" placeholder="Price" className="border p-2 w-full" />
-          <input {...register("quantity", { valueAsNumber: true })} type="number" placeholder="Quantity" className="border p-2 w-full" />
-          <input {...register("category")} placeholder="Category" className="border p-2 w-full" />
-          <input {...register("warranty")} placeholder="Warranty" className="border p-2 w-full" />
-          <textarea {...register("description")} placeholder="Description" className="border p-2 w-full" />
+    <section className="p-6 flex flex-col gap-6">
+      {/* Page Heading */}
+      <h1 className="text-2xl font-bold p-4 rounded bg-blue-600 text-white uppercase shadow">
+        Add New Product
+      </h1>
 
-          {/* Thumbnail */}
-          <label>
-            Thumbnail:
-            <input type="file" accept="image/*" {...register("thumbnail")} />
-          </label>
+      {/* Product Form */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-5 p-6 border rounded-lg shadow bg-white"
+      >
+        {/* Basic Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            {...register("name")}
+            placeholder="Product Name"
+            className="border p-2 rounded w-full"
+            required
+          />
+          <input
+            {...register("brand")}
+            placeholder="Brand"
+            className="border p-2 rounded w-full"
+            required
+          />
+          <input
+            {...register("price", { valueAsNumber: true })}
+            type="number"
+            placeholder="Price"
+            className="border p-2 rounded w-full"
+            required
+          />
+          <input
+            {...register("quantity", { valueAsNumber: true })}
+            type="number"
+            placeholder="Quantity"
+            className="border p-2 rounded w-full"
+            required
+          />
+          <input
+            {...register("category")}
+            placeholder="Category"
+            className="border p-2 rounded w-full"
+          />
+          <input
+            {...register("warranty")}
+            placeholder="Warranty"
+            className="border p-2 rounded w-full"
+          />
+        </div>
 
-          {/* Three separate images */}
-          <label>
-            Image 1:
+        {/* Description */}
+        <textarea
+          {...register("description")}
+          placeholder="Description"
+          className="border p-2 rounded w-full min-h-[100px]"
+        />
+
+        {/* File Inputs */}
+        <div className="space-y-2">
+          <label className="block font-medium">Thumbnail</label>
+          <input type="file" accept="image/*" {...register("thumbnail")} />
+
+          <label className="block font-medium">Gallery Images</label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <input type="file" accept="image/*" {...register("image1")} />
-          </label>
-          <label>
-            Image 2:
             <input type="file" accept="image/*" {...register("image2")} />
-          </label>
-          <label>
-            Image 3:
             <input type="file" accept="image/*" {...register("image3")} />
-          </label>
-
-          {/* Radio buttons for isBrandNew */}
-          <div className="flex gap-4">
-            <label>
-              <input type="radio" value="true" {...register("isBrandNew")} defaultChecked /> Brand New
-            </label>
-            <label>
-              <input type="radio" value="false" {...register("isBrandNew")} /> Used
-            </label>
           </div>
+        </div>
 
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-            disabled={loading || addProduct.status === "pending"}
-          >
-            {loading || addProduct.status === "pending" ? (<span><span className="loading loading-ring loading-sm"/> Adding...</span> ) : "Add Product"}
-          </button>
-        </form>
-      </section>
-    </DashboardLayout>
+        {/* Radio Buttons */}
+        <div className="flex gap-6 items-center">
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              value="true"
+              {...register("isBrandNew")}
+              defaultChecked
+            />
+            <span>Brand New</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input type="radio" value="false" {...register("isBrandNew")} />
+            <span>Used</span>
+          </label>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded font-medium transition disabled:opacity-50"
+          disabled={loading || addProduct.status === "pending"}
+        >
+          {loading || addProduct.status === "pending" ? (
+            <span className="flex items-center gap-2">
+              <span className="loading loading-ring loading-sm" />
+              Adding...
+            </span>
+          ) : (
+            "Add Product"
+          )}
+        </button>
+      </form>
+    </section>
   );
 }
