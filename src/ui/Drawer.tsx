@@ -20,14 +20,8 @@ export default function Drawer({ label, lebelClose, children, className }: DropD
 
       <div
         onClick={() => setIsOpen(false)}
-        className={`absolute top-16 right-0 z-40 h-[calc(100dvh-64px)] ${className} transition-all duration-300 ease-in-out overflow-hidden
-        ${isOpen ? "w-full " : "w-0"}`}>
-          <div className={`absolute top-0 right-0 bg-warning h-full p-4 
-            duration-500 ease-in-out  
-            ${isOpen ? "w-full " : "w-0"}`}>
-            {children}
-          </div>
-        
+        className={`absolute top-16 right-0 z-40 h-[calc(100dvh-64px)] ${className} transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "w-full p-4" : "w-0 p-0"}`}>
+        {children}
       </div>
     </>
   );

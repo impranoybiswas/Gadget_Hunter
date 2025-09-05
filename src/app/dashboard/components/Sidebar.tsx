@@ -1,13 +1,12 @@
 "use client";
 
-import SiteTitle from "@/customs/SiteTitle";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FaHome, FaUser, FaCog, FaBars, FaSignOutAlt, FaUserEdit, FaPlus } from "react-icons/fa";
 
-const sidebarLinks = [
+export const sidebarLinks = [
   { name: "Home", href: "/dashboard", icon: <FaHome /> },
   { name: "Profile", href: "/dashboard/profile", icon: <FaUser /> },
   { name: "Edit Profile", href: "/dashboard/edit-profile", icon: <FaUserEdit /> },

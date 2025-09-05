@@ -1,5 +1,5 @@
 "use client";
-import React, { use } from "react";
+import React from "react";
 import SiteTitle from "@/customs/SiteTitle";
 import Link from "next/link";
 import NavController from "@/customs/NavController";
@@ -44,9 +44,9 @@ export default function Navbar() {
         <SiteTitle className="flex-1 text-xl" />
 
         {
-(session && currentUser) && (
-  <Image className="object-cover size-6 rounded-full border" src={currentUser.image || ""} alt="avatar" width={100} height={100} />
-)
+          (session && currentUser) && (
+            <Image className="object-cover size-6 rounded-full border" src={currentUser.image || ""} alt="avatar" width={100} height={100} />
+          )
         }
 
         <ThemeToggler className="text-2xl font-semibold"/>
@@ -56,13 +56,16 @@ export default function Navbar() {
           lebelClose={<IoClose className="text-2xl font-semibold" />}
           className="bg-gray-900 text-white"
         >
+
           <div className="flex flex-col gap-3 items-end text-2xl tracking-[2px] uppercase">
           {navLink.map((link) => (
             <Link key={link.name} href={link.href}>
               {link.name}
             </Link>
           ))}
+          <Link href="/dashboard">Dashboard</Link>
           </div>
+   
         </Drawer>
       </section>
     </nav>
