@@ -44,7 +44,7 @@ const sideData = bannerData.slice(3, 7);
 
 export default function Header() {
   return (
-    <header className="w-full bg-red-200">
+    <header className="w-full">
       <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 ">
         <div className="w-full h-100 md:h-120 overflow-hidden col-span-1 lg:col-span-2 rounded">
           <Swiper

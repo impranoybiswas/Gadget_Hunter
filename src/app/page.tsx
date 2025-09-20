@@ -4,6 +4,7 @@ import FeaturedProductSection from "@/components/home/FeatureSection";
 import Header from "@/components/Header";
 import ReviewSection from "@/components/home/ReviewSection";
 import Container from "@/ui/Container";
+import TopCategorySection from "@/components/home/TopCategorySection";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Header />
       <CategorySection />
       <FeaturedProductSection />
+      <TopCategorySection/>
       <CouponSection />
       <ReviewSection />
     </Container>

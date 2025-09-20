@@ -9,10 +9,6 @@ import Container from "@/ui/Container";
 import Section from "@/ui/Section";
 import ProductCard from "@/components/ProductCard";
 
-// Demo: ideally fetch these from backend
-const categories = ["mobile", "tablet", "laptop", "accessory"];
-const brands = ["apple", "samsung", "xiaomi", "oppo"];
-
 export default function ShopPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -28,6 +24,11 @@ export default function ShopPage() {
   const [brand, setBrand] = useState(currentBrand);
 
   const { data, isLoading } = useGetItems(page, search, category, brand);
+  const { data: allData } = useGetItems(1, "", "", "");
+  const allCategories = allData?.items.map((p) => p.category);
+  const categories = [...new Set(allCategories)];
+  const allBrands = allData?.items.map((p) => p.brand);
+  const brands = [...new Set(allBrands)];
 
   // Sync filters with URL
   useEffect(() => {
