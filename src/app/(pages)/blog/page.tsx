@@ -1,5 +1,6 @@
 "use client";
 
+import { ImageUpload } from "@/customs/ImageUpload";
 import ProtectedLayout from "@/customs/ProtectedLayout";
 import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
 import Container from "@/ui/Container";
@@ -30,8 +31,32 @@ export default function Blogs() {
       {loading && <p>Uploading...</p>}
       <Image width={100} height={100} src={image || "https://cdn-icons-png.flaticon.com/512/149/149071.png"} alt="Uploaded" className="w-32 h-32 object-cover mt-2" />
     </div>
+    
+    <ProfileSettings/>
+
         </Section>
       </Container>
     </ProtectedLayout>
+
+  );
+}
+
+
+export function ProfileSettings() {
+  const handleImageUploaded = (url: string) => {
+    console.log("Uploaded image URL:", url);
+    // save to DB or update profile
+  };
+
+  return (
+    <div className="p-4">
+      <h2 className="text-xl font-semibold mb-4">Update Profile Picture</h2>
+
+      <ImageUpload
+        folder="gadget_hunters/profile_images"
+        label="Profile Picture"
+        onUploadSuccess={handleImageUploaded}
+      />
+    </div>
   );
 }

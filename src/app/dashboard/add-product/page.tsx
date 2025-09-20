@@ -83,7 +83,7 @@ export default function AddProduct() {
   };
 
   return (
-    <section className="p-6 flex flex-col gap-6">
+    <section className="flex flex-col gap-6">
       {/* Page Heading */}
       <h1 className="text-2xl font-bold p-4 rounded bg-blue-600 text-white uppercase shadow">
         Add New Product
@@ -187,6 +187,7 @@ export default function AddProduct() {
           )}
         </button>
       </form>
+      <div className="h-100"/>
     </section>
   );
 }

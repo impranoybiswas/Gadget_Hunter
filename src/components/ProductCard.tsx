@@ -14,7 +14,7 @@ export default function ProductCard({ product }: { product: Product }) {
           fill
           src={
             thumbnail ||
-            "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+            "./assets/placeholder-image.svg"
           }
           alt={name}
           className="object-cover group-hover:scale-110 transition-transform duration-500"

@@ -1,8 +1,8 @@
-import CategorySection from "@/components/CategorySection";
-import CouponSection from "@/components/CouponSection";
-import FeaturedProductSection from "@/components/FeatureSection";
+import CategorySection from "@/components/home/CategorySection";
+import CouponSection from "@/components/home/CouponSection";
+import FeaturedProductSection from "@/components/home/FeatureSection";
 import Header from "@/components/Header";
-import ReviewSection from "@/components/ReviewSection";
+import ReviewSection from "@/components/home/ReviewSection";
 import Container from "@/ui/Container";
 
 export default function Home() {

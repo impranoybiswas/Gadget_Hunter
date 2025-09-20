@@ -8,8 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { FaArrowRight, FaUser } from "react-icons/fa";
-import { MdOutlineShoppingCart } from "react-icons/md";
+import { FaArrowRight } from "react-icons/fa";
+import { AiOutlineUser } from "react-icons/ai";
+import { PiShoppingCartLight } from "react-icons/pi";
 
 export default function NavController() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function NavController() {
     <div className="flex-1 flex items-center justify-end gap-2">
       <IconButtton icon={<ThemeToggler />} />
       <IconButtton
-        icon={<MdOutlineShoppingCart />}
+        icon={<PiShoppingCartLight />}
         onClick={() => router.push("/about")}
       />
       {status === "loading" ? (
@@ -37,7 +38,7 @@ export const GuestAvatar = () => {
   return (
     <DropDown
       className="bg-primary text-white"
-      label={<IconButtton icon={<FaUser />} />}
+      label={<IconButtton icon={<AiOutlineUser />} />}
     >
       <div className="flex flex-col gap-2 p-4">
         <Link

@@ -8,11 +8,19 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
-    const limit = 12;
-    const search = searchParams.get("search") || "";
+    const limit = 15;
     const skip = (page - 1) * limit;
 
-    const query = search ? { name: { $regex: search, $options: "i" } } : {};
+    const search = searchParams.get("search") || "";
+    const category = searchParams.get("category") || "";
+    const brand = searchParams.get("brand") || "";
+
+    const query = {
+      name: { $regex: search, $options: "i" },
+      category: { $regex: category, $options: "i" },
+      brand: { $regex: brand, $options: "i" },
+    };
+
     const total = await collection.countDocuments(query);
 
     const items = await collection

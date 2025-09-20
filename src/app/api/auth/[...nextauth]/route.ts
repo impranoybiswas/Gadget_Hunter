@@ -38,7 +38,7 @@ export const authOptions: AuthOptions = {
           { $set: { lastSignInAt: formattedDate() } }
         );
 
-        // Step 4: If createdAt is missing (edge case), set it
+        // Step 4: Ensure createdAt exists
         if (!user.createdAt) {
           await users.updateOne(
             { _id: user._id },
@@ -46,10 +46,11 @@ export const authOptions: AuthOptions = {
           );
         }
 
-        // Step 5: Return minimal user object
+        // Step 5: Return user with role
         return {
           id: user._id.toString(),
           email: user.email,
+          role: user.role, // IMPORTANT
         };
       },
     }),
@@ -69,49 +70,60 @@ export const authOptions: AuthOptions = {
     }),
   ],
 
-  // Use JWT session strategy
   session: { strategy: "jwt" },
 
   callbacks: {
-    // Attach user ID and email to JWT token
+    // JWT callback runs on login + subsequent requests
     async jwt({ token, user }) {
+      // If login just happened, attach basic info
       if (user) {
         token.id = user.id || token.sub;
         token.email = user.email || "";
+        token.role = user.role || "";
       }
+
+      // Always fetch latest role from DB
+      if (token.email) {
+        const users = await getUsersCollection();
+        const dbUser = await users.findOne({ email: token.email });
+        if (dbUser?.role) {
+          token.role = dbUser.role;
+        }
+      }
+
       return token;
     },
 
-    // Attach token info to session
+    // Session callback exposes token info to client
     async session({ session, token }) {
-      if (session.user) {
+      if (token && session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
+        session.user.role = token.role as string;
       }
       return session;
     },
 
-    // Google Sign-In handler
+    // Handle Google sign-in user creation
     async signIn({ user, account }) {
       const users = await getUsersCollection();
 
       if (account?.provider === "google") {
-        // Step 1: Check if user already exists
         const existingUser = await users.findOne({ email: user.email });
 
         if (!existingUser) {
-          // Step 2: Insert new Google user
+          // New Google user → assign default "user" role
           await users.insertOne({
             name: user.name,
             email: user.email,
             provider: "google",
             image: user.image,
-            role: "user",
+            role: "user", // default role
             createdAt: formattedDate(),
             lastSignInAt: formattedDate(),
           });
         } else {
-          // Step 3: Update lastSignInAt for existing user
+          // Update lastSignInAt
           await users.updateOne(
             { _id: existingUser._id },
             { $set: { lastSignInAt: formattedDate() } }
@@ -119,7 +131,6 @@ export const authOptions: AuthOptions = {
         }
       }
 
-      // For Credentials login, lastSignInAt already updated in authorize()
       return true;
     },
   },

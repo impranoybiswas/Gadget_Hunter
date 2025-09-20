@@ -11,7 +11,8 @@ const nextConfig: NextConfig = {
       "randomuser.me",
       "developers.elementor.com",
       "images.unsplash.com",
-      "via.placeholder.com"
+      "via.placeholder.com",
+      "ik.imagekit.io",
     ],
   },
 };

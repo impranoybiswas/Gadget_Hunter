@@ -28,19 +28,21 @@ import { Product, PaginatedResponse } from "@/types/product";
  */
 const fetchItems = async (
   page: number,
-  search: string
+  search: string,
+  category: string,
+  brand: string,
 ): Promise<PaginatedResponse> => {
-  const res = await axiosApi.get("/items", { params: { page, search } });
+  const res = await axiosApi.get("/items", { params: { page, search, category, brand } });
   return res.data;
 };
 
 /**
  * Hook for fetching paginated products with search support.
  */
-export function useGetItems(page: number, search: string) {
+export function useGetItems(page: number, search: string, category: string, brand: string) {
   return useQuery({
-    queryKey: ["items", page, search],
-    queryFn: () => fetchItems(page, search),
+    queryKey: ["items", page, search, category, brand],
+    queryFn: () => fetchItems(page, search, category, brand),
     placeholderData: keepPreviousData, // Keeps old data during pagination to prevent flickering
   });
 }

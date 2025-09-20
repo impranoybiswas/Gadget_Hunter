@@ -1,36 +1,47 @@
+"use client";
+
 import React, { ReactNode } from "react";
+import { motion } from "framer-motion";
+
+interface ButtonProps {
+  onClick?: () => void;
+  type?: "button" | "submit" | "reset";
+  className?: string;
+  label?: string;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  isOutline: boolean;
+  isLarge: boolean;
+}
 
 export default function Button({
   onClick,
-  type,
-  disabled,
+  type = "button",
+  className,
+  label,
   leftIcon,
   rightIcon,
-  label,
-  className,
-}: {
-  onClick?: () => void;
-  type?: "button" | "submit" | "reset";
-  disabled?: boolean;
-  leftIcon?: ReactNode;
-  rightIcon?: ReactNode;
-  label?: string;
-  className?: string;
-}) {
+  isOutline,
+  isLarge,
+}: ButtonProps) {
   return (
-    <button
+    <motion.button
+      whileTap={{ scale: 0.96 }}
+      viewport={{ once: true, amount: 0.2 }}
       onClick={onClick}
-      className={`${className} bg-primary hover:bg-secondary rounded-sm h-10 px-5 flex items-center justify-center gap-2 group text-white cursor-pointer transition-all duration-300 ease-in-out`}
       type={type}
-      disabled={disabled}
+      className={`rounded-md relative overflow-hidden group text-shadow-2xs z-0 flex justify-center items-center font-semibold cursor-pointer transition-all duration-500 ease-in-out group 
+        ${label && "px-3 gap-2"}
+        ${isOutline ? "bg-transparent text-primary border-primary scale-[0.950]" : "bg-primary text-white border-transparent"}
+        ${isLarge ? "h-12 text-xl" : "h-8 text-sm"} ${className}
+        `}
     >
-      <span className="group-hover:scale-110 transition-all duration-300 ease-in-out">
-        {leftIcon}
-      </span>
-      <span className="font-medium text-base">{label}</span>
-      <span className="group-hover:translate-x-1 transition-all duration-300 ease-in-out">
-        {rightIcon}
-      </span>
-    </button>
+      {!isOutline && (
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0 w-0 z-2 scale-150 bg-blue-700 group-hover:w-full group-hover:h-full transition-all duration-800 ease-in-out shadow-sm group-hover:rounded-full"/>
+      )}
+      {leftIcon}
+      <span className="z-2">{label}</span>
+      {rightIcon}
+    </motion.button>
   );
 }

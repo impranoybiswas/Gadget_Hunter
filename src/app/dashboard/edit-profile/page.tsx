@@ -3,11 +3,10 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUserData } from "@/hooks/useUserData";
-import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
-import Image from "next/image";
 import toast from "react-hot-toast";
 import Button from "@/ui/Button";
 import axiosApi from "@/libs/axiosInstance";
+import { ImageUpload } from "@/customs/ImageUpload";
 
 // Form values type
 type ProfileFormValues = {
@@ -18,8 +17,6 @@ type ProfileFormValues = {
 
 export default function EditProfilePage() {
   const { currentUser } = useUserData();
-  const { uploadImage, loading: uploading } =
-    useCloudinaryUpload("profile_images");
 
   const {
     register,
@@ -53,25 +50,6 @@ export default function EditProfilePage() {
   }, [currentUser, reset]);
 
   /**
-   * Handle profile image upload
-   */
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const uploadedUrl = await uploadImage(file);
-      if (uploadedUrl) {
-        setValue("image", uploadedUrl, { shouldValidate: true });
-        toast.success("Image uploaded successfully!");
-      }
-    } catch (err) {
-      console.error("Image upload failed:", err);
-      toast.error("Failed to upload image");
-    }
-  };
-
-  /**
    * Handle profile update submission
    */
   const onSubmit = async (data: ProfileFormValues) => {
@@ -87,11 +65,10 @@ export default function EditProfilePage() {
   };
 
   return (
-    <section className="max-w-2xl mx-auto p-6">
+    <section className="w-full mx-auto flex flex-col gap-6">
       <h1 className="text-3xl font-semibold mb-6 text-gray-800">
         Edit Profile
       </h1>
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 bg-white shadow-md rounded-lg p-6 border"
@@ -126,34 +103,12 @@ export default function EditProfilePage() {
 
         {/* Profile Image Upload */}
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Profile Image
-          </label>
-          <div className="flex items-center gap-4">
-            <input
-              type="file"
-              accept="image/*"
-              disabled={uploading || isSubmitting}
-              onChange={handleImageChange}
-              className="block text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-md file:border-0
-                file:text-sm file:font-semibold
-                file:bg-primary file:text-white
-                hover:file:bg-primary/90"
-            />
-
-            {/* Show preview if an image is set */}
-            {image && (
-              <Image
-                src={image}
-                width={64}
-                height={64}
-                alt="Profile preview"
-                className="rounded-full border object-cover w-16 h-16"
-              />
-            )}
-          </div>
+          <ImageUpload
+            folder="gadget_hunters/profile_images"
+            label="Profile Picture"
+            onUploadSuccess={(url) => setValue("image", url, { shouldValidate: true })}
+            imageUrl={image}
+          />
         </div>
 
         {/* Submit Button */}
@@ -161,7 +116,7 @@ export default function EditProfilePage() {
           <Button
             type="submit"
             label={isSubmitting ? "Updating..." : "Update Profile"}
-            disabled={uploading || isSubmitting}
+            disabled={isSubmitting}
           />
         </div>
       </form>

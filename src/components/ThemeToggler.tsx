@@ -2,7 +2,7 @@
 
 import { ThemeContext } from "@/providers/ThemeProvider";
 import React, { useContext } from "react";
-import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { CiDark, CiLight } from "react-icons/ci";
 
 
 export default function ThemeToggler({className}: {className?:string}) {
@@ -19,7 +19,7 @@ export default function ThemeToggler({className}: {className?:string}) {
       title={`Toggle ${theme === "light" ? "Dark" : "Light"}`}
       onClick={toggleTheme}
     >
-      {theme === "light" ? <MdDarkMode /> : <MdLightMode />}
+      {theme === "light" ? <CiDark /> : <CiLight />}
     </div>
   );
 }

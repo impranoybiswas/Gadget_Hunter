@@ -30,7 +30,7 @@ export default function LoginPage() {
       redirect: false,
       email: form.email,
       password: form.password,
-      callbackUrl, // এখানে path pass করি
+      callbackUrl, 
     });
 
     if (res?.error) {

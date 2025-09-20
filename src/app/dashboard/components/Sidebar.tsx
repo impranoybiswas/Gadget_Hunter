@@ -20,7 +20,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`min-h-[calc(100dvh-64px)] sticky top-0 mt-16 bg-gray-900 text-white hidden md:flex flex-col shadow-lg border-r border-gray-700 transition-all duration-300 ease-in-out  ${collapsed ? "w-16" : "lg:w-60 w-50"}`}>
+      className={`h-[calc(100dvh-64px)] sticky top-16 bg-gray-900 text-white hidden md:flex flex-col shadow-lg border-r border-gray-700 transition-all duration-300 ease-in-out  ${collapsed ? "w-16" : "lg:w-60 w-50"}`}>
 
          {/* Top Section */}
         <div className="w-full h-16 flex items-center justify-start border-b border-gray-700">
@@ -39,7 +39,7 @@ export default function Sidebar() {
         }
 
         {/* Sign Out */}
-        <div className=" flex flex-1 items-end pb-4">
+        <div className="flex flex-1 items-end pb-4">
         <button onClick={() => signOut()} className="w-full h-12 flex items-center justify-start hover:bg-gray-800 cursor-pointer">
           <span onClick={() => setCollapsed(!collapsed)} className="min-w-16 flex items-center justify-center text-lg"><FaSignOutAlt /></span>
           <span className={`h-8 whitespace-nowrap flex items-center transform transition-all duration-300 ease-in-out ${collapsed ? "opacity-0" : "opacity-100"}`}>Sign Out</span>
