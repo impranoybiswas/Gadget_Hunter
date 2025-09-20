@@ -114,6 +114,8 @@ export default function EditProfilePage() {
         {/* Submit Button */}
         <div className="pt-4">
           <Button
+          isOutline={false}
+          isLarge={true}
             type="submit"
             label={isSubmitting ? "Updating..." : "Update Profile"}
             disabled={isSubmitting}

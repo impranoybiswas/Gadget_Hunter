@@ -12,6 +12,7 @@ interface ButtonProps {
   rightIcon?: ReactNode;
   isOutline: boolean;
   isLarge: boolean;
+  disabled?: boolean;
 }
 
 export default function Button({
@@ -23,6 +24,7 @@ export default function Button({
   rightIcon,
   isOutline,
   isLarge,
+  disabled,
 }: ButtonProps) {
   return (
     <motion.button
@@ -30,6 +32,7 @@ export default function Button({
       viewport={{ once: true, amount: 0.2 }}
       onClick={onClick}
       type={type}
+      disabled={disabled}
       className={`rounded-md relative overflow-hidden group text-shadow-2xs z-0 flex justify-center items-center font-semibold cursor-pointer transition-all duration-500 ease-in-out group 
         ${label && "px-3 gap-2"}
         ${isOutline ? "bg-transparent text-primary border-primary scale-[0.950]" : "bg-primary text-white border-transparent"}

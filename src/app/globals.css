@@ -13,7 +13,7 @@
 @plugin "daisyui/theme" {
   name: "light";
   --color-primary: #0c94e8;
-  --color-secondary: #ed254e;
+  --color-secondary: #ED254E;
   --color-accent: #260a2e;
   --color-base-100: #fffffa;
 }
@@ -21,7 +21,7 @@
 @plugin "daisyui/theme" {
   name: "dark";
   --color-primary: #0c94e8;
-  --color-secondary: #ed254e;
+  --color-secondary: #ED254E;
   --color-accent: #260a2e;
   --color-base-100: #2f323a;
 }
