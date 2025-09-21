@@ -32,11 +32,11 @@ export function ImageUpload({
 
   return (
     <div
-      className={`flex w-full h-22 items-start justify-between gap-2 ${className} border shadow border-gray-200 rounded-md p-3`}
+      className={`flex w-full h-22 items-start justify-between gap-2 ${className} border shadow border-base-300 rounded-md p-3`}
     >
       {/* Upload Input */}
       <div className="flex flex-col gap-2">
-        <label className="font-medium">{label}</label>
+        <label>{label}</label>
         <input
           type="file"
           onChange={handleChange}
@@ -59,7 +59,7 @@ export function ImageUpload({
           src={
             loading
               ? "/assets/uploading.svg"
-              : imageUrl || "/assets/placeholder_image.svg"
+              : imageUrl || "/assets/placeholder-image.svg"
           }
           alt="Uploaded preview"
         />

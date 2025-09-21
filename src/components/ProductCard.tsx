@@ -1,44 +1,49 @@
 import { Product } from "@/types/product";
+import IconButtton from "@/ui/IconButtton";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { CiHeart } from "react-icons/ci";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { _id, thumbnail, name, brand, price } = product;
+  const { _id, name, brand, price, images } = product;
 
   return (
-    <div className="group relative border rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden bg-white flex flex-col">
+    <div className="group relative border border-base-300 rounded-md shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden bg-base-100 flex flex-col p-2 hover:-translate-y-2">
       {/* Thumbnail */}
-      <div className="relative w-full h-56 overflow-hidden">
+      <div className="relative w-full h-60 overflow-hidden bg-gray-50 border border-base-300 rounded-md">
         <Image
           fill
-          src={
-            thumbnail ||
-            "./assets/placeholder-image.svg"
-          }
+          src={images[0] || "/assets/placeholder-image.svg"}
           alt={name}
-          className="object-cover group-hover:scale-110 transition-transform duration-500"
+          className="object-cover transition-transform duration-500 h-40 group-hover:scale-110 w-full "
         />
 
-        {/* Badge */}
-        <span className="absolute top-3 left-3 bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-md">
-          New
+        {/* Wishlist Icon */}
+        <span className="absolute top-3 right-3">
+          <IconButtton icon={<CiHeart />} />
         </span>
       </div>
 
       {/* Product Info */}
-      <div className="p-4 flex flex-col flex-1">
-        <h2 className="font-semibold text-lg text-gray-800 group-hover:text-blue-600 transition-colors">
+      <div className="flex flex-col flex-1 pt-3">
+        <p className="font-medium text-sm md:text-base uppercase pl-2">
+          {brand}
+        </p>
+        <p className="font-medium text-sm md:text-base pb-1 line-clamp-1 pl-2">
           {name}
-        </h2>
-        <p className="text-gray-500 text-sm mb-2">{brand}</p>
-        <p className="font-bold text-xl text-blue-600 mb-4">${price}</p>
+        </p>
+        <span className="pl-2 text-sm md:text-base flex items-center gap-0 text-primary">
+          <TbCurrencyTaka size={20} />
+          {price} Only
+        </span>
 
         {/* Actions */}
-        <div className="mt-auto">
+        <div className="mt-5">
           <Link
             href={`/shop/${_id}`}
-            className="block text-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors duration-300"
+            className="flex w-full justify-center items-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-2 px-4 rounded-md transition-colors duration-300 shadow-md"
           >
             View Details
           </Link>

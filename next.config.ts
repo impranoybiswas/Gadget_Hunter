@@ -13,7 +13,8 @@ const nextConfig: NextConfig = {
       "images.unsplash.com",
       "via.placeholder.com",
       "ik.imagekit.io",
-      "i.pravatar.cc"
+      "i.pravatar.cc",
+      "mobilebuzzbd.com"
     ],
   },
 };

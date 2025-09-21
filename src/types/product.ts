@@ -8,7 +8,6 @@ export interface Product {
   warranty: string;
   description: string;
   isBrandNew: boolean;
-  thumbnail: string;
   images: string[];
 }
 

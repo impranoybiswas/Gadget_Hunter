@@ -42,7 +42,7 @@ export default function ProductDetailPage() {
           <Image
             width={1000}
             height={1000}
-            src={product.thumbnail  ||
+            src={product.images[0]  ||
               "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"}
             alt={product.name}
             className="w-full h-80 object-cover rounded-xl shadow-md mb-4"

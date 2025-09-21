@@ -7,6 +7,7 @@ import ThemeProvider from "@/providers/ThemeProvider";
 import { SessionProvider } from "next-auth/react";
 import QueryProvider from "@/providers/QueryProvider";
 import { Toaster } from "react-hot-toast";
+import Footer from "@/components/Footer";
 
 export default function CoustomLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -20,6 +21,7 @@ export default function CoustomLayout({ children }: { children: ReactNode }) {
           <Toaster />
           {hideLayout || <Navbar />}
           {children}
+          {hideLayout || <Footer />}
         </QueryProvider>
       </SessionProvider>
     </ThemeProvider>

@@ -19,7 +19,6 @@ type ProductFormValues = {
   warranty: string;
   description: string;
   isBrandNew: string; // radio: "true" | "false"
-  thumbnail: FileList;
   image1: FileList;
   image2: FileList;
   image3: FileList;
@@ -43,13 +42,8 @@ export default function AddProduct() {
    */
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      // Upload thumbnail
-      let thumbnailUrl = "";
-      if (data.thumbnail?.[0]) {
-        thumbnailUrl = (await uploadImage(data.thumbnail[0])) || "";
-      }
 
-      // Upload other images
+      // Upload images
       const imagesUrls: string[] = [];
       for (const key of ["image1", "image2", "image3"] as const) {
         if (data[key]?.[0]) {
@@ -68,7 +62,6 @@ export default function AddProduct() {
         warranty: data.warranty,
         description: data.description,
         isBrandNew: data.isBrandNew === "true",
-        thumbnail: thumbnailUrl,
         images: imagesUrls,
       };
 
@@ -143,9 +136,6 @@ export default function AddProduct() {
 
         {/* File Inputs */}
         <div className="space-y-2">
-          <label className="block font-medium">Thumbnail</label>
-          <input type="file" accept="image/*" {...register("thumbnail")} />
-
           <label className="block font-medium">Gallery Images</label>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <input type="file" accept="image/*" {...register("image1")} />

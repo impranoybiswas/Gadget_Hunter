@@ -37,19 +37,18 @@ export function CategorySwiper({ category }: { category: string }) {
         className="w-full h-full"
       >
         {products.map((data, index) => (
-          <SwiperSlide
-            key={index}
-            className="w-full h-full rounded-md"
-          >
-            <Image
-              className="object-cover w-full h-40 rounded-md mb-4"
-              src={data.thumbnail}
-              alt="logo"
-              height={500}
-              width={500}
-            />
-
-            <Link href={`/shop/${data._id}`} className="flex justify-center text-lg md:text-xl font-semibold text-shadow-xs text-primary bg-white pt-2 pb-6 text-center rounded-md mb-2 w-full">
+          <SwiperSlide key={index} className="w-full h-full rounded-md">
+            <Link
+              href={`/shop/${data._id}`}
+              className="flex flex-col text-lg md:text-xl font-semibold text-shadow-xs text-primary bg-base-100 pb-5 text-center rounded-md mb-2 w-full border border-base-300 p-2"
+            >
+              <Image
+                className="object-cover w-full h-40 rounded-md mb-4 border border-base-300"
+                src={data.images[0] || "./assets/placeholder-image.svg"}
+                alt="logo"
+                height={500}
+                width={500}
+              />
               {data.name}
             </Link>
           </SwiperSlide>

@@ -8,6 +8,7 @@ import { Product } from "@/types/product";
 import Container from "@/ui/Container";
 import Section from "@/ui/Section";
 import ProductCard from "@/components/ProductCard";
+import { FaSearch } from "react-icons/fa";
 
 export default function ShopPage() {
   const searchParams = useSearchParams();
@@ -51,32 +52,56 @@ export default function ShopPage() {
       <Section
         title="Our Products"
         subtitle="Browse and discover the best items available"
-        className="space-y-6"
+        className="space-y-8"
       >
         {/* Filter Row */}
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Search Input */}
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="border rounded-lg p-3 w-full shadow-sm"
-            value={search}
-            onChange={(e) => {
-              setPage(1);
-              setSearch(e.target.value);
-            }}
-          />
+          <div className="relative w-full lg:col-span-2">
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="border border-base-300 rounded-md p-3 w-full shadow-sm focus-within:outline-primary focus-within:outline-1 focus-within:shadow-md transition-all duration-300  ease-in-out pl-10"
+              value={search}
+              onChange={(e) => {
+                setPage(1);
+                setSearch(e.target.value);
+              }}
+            />
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          </div>
+
+          {/* Brand Dropdown */}
+
+            <select
+              value={brand}
+              onChange={(e) => {
+                setPage(1);
+                setBrand(e.target.value);
+              }}
+              className="border border-base-300 rounded-md shadow-sm p-3 w-full focus-within:outline-primary focus-within:outline-1 focus-within:shadow-md transition-all duration-300  ease-in-out "
+            >
+              <option value="">All Brands</option>
+              {brands.map((b) => (
+                <option key={b} value={b}>
+                  {b.charAt(0).toUpperCase() + b.slice(1)}
+                </option>
+              ))}
+            </select>
+   
 
           {/* Category Tabs with Horizontal Scroll */}
-          <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
+          <div className="flex overflow-x-auto gap-3 pb-2 hide-scrollbar col-span-1 md:col-span-2">
             {/* All Tab */}
             <button
               onClick={() => {
                 setPage(1);
                 setCategory("");
               }}
-              className={`px-4 py-2 whitespace-nowrap rounded-lg border ${
-                category === "" ? "bg-blue-600 text-white" : "bg-gray-100"
+              className={`px-5 py-2 cursor-pointer whitespace-nowrap rounded-md border border-base-300 transition-all ${
+                category === ""
+                  ? "bg-primary text-white shadow"
+                  : "bg-gray-100 hover:bg-gray-200 text-gray-700"
               }`}
             >
               All
@@ -89,10 +114,10 @@ export default function ShopPage() {
                   setPage(1);
                   setCategory(cat);
                 }}
-                className={`px-4 py-2 whitespace-nowrap rounded-lg border ${
+                className={`px-5 py-2 cursor-pointer whitespace-nowrap rounded-md border-base-300 border transition-all ${
                   category === cat
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 hover:bg-gray-200"
+                    ? "bg-primary text-white shadow"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                 }`}
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -100,26 +125,11 @@ export default function ShopPage() {
             ))}
           </div>
 
-          {/* Brand Dropdown */}
-          <select
-            value={brand}
-            onChange={(e) => {
-              setPage(1);
-              setBrand(e.target.value);
-            }}
-            className="border rounded-lg p-3 w-full md:w-48 shadow-sm"
-          >
-            <option value="">All Brands</option>
-            {brands.map((b) => (
-              <option key={b} value={b}>
-                {b.charAt(0).toUpperCase() + b.slice(1)}
-              </option>
-            ))}
-          </select>
+          
         </div>
 
         {/* Product Grid */}
-        <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
           {products.length > 0 ? (
             products.map((product: Product) => (
               <ProductCard key={product._id} product={product} />
@@ -134,14 +144,14 @@ export default function ShopPage() {
         {/* Pagination */}
         <div className="flex justify-center items-center gap-2 mt-6 flex-wrap">
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-100"
             onClick={() => setPage(1)}
             disabled={page === 1}
           >
             First
           </button>
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-100"
             onClick={() => setPage((p) => Math.max(p - 1, 1))}
             disabled={page === 1}
           >
@@ -151,14 +161,14 @@ export default function ShopPage() {
             Page {page} of {totalPages}
           </span>
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-100"
             onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
             disabled={page === totalPages}
           >
             Next
           </button>
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-100"
             onClick={() => setPage(totalPages)}
             disabled={page === totalPages}
           >
