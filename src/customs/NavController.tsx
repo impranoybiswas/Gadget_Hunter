@@ -21,7 +21,7 @@ export default function NavController() {
       <IconButtton icon={<ThemeToggler />} />
       <IconButtton
         icon={<PiShoppingCartLight />}
-        onClick={() => router.push("/about")}
+        onClick={() => router.push("/dashboard/carts")}
       />
       {status === "loading" ? (
         <span className="loading loading-dots loading-sm" />

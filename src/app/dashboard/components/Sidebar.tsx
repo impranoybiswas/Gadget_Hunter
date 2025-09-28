@@ -4,11 +4,13 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FaHome, FaUser, FaCog, FaBars, FaSignOutAlt, FaUserEdit, FaPlus } from "react-icons/fa";
+import { FaHome, FaUser, FaCog, FaBars, FaSignOutAlt, FaUserEdit, FaPlus, FaHeart, FaShoppingBasket } from "react-icons/fa";
 
 export const sidebarLinks = [
   { name: "Home", href: "/dashboard", icon: <FaHome /> },
   { name: "Profile", href: "/dashboard/profile", icon: <FaUser /> },
+  { name: "Favorites", href: "/dashboard/favourites", icon: <FaHeart /> },
+  { name: "Carts", href: "/dashboard/carts", icon: <FaShoppingBasket /> },
   { name: "Edit Profile", href: "/dashboard/edit-profile", icon: <FaUserEdit /> },
   { name: "Add Product", href: "/dashboard/add-product", icon: <FaPlus/> },
   { name: "Settings", href: "/dashboard/settings", icon: <FaCog /> },

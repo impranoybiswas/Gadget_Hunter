@@ -2,11 +2,13 @@
 
 import { useParams } from "next/navigation";
 import { useGetItem } from "@/hooks/useItems";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Loading from "@/app/loading";
 import Container from "@/ui/Container";
 import Section from "@/ui/Section";
 import Image from "next/image";
+import AddToFavourite from "@/components/AddToFavourite";
 
 /**
  * =========================
@@ -15,6 +17,7 @@ import Image from "next/image";
  * Shows detailed information about a single product.
  */
 export default function ProductDetailPage() {
+  
   const params = useParams();
   const id = params?.id as string;
 
@@ -32,57 +35,50 @@ export default function ProductDetailPage() {
 
   return (
     <Container>
-      <Section
-        title={product.name}
-        subtitle={`Explore full details about ${product.name}`}
-        className="grid lg:grid-cols-2 gap-10"
-      >
-        {/* Left: Main Image + Gallery */}
-        <div>
-          <Image
-            width={1000}
-            height={1000}
-            src={product.images[0]  ||
-              "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"}
-            alt={product.name}
-            className="w-full h-80 object-cover rounded-xl shadow-md mb-4"
-          />
-          <div className="grid grid-cols-3 gap-3">
-            {product.images?.map((img, idx) => (
-              <Image
-                width={1000}
-                height={1000}
-                key={idx}
-                src={img ||
-                  "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"}
-                alt={`Preview ${idx + 1}`}
-                className="h-24 w-full object-cover rounded-lg border"
-              />
+      <Section title={product.name} className="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-10">
+        {/* Left: Image Gallery */}
+        <div className="rounded-lg overflow-hidden">
+        <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={20}
+            slidesPerView={1}
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 3000 }}
+            loop={true}
+            className="w-full h-84 md:h-100 lg:h-120"
+          >
+            {product.images.map((data, index) => (
+              <SwiperSlide key={index} className="w-full h-full relative">
+                <Image
+                  className="object-cover"
+                  src={data}
+                  alt="image"
+                  fill
+                />
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
         </div>
 
         {/* Right: Product Info */}
         <div className="flex flex-col gap-4">
-          <h2 className="text-2xl font-bold">{product.name}</h2>
-          <p className="text-gray-600">Brand: {product.brand}</p>
-          <p className="text-xl text-blue-600 font-semibold">
-            ${product.price}
-          </p>
+          <p className="uppercase font-semibold py-2 px-4 border border-base-300 w-fit rounded-md"> {product.brand}</p>
+          <p className="text-xl text-primary font-semibold">BDT {product.price}</p>
 
           {/* Extra Info */}
-          <ul className="space-y-1 text-gray-700">
-            <li>
-              <strong>Category:</strong> {product.category}
+          <ul className="space-y-1">
+            <li className="capitalize">
+              <strong>Category :</strong> {product.category}
             </li>
             <li>
-              <strong>Warranty:</strong> {product.warranty}
+              <strong>Warranty :</strong> {product.warranty}
             </li>
             <li>
-              <strong>Quantity:</strong> {product.quantity} available
+              <strong>Quantity :</strong> {product.quantity} Available
             </li>
             <li>
-              <strong>Condition:</strong>{" "}
+              <strong>Condition :</strong>{" "}
               {product.isBrandNew ? "Brand New" : "Used"}
             </li>
           </ul>
@@ -90,16 +86,12 @@ export default function ProductDetailPage() {
           {/* Description */}
           <div>
             <h3 className="text-lg font-semibold mt-4 mb-2">Description</h3>
-            <p className="text-gray-600 leading-relaxed">
-              {product.description}
-            </p>
+            <p className="leading-relaxed opacity-80 text-justify">{product.description}</p>
           </div>
 
           {/* Action Buttons */}
           <div className="mt-6 flex gap-4">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition">
-              Add to Cart
-            </button>
+            <AddToFavourite productId={product._id as string} />
             <button className="border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white py-2 px-4 rounded-lg transition">
               Buy Now
             </button>

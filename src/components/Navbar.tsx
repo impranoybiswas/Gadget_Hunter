@@ -20,7 +20,7 @@ const navLink = [
 export default function Navbar() {
   const { session, currentUser } = useUserData();
   return (
-    <nav className="w-full h-16 fixed top-0 left-0 z-50 border-b border-base-300 flex items-center justify-center px-4 md:px-10 lg:px-20 bg-base-100 shadow-xs">
+    <nav className="w-full h-14 fixed top-0 left-0 z-50 border-b border-base-300 flex items-center justify-center px-4 md:px-10 lg:px-20 bg-base-100 shadow-xs">
       {/* Desktop Section */}
       <section className="w-full hidden lg:flex items-center justify-between bg-base-100 h-full">
         <SiteTitle className="flex-1" />

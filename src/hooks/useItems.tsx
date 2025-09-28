@@ -7,7 +7,7 @@ import {
   useQueryClient,
   keepPreviousData,
 } from "@tanstack/react-query";
-import { Product, PaginatedResponse } from "@/types/product";
+import { Product, PaginatedResponse, BannerItem } from "@/types/product";
 
 /**
  * =========================
@@ -144,5 +144,23 @@ export function useDeleteItem() {
   return useMutation({
     mutationFn: deleteItem,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["items"] }),
+  });
+}
+
+
+/* =========================
+   GET: Head Data
+   ========================= */
+
+
+const fetchHeadData = async (): Promise<BannerItem[]> => {
+  const res = await axiosApi.get("/head-data");
+  return res.data;
+};
+
+export function useGetHeadData() {
+  return useQuery<BannerItem[]>({
+    queryKey: ["head-data"],
+    queryFn: () => fetchHeadData(),
   });
 }

@@ -17,43 +17,35 @@ export type User = {
   role: string;
   createdAt: string;
   lastSignInAt: string;
+  favorites: string[];
 };
 
 /**
- * Fetch a user by email from the backend
+ * Fetch current logged-in user (backend verifies via session)
  */
-const fetchUser = async (email: string): Promise<User> => {
-  
-  if (!email) {
-    throw new Error("Email is required to fetch user data");
-  }
-
-  const res = await axiosApi.get(`/user`, { params: { email } });
-  return res.data;
+const fetchUser = async (): Promise<User> => {
+  const response = await axiosApi.get<User>("/user");
+  return response.data;
 };
 
 /**
  * Custom hook to fetch the current logged-in user's data
- * - Uses NextAuth session to get the email
- * - Uses TanStack Query to fetch user from backend
  */
 export function useUserData() {
   const { data: session, status } = useSession();
 
-  const email = session?.user?.email ?? "";
-
   const query = useQuery<User>({
-    queryKey: ["user", email],
-    queryFn: () => fetchUser(email),
-    enabled: Boolean(email), // only run if email exists
-    staleTime: 5 * 60 * 1000, // 5 min cache for performance
-    retry: 1, // retry once if it fails
+    queryKey: ["user"],
+    queryFn: fetchUser,
+    enabled: status === "authenticated", // run only if logged in
+    staleTime: 5 * 60 * 1000, // 5 min cache
+    retry: 1,
   });
 
   return {
-    ...query,       // includes: data, isLoading, isError, error, refetch, etc.
-    currentUser: query.data, // alias for clarity
-    session,        // NextAuth session
-    status,         // "loading" | "authenticated" | "unauthenticated"
+    ...query,
+    currentUser: query.data, // alias
+    session,
+    status,
   };
 }

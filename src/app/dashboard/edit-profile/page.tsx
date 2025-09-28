@@ -55,7 +55,7 @@ export default function EditProfilePage() {
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       // ✅ Use PUT to update user profile (adjust endpoint if needed)
-      await axiosApi.patch(`/user?email=${currentUser?.email}`, data);
+      await axiosApi.patch(`/user`, data);
 
       toast.success("Profile updated successfully!");
     } catch (err: unknown) {

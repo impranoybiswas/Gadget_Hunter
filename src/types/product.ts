@@ -17,3 +17,10 @@ export interface PaginatedResponse {
   totalItems: number;
   items: Product[];
 }
+
+
+export interface BannerItem {
+  title: string;
+  subtitle: string;
+  image: string;
+}

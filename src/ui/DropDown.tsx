@@ -18,7 +18,7 @@ export default function DropDown({ label, children, className }: DropDownProps) 
         <div
           className={`absolute right-0 min-w-50 min-h-10 -z-1 rounded-b-md transition-all duration-300 ease-in-out shadow-md pt-2 ${
             isOpen
-              ? "translate-y-0 top-12 opacity-100"
+              ? "translate-y-0 top-10 opacity-100"
               : "-translate-y-full top-0  opacity-50"
           } ${className}`}
         >

@@ -2,30 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "../../../libs/collection";
 import bcrypt from "bcryptjs";
 import { formattedDate } from "@/utilities/MyFormat";
+import { getSessionUser } from "@/libs/getSessionUser";
 
 /**
- * GET /api/user?email=<email>
+ * GET /api/user
  * Fetch a single user by email.
  */
-export async function GET(request: NextRequest) {
+
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const email = searchParams.get("email");
+    // User fetch
+    const { user, error } = await getSessionUser();
+    if (error) return error;
 
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
-    }
-
-    const users = await getUsersCollection();
-    const user = await users.findOne({ email });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    // Never expose password hash in API response
+    // password hide
     const safeUser = { ...user };
     delete safeUser.password;
+
     return NextResponse.json(safeUser);
   } catch (error) {
     console.error("GET /api/user error:", error);
@@ -37,25 +30,16 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * PATCH /api/user?email=<email>
- * Update user profile data. Requires password verification.
+ * PATCH /api/user
+ * Update user profile data. Requires session (authenticated user).
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const email = searchParams.get("email");
+    // User fetch
+    const { email, error } = await getSessionUser();
+    if (error) return error;
 
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
-    }
-
-    const users = await getUsersCollection();
-    const user = await users.findOne({ email });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
+    // Parse update data
     const updateData = await request.json();
 
     if (!updateData || Object.keys(updateData).length === 0) {
@@ -65,13 +49,22 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    // Hash password if present
     if (updateData.password) {
       updateData.password = await bcrypt.hash(updateData.password, 10);
     }
 
+    // ✅ Fix: users collection আনতে হবে
+    const users = await getUsersCollection();
+
     const result = await users.updateOne(
       { email },
-      { $set: { ...updateData, lastUpdatedAt: formattedDate() } }
+      {
+        $set: {
+          ...updateData,
+          lastUpdatedAt: formattedDate(),
+        },
+      }
     );
 
     if (result.matchedCount === 0) {

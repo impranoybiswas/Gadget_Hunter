@@ -1,10 +1,9 @@
 import { Product } from "@/types/product";
-import IconButtton from "@/ui/IconButtton";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { CiHeart } from "react-icons/ci";
 import { TbCurrencyTaka } from "react-icons/tb";
+import AddToFavourite from "./AddToFavourite";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { _id, name, brand, price, images } = product;
@@ -22,7 +21,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {/* Wishlist Icon */}
         <span className="absolute top-3 right-3">
-          <IconButtton icon={<CiHeart />} />
+          <AddToFavourite productId={_id as string} />
         </span>
       </div>
 
