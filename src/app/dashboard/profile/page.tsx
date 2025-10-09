@@ -10,22 +10,27 @@ import {
   FaUserShield,
   FaCalendarAlt,
 } from "react-icons/fa";
+import { format, parseISO } from "date-fns";
 
 export default function ProfilePage() {
   const { currentUser, isLoading } = useUserData();
 
   if (isLoading) {
     return (
-      <section className="p-6 flex justify-center items-center">
-        <p className="text-gray-500 text-lg">Loading profile...</p>
+      <section className="p-6 flex justify-center items-center min-h-[60vh]">
+        <p className="text-gray-500 text-lg animate-pulse">
+          Loading profile...
+        </p>
       </section>
     );
   }
 
   if (!currentUser) {
     return (
-      <section className="p-6 flex justify-center items-center">
-        <p className="text-red-500 text-lg">No profile data available.</p>
+      <section className="p-6 flex justify-center items-center min-h-[60vh]">
+        <p className="text-red-500 text-lg font-medium">
+          No profile data available.
+        </p>
       </section>
     );
   }
@@ -33,85 +38,95 @@ export default function ProfilePage() {
   const { name, email, gender, image, role, createdAt, lastSignInAt } =
     currentUser;
 
+  // Safely format dates using date-fns
+  const formattedCreatedAt = createdAt
+    ? format(parseISO(createdAt), "PPP")
+    : "N/A";
+  const formattedLastSignIn = lastSignInAt
+    ? format(parseISO(lastSignInAt), "PPpp")
+    : "N/A";
+
   return (
-    <section className="max-w-4xl mx-auto p-6 space-y-6">
-      {/* Title */}
-      <h1 className="text-3xl font-bold mb-2 text-gray-800 border-b pb-2">
-        My Profile
-      </h1>
+    <section className="w-full flex flex-col md:flex-row items-start gap-10 bg-white rounded-2xl shadow-md p-8 border border-gray-100 transition-all hover:shadow-lg duration-300">
+      {/* Profile Image */}
+      <div className="flex-shrink-0 relative w-full h-44 md:w-44 md:h-44 mb-5 md:mb-0">
+        <Image
+          src={image || "/assets/placeholder-profile.svg"}
+          alt={name || "User avatar"}
+          fill
+          className="rounded-2xl object-cover border border-gray-200"
+        />
+      </div>
 
-      {/* Profile Card */}
-      <div className="flex flex-col md:flex-row items-start gap-6 bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-        {/* Profile Image */}
-        <div className="flex-shrink-0 relative w-40 h-40 md:w-48 md:h-48">
-          <Image
-            src={image || "/images/avatar-placeholder.png"}
-            alt={name || "User avatar"}
-            fill
-            className="rounded-xl object-cover border border-gray-200"
+      {/* Profile Details */}
+      <div className="flex-1 flex flex-col gap-6 text-gray-800">
+        <h2 className="text-2xl font-semibold text-gray-900 border-b pb-2">
+          Profile Information
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Name */}
+          <ProfileItem
+            icon={<FaUser className="text-indigo-600" />}
+            label="Name"
+            value={name}
           />
-        </div>
 
-        {/* Profile Details */}
-        <div className="flex-1 flex flex-col gap-4 text-gray-700">
-          {/* Basic Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3">
-              <FaUser className="text-indigo-600" />
-              <div>
-                <p className="text-sm text-gray-500">Name</p>
-                <p className="text-lg font-semibold">{name}</p>
-              </div>
-            </div>
+          {/* Email */}
+          <ProfileItem
+            icon={<FaEnvelope className="text-green-600" />}
+            label="Email"
+            value={email}
+          />
 
-            <div className="flex items-center gap-3">
-              <FaEnvelope className="text-green-600" />
-              <div>
-                <p className="text-sm text-gray-500">Email</p>
-                <p className="text-lg font-semibold">{email}</p>
-              </div>
-            </div>
+          {/* Gender */}
+          <ProfileItem
+            icon={<FaVenusMars className="text-pink-600" />}
+            label="Gender"
+            value={gender || "N/A"}
+          />
 
-            <div className="flex items-center gap-3">
-              <FaVenusMars className="text-pink-600" />
-              <div>
-                <p className="text-sm text-gray-500">Gender</p>
-                <p className="text-lg font-semibold capitalize">
-                  {gender || "N/A"}
-                </p>
-              </div>
-            </div>
+          {/* Role */}
+          <ProfileItem
+            icon={<FaUserShield className="text-yellow-600" />}
+            label="Role"
+            value={role}
+          />
 
-            <div className="flex items-center gap-3">
-              <FaUserShield className="text-yellow-600" />
-              <div>
-                <p className="text-sm text-gray-500">Role</p>
-                <p className="text-lg font-semibold capitalize">{role}</p>
-              </div>
-            </div>
+          {/* Created At */}
+          <ProfileItem
+            icon={<FaCalendarAlt className="text-indigo-500" />}
+            label="Created At"
+            value={formattedCreatedAt}
+          />
 
-            <div className="flex items-center gap-3">
-              <FaCalendarAlt className="text-indigo-500" />
-              <div>
-                <p className="text-sm text-gray-500">Created At</p>
-                <p className="text-lg font-semibold">
-                  {new Date(createdAt).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <FaCalendarAlt className="text-red-500" />
-              <div>
-                <p className="text-sm text-gray-500">Last Sign In</p>
-                <p className="text-lg font-semibold">
-                  {new Date(lastSignInAt).toLocaleString()}
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* Last Sign In */}
+          <ProfileItem
+            icon={<FaCalendarAlt className="text-red-500" />}
+            label="Last Sign In"
+            value={formattedLastSignIn}
+          />
         </div>
       </div>
     </section>
+  );
+}
+
+interface ProfileItemProps {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}
+
+// ✅ Reusable Info Row Component
+function ProfileItem({ icon, label, value }: ProfileItemProps) {
+  return (
+    <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition">
+      <div className="text-xl">{icon}</div>
+      <div>
+        <p className="text-sm text-gray-500">{label}</p>
+        <p className="text-base font-medium">{value}</p>
+      </div>
+    </div>
   );
 }

@@ -1,8 +1,13 @@
 "use client";
 
-import { useStatesNumber } from "@/hooks/useStatesNumber";
 import React from "react";
-import { FaBoxOpen, FaShoppingCart, FaHeart, FaTags } from "react-icons/fa";
+import { useStatesNumber } from "@/hooks/useStatesNumber";
+import {
+  FaBoxOpen,
+  FaShoppingCart,
+  FaHeart,
+  FaTags,
+} from "react-icons/fa";
 import {
   PieChart,
   Pie,
@@ -16,12 +21,22 @@ import {
   Legend,
 } from "recharts";
 
+/** =========================
+ * ✅ Number Formatter (for large values like 1.2K, 3.5M)
+ ========================= */
+const formatNumber = (num: number) => {
+  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + "M";
+  if (num >= 1_000) return (num / 1_000).toFixed(1) + "K";
+  return num.toString();
+};
+
 export default function DashboardHome() {
   const { totalProducts, totalCarts, totalFavorites, totalCategories } =
     useStatesNumber();
 
-  console.log(totalProducts);
-
+  /** =========================
+   * 📊 Chart Data
+   ========================= */
   const pieData = [
     { name: "Products", value: totalProducts },
     { name: "Carts", value: totalCarts },
@@ -38,63 +53,80 @@ export default function DashboardHome() {
     { month: "Jun", products: 90 },
   ];
 
+  /** =========================
+   * 📦 State Summary Data
+   ========================= */
+  const stateCards = [
+    {
+      name: "Total Products",
+      value: totalProducts,
+      icon: <FaBoxOpen size={26} />,
+      color: "bg-indigo-100 text-indigo-600",
+      growth: "+12%",
+    },
+    {
+      name: "Carts",
+      value: totalCarts,
+      icon: <FaShoppingCart size={26} />,
+      color: "bg-green-100 text-green-600",
+      growth: "+8%",
+    },
+    {
+      name: "Favorites",
+      value: totalFavorites,
+      icon: <FaHeart size={26} />,
+      color: "bg-pink-100 text-pink-600",
+      growth: "+5%",
+    },
+    {
+      name: "Categories",
+      value: totalCategories,
+      icon: <FaTags size={26} />,
+      color: "bg-yellow-100 text-yellow-600",
+      growth: "+3%",
+    },
+  ];
+
   return (
-    <div className="p-4 space-y-6 overflow-hidden">
-      {/* Welcome */}
-      <div>
-        <h2 className="text-3xl font-bold mb-1">Welcome to Dashboard</h2>
-        <p className="text-gray-600">Overview of your gadget shop.</p>
+    <section className="space-y-8">
+      {/* =========================
+       * 🧩 Overview Cards
+       ========================= */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {stateCards.map((card, i) => (
+          <div
+            key={i}
+            className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 flex flex-col gap-4 border border-gray-100"
+          >
+            <div className="flex items-center justify-between">
+              <div className={`p-3 rounded-full ${card.color}`}>
+                {card.icon}
+              </div>
+              <span className="text-sm text-green-500 font-semibold">
+                {card.growth}
+              </span>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm">{card.name}</p>
+              <p className="text-3xl font-bold text-gray-800 mt-1">
+                {formatNumber(card.value)}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Overview Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex items-center gap-4">
-          <div className="p-3 bg-indigo-100 text-indigo-600 rounded-full">
-            <FaBoxOpen size={24} />
-          </div>
-          <div>
-            <p className="text-gray-500 text-sm">Total Products</p>
-            <p className="text-xl font-bold">{totalProducts as number}</p>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex items-center gap-4">
-          <div className="p-3 bg-green-100 text-green-600 rounded-full">
-            <FaShoppingCart size={24} />
-          </div>
-          <div>
-            <p className="text-gray-500 text-sm">Total Carts</p>
-            <p className="text-xl font-bold">{totalCarts}</p>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex items-center gap-4">
-          <div className="p-3 bg-pink-100 text-pink-600 rounded-full">
-            <FaHeart size={24} />
-          </div>
-          <div>
-            <p className="text-gray-500 text-sm">Favorites</p>
-            <p className="text-xl font-bold">{totalFavorites}</p>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex items-center gap-4">
-          <div className="p-3 bg-yellow-100 text-yellow-600 rounded-full">
-            <FaTags size={24} />
-          </div>
-          <div>
-            <p className="text-gray-500 text-sm">Categories</p>
-            <p className="text-xl font-bold">{totalCategories}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts */}
+      {/* =========================
+       * 📊 Analytics Charts
+       ========================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pie Chart */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4">Distribution Overview</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+          <h3 className="text-lg font-semibold mb-4 text-gray-700">
+            Distribution Overview
+          </h3>
+          <ResponsiveContainer width="100%" height={260}>
             <PieChart>
               <Pie
                 data={pieData}
@@ -102,10 +134,10 @@ export default function DashboardHome() {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
+                outerRadius={90}
                 label
               >
-                {pieData.map((entry, index) => (
+                {pieData.map((_, index) => (
                   <Cell
                     key={index}
                     fill={pieColors[index % pieColors.length]}
@@ -118,10 +150,12 @@ export default function DashboardHome() {
           </ResponsiveContainer>
         </div>
 
-        {/* Rectangle/Bar Chart */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4">Monthly Product Added</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        {/* Bar Chart */}
+        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+          <h3 className="text-lg font-semibold mb-4 text-gray-700">
+            Monthly Product Added
+          </h3>
+          <ResponsiveContainer width="100%" height={260}>
             <BarChart
               data={barData}
               margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
@@ -130,11 +164,11 @@ export default function DashboardHome() {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="products" fill="#4f46e5" radius={[5, 5, 0, 0]} />
+              <Bar dataKey="products" fill="#4f46e5" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

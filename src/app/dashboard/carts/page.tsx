@@ -2,23 +2,22 @@
 
 import React, { useMemo } from "react";
 import Image from "next/image";
-import CartButton from "@/components/CartButton";
+import Link from "next/link";
 import {
   FaTrashAlt,
-  FaShoppingCart,
   FaBoxOpen,
   FaDollarSign,
   FaInfo,
+  FaShoppingCart,
 } from "react-icons/fa";
 import { LuLoader } from "react-icons/lu";
-import Link from "next/link";
 import { useCarts, useRemoveCart } from "@/hooks/useFavCarts";
+import CartButton from "@/components/CartButton";
 
 export default function CartTable() {
   const { data: carts = [], isLoading, isError } = useCarts();
   const removeCart = useRemoveCart();
 
-  // Calculate grand total
   const grandTotal = useMemo(() => {
     return (
       carts?.reduce(
@@ -29,11 +28,11 @@ export default function CartTable() {
     );
   }, [carts]);
 
-  // Loading states
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-40 text-gray-500">
-        <LuLoader className="animate-spin mr-2" /> Loading your cart...
+      <div className="flex justify-center items-center h-48 text-gray-500">
+        <LuLoader className="animate-spin mr-2 text-2xl" />
+        Loading your cart...
       </div>
     );
 
@@ -53,80 +52,64 @@ export default function CartTable() {
     );
 
   return (
-    <div className="w-full mt-4">
-      <div className="flex items-center mb-4 space-x-2 text-gray-700">
-        <FaShoppingCart className="text-2xl text-indigo-600" />
-        <h2 className="text-xl font-semibold">My Cart</h2>
-      </div>
+    <section className="w-full space-y-4">
 
-      <div className="overflow-x-auto bg-white border border-gray-200 shadow-sm rounded-lg">
+      {/* --- Desktop Table --- */}
+      <div className="hidden md:block overflow-x-auto bg-white border border-gray-200 shadow-sm rounded-xl">
         <table className="min-w-full text-sm text-left">
-          <thead className="bg-gray-100 text-gray-700 uppercase text-xs tracking-wider">
+          <thead className="bg-gray-50 text-gray-700 uppercase text-xs tracking-wide">
             <tr>
               <th className="px-4 py-3">Product</th>
               <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3 flex items-center gap-1">Price (BDT)</th>
-              <th className="px-4 py-3">Quantity</th>
+              <th className="px-4 py-3">Price</th>
+              <th className="px-4 py-3">Qty</th>
               <th className="px-4 py-3">Total</th>
               <th className="px-4 py-3 text-center">Action</th>
             </tr>
           </thead>
-
           <tbody>
             {carts.map((product) => (
               <tr
                 key={product._id}
-                className="border-t hover:bg-gray-50 transition"
+                className="border-t border-gray-300 hover:bg-gray-50 transition-colors"
               >
                 <td className="px-4 py-3">
-                  <Image
-                    src={product.images[0] || "/assets/placeholder-image.svg"}
-                    alt={product.name}
-                    width={100}
-                    height={100}
-                    className="size-16 object-cover rounded-md shadow-sm"
-                  />
+                  <div className="relative w-14 h-14 md:w-16 md:h-16">
+                    <Image
+                      src={product.images?.[0] || "/assets/placeholder-image.svg"}
+                      alt={product.name}
+                      fill
+                      className="object-cover rounded-lg shadow-sm"
+                    />
+                  </div>
                 </td>
-
-                <td className="px-4 py-3 font-medium text-gray-800">
+                <td className="px-4 py-3 font-medium text-gray-800 truncate max-w-[200px]">
                   {product.name}
                 </td>
-
-                <td className="px-4 py-3 text-gray-700">
-                  {product.price.toFixed(2)}
-                </td>
-
+                <td className="px-4 py-3 text-gray-700">{product.price.toFixed(2)}</td>
                 <td className="px-4 py-3">
-                  <CartButton
-                    productId={product._id as string}
-                    maxQuantity={product.quantity}
-                  />
+                  <CartButton productId={product._id} maxQuantity={product.quantity} />
                 </td>
-
                 <td className="px-4 py-3 font-semibold text-gray-900">
-                  {(
-                    product.totalPrice ||
-                    product.price * (product.quantity || 1)
-                  ).toFixed(2)}{" "}
-                  BDT
+                  {(product.totalPrice || product.price * (product.quantity || 1)).toFixed(2)} BDT
                 </td>
-
-                <td className="px-4 py-3 text-center space-x-2">
-                  <Link
-                    href={`/shop/${product._id}`}
-                    className="p-2 rounded-full inline-flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
-                    title="Show details"
-                  >
-                    <FaInfo />
-                  </Link>
-
-                  <button
-                    onClick={() => removeCart.mutate(product._id as string)}
-                    className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition cursor-pointer"
-                    title="Remove item"
-                  >
-                    <FaTrashAlt />
-                  </button>
+                <td className="px-4 py-3 text-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <Link
+                      href={`/shop/${product._id}`}
+                      className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
+                      title="View details"
+                    >
+                      <FaInfo size={16} />
+                    </Link>
+                    <button
+                      onClick={() => removeCart.mutate(product._id)}
+                      className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition"
+                      title="Remove item"
+                    >
+                      <FaTrashAlt size={16} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -134,15 +117,62 @@ export default function CartTable() {
         </table>
       </div>
 
-      {/* Grand Total Section */}
-      <div className="mt-6 flex justify-end">
-        <div className="bg-gray-100 px-6 py-4 rounded-lg shadow-sm flex items-center space-x-3">
+      {/* --- Mobile Card Layout --- */}
+      <div className="md:hidden flex flex-col gap-4">
+        {carts.map((product) => (
+          <div
+            key={product._id}
+            className="bg-white border border-gray-200 shadow-sm rounded-xl p-4 flex flex-col sm:flex-row items-center gap-4"
+          >
+            <div className="relative w-24 h-24 flex-shrink-0">
+              <Image
+                src={product.images?.[0] || "/assets/placeholder-image.svg"}
+                alt={product.name}
+                fill
+                className="object-cover rounded-lg"
+              />
+            </div>
+            <div className="flex-1 flex flex-col gap-1 w-full">
+              <p className="font-medium text-gray-800">{product.name}</p>
+              <p className="text-gray-700">Price: {product.price.toFixed(2)} BDT</p>
+              <div className="flex items-center gap-2">
+                <span>Qty:</span>
+                <CartButton productId={product._id} maxQuantity={product.quantity} />
+              </div>
+              <p className="font-semibold text-gray-900">
+                Total: {(product.totalPrice || product.price * (product.quantity || 1)).toFixed(2)} BDT
+              </p>
+            </div>
+            <div className="flex items-center gap-2 mt-2 sm:mt-0">
+              <Link
+                href={`/shop/${product._id}`}
+                className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
+              >
+                <FaInfo />
+              </Link>
+              <button
+                onClick={() => removeCart.mutate(product._id)}
+                className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition"
+              >
+                <FaTrashAlt />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Grand Total + Checkout */}
+      <div className="mt-4 flex flex-col md:flex-row md:items-center justify-end gap-3">
+        <div className="bg-gray-50 border border-gray-200 px-6 py-4 rounded-xl shadow-sm flex items-center gap-2">
           <FaDollarSign className="text-green-600 text-xl" />
           <span className="text-lg font-semibold text-gray-800">
-            Grand Total: BDT {grandTotal.toFixed(2)}
+            Grand Total: <span className="text-green-700">BDT {grandTotal.toFixed(2)}</span>
           </span>
         </div>
+        <button className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-3 rounded-xl transition">
+          <FaShoppingCart /> Checkout
+        </button>
       </div>
-    </div>
+    </section>
   );
 }

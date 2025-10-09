@@ -17,7 +17,7 @@ export default function Navbar() {
       <SiteTitle className="flex-1 text-xl"/>
       
 
-      <span className="w-full absolute left-0 top-16 bg-gray-900 font-semibold block md:hidden py-2 px-4 border-b border-gray-700 z-50">DASHBOARD</span>
+     
 
       <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-md">
         {isLoading ? (

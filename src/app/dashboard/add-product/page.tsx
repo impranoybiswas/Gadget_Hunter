@@ -74,21 +74,11 @@ export default function AddProduct() {
   };
 
   return (
-    <section className="max-w-5xl mx-auto w-full p-4 sm:p-6 lg:p-10">
-      {/* Header */}
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl sm:text-4xl font-semibold text-gray-800">
-          Add New Product
-        </h1>
-        <p className="text-gray-500 mt-2 text-sm sm:text-base">
-          Fill out the details below to list a new gadget in the store.
-        </p>
-      </div>
-
+    <section className=" w-full">
       {/* Form */}
       <motion.form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white border border-base-300 border border-base-300-gray-100 shadow-lg rounded-2xl p-6 sm:p-8 space-y-6"
+        className="bg-white border border-base-300 shadow-lg rounded-xl p-6 sm:p-8 space-y-6"
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
@@ -114,7 +104,9 @@ export default function AddProduct() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Price (BDT)</label>
+            <label className="block text-sm font-medium mb-2">
+              Price (BDT)
+            </label>
             <input
               {...register("price", { required: true, valueAsNumber: true })}
               type="number"
