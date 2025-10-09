@@ -1,13 +1,8 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useUserData } from "@/hooks/useUserData";
 import Image from "next/image";
-import { Product } from "@/types/product";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import axiosApi from "@/libs/axiosInstance";
 import CartButton from "@/components/CartButton";
-import toast from "react-hot-toast";
 import {
   FaTrashAlt,
   FaShoppingCart,
@@ -17,43 +12,11 @@ import {
 } from "react-icons/fa";
 import { LuLoader } from "react-icons/lu";
 import Link from "next/link";
+import { useCarts, useRemoveCart } from "@/hooks/useFavCarts";
 
 export default function CartTable() {
-  const { currentUser, isLoading: userLoading } = useUserData();
-  const queryClient = useQueryClient();
-
-  // Fetch cart products
-  const fetchCarts = async (): Promise<Product[]> => {
-    const res = await axiosApi.get("/items/carts/all");
-    return res.data.items || [];
-  };
-
-  const {
-    data: carts,
-    isLoading,
-    isError,
-  } = useQuery<Product[]>({
-    queryKey: ["carts", currentUser?.email],
-    queryFn: fetchCarts,
-    enabled: !!currentUser?.email,
-    staleTime: 0,
-    retry: 1,
-    refetchInterval: 1000,
-  });
-
-  // Remove cart item
-  const handleRemoveCart = async (productId: string) => {
-    try {
-      await axiosApi.post("/items/carts/remove", { productId });
-      toast.success("Item removed from cart!");
-      queryClient.invalidateQueries({
-        queryKey: ["carts", currentUser?.email],
-      });
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to remove item!");
-    }
-  };
+  const { data: carts = [], isLoading, isError } = useCarts();
+  const removeCart = useRemoveCart();
 
   // Calculate grand total
   const grandTotal = useMemo(() => {
@@ -67,7 +30,7 @@ export default function CartTable() {
   }, [carts]);
 
   // Loading states
-  if (userLoading || isLoading)
+  if (isLoading)
     return (
       <div className="flex justify-center items-center h-40 text-gray-500">
         <LuLoader className="animate-spin mr-2" /> Loading your cart...
@@ -158,7 +121,7 @@ export default function CartTable() {
                   </Link>
 
                   <button
-                    onClick={() => handleRemoveCart(product._id as string)}
+                    onClick={() => removeCart.mutate(product._id as string)}
                     className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition cursor-pointer"
                     title="Remove item"
                   >

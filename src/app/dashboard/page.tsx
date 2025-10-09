@@ -1,12 +1,8 @@
 "use client";
 
+import { useStatesNumber } from "@/hooks/useStatesNumber";
 import React from "react";
-import {
-  FaBoxOpen,
-  FaShoppingCart,
-  FaHeart,
-  FaTags,
-} from "react-icons/fa";
+import { FaBoxOpen, FaShoppingCart, FaHeart, FaTags } from "react-icons/fa";
 import {
   PieChart,
   Pie,
@@ -21,11 +17,10 @@ import {
 } from "recharts";
 
 export default function DashboardHome() {
-  // Dummy data (replace with real API later)
-  const totalProducts = 120;
-  const totalCarts = 45;
-  const totalFavorites = 78;
-  const totalCategories = 8;
+  const { totalProducts, totalCarts, totalFavorites, totalCategories } =
+    useStatesNumber();
+
+  console.log(totalProducts);
 
   const pieData = [
     { name: "Products", value: totalProducts },
@@ -59,7 +54,7 @@ export default function DashboardHome() {
           </div>
           <div>
             <p className="text-gray-500 text-sm">Total Products</p>
-            <p className="text-xl font-bold">{totalProducts}</p>
+            <p className="text-xl font-bold">{totalProducts as number}</p>
           </div>
         </div>
 
@@ -111,7 +106,10 @@ export default function DashboardHome() {
                 label
               >
                 {pieData.map((entry, index) => (
-                  <Cell key={index} fill={pieColors[index % pieColors.length]} />
+                  <Cell
+                    key={index}
+                    fill={pieColors[index % pieColors.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -124,7 +122,10 @@ export default function DashboardHome() {
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="text-lg font-semibold mb-4">Monthly Product Added</h3>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={barData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+            <BarChart
+              data={barData}
+              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+            >
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />

@@ -1,4 +1,3 @@
-// /api/items/carts/remove/route.ts
 import { getUsersCollection } from "@/libs/collection";
 import { getSessionUser } from "@/libs/getSessionUser";
 import { NextResponse } from "next/server";

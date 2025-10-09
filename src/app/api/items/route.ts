@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const category = searchParams.get("category") || "";
     const brand = searchParams.get("brand") || "";
+    const all = searchParams.get("all") === "true"; // ✅ new param
 
     const query = {
       name: { $regex: search, $options: "i" },
@@ -23,15 +24,19 @@ export async function GET(request: NextRequest) {
 
     const total = await collection.countDocuments(query);
 
-    const items = await collection
-      .find(query)
-      .skip(skip)
-      .limit(limit)
-      .toArray();
+    let items;
+
+    if (all) {
+      // ✅ Return all matching products without pagination
+      items = await collection.find(query).toArray();
+    } else {
+      // ✅ Paginated response
+      items = await collection.find(query).skip(skip).limit(limit).toArray();
+    }
 
     return NextResponse.json({
       page,
-      totalPages: Math.ceil(total / limit),
+      totalPages: all ? 1 : Math.ceil(total / limit),
       totalItems: total,
       items,
     });
@@ -40,6 +45,7 @@ export async function GET(request: NextRequest) {
     return new NextResponse("Error fetching products", { status: 500 });
   }
 }
+
 
 //_________POST Data
 export async function POST(request: NextRequest) {

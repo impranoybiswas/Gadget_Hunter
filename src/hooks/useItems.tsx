@@ -31,19 +31,30 @@ const fetchItems = async (
   search: string,
   category: string,
   brand: string,
+  all: boolean = false
 ): Promise<PaginatedResponse> => {
-  const res = await axiosApi.get("/items", { params: { page, search, category, brand } });
+  const res = await axiosApi.get("/items", {
+    params: { page, search, category, brand, all },
+  });
   return res.data;
 };
 
 /**
  * Hook for fetching paginated products with search support.
  */
-export function useGetItems(page: number, search: string, category: string, brand: string) {
+
+export function useGetItems(
+  page: number,
+  search: string,
+  category: string,
+  brand: string,
+  all: boolean = false
+) {
   return useQuery({
-    queryKey: ["items", page, search, category, brand],
-    queryFn: () => fetchItems(page, search, category, brand),
-    placeholderData: keepPreviousData, // Keeps old data during pagination to prevent flickering
+    queryKey: ["items", page, search, category, brand, all],
+    queryFn: () => fetchItems(page, search, category, brand, all), // ✅ use the actual param
+    placeholderData: keepPreviousData,
+    refetchInterval: 2000,
   });
 }
 
@@ -68,6 +79,7 @@ export function useGetItem(id: string) {
     queryKey: ["item", id],
     queryFn: () => fetchItem(id),
     enabled: !!id, // Prevents request if id is undefined/null
+    refetchInterval: 2000,
   });
 }
 
@@ -147,11 +159,9 @@ export function useDeleteItem() {
   });
 }
 
-
 /* =========================
    GET: Head Data
    ========================= */
-
 
 const fetchHeadData = async (): Promise<BannerItem[]> => {
   const res = await axiosApi.get("/head-data");
@@ -162,5 +172,6 @@ export function useGetHeadData() {
   return useQuery<BannerItem[]>({
     queryKey: ["head-data"],
     queryFn: () => fetchHeadData(),
+    refetchInterval: 2000,
   });
 }

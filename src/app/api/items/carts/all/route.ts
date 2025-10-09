@@ -5,7 +5,12 @@ import { ObjectId } from "mongodb";
 
 export async function GET() {
   try {
-    const { email } = await getSessionUser();
+    const sessionUser = await getSessionUser();
+
+    if (!sessionUser?.email) {
+      return NextResponse.json({ items: [] });
+    }
+    const { email } = sessionUser;
 
     const users = await getUsersCollection();
     const products = await getItemsCollection();

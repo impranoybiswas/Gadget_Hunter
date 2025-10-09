@@ -10,6 +10,7 @@ export interface Product {
   isBrandNew: boolean;
   images: string[];
   totalPrice?: number;
+  totalProducts?: number ;
 }
 
 export interface PaginatedResponse {

@@ -1,58 +1,58 @@
 "use client";
 
+import { useToggleFavorite } from "@/hooks/useFavCarts";
 import { useUserData } from "@/hooks/useUserData";
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 
-export default function FavouriteButton({ productId }: { productId: string }) {
-  const { currentUser, isLoading } = useUserData();
-  const [isFavourite, setIsFavourite] = useState(false);
-  const [loading, setLoading] = useState(false);
+interface FavouriteButtonProps {
+  productId: string;
+}
 
+export default function FavouriteButton({ productId }: FavouriteButtonProps) {
+  const { currentUser, isLoading: userLoading } = useUserData();
+  const [isFavourite, setIsFavourite] = useState(false);
+  const toggleFavorite = useToggleFavorite();
+
+  // Sync local state with user data
   useEffect(() => {
-    const fav = currentUser?.favorites?.includes(productId) || false;
-    setIsFavourite(fav);
+    if (currentUser?.favorites) {
+      setIsFavourite(currentUser.favorites.includes(productId));
+    }
   }, [currentUser?.favorites, productId]);
 
-  const handleToggleFavourite = async () => {
+  // Handle click
+  const handleToggle = () => {
     if (!currentUser?.email) {
-      toast.error("Please login first!");
+      // Optional: show toast or alert
+      alert("Please log in to save favorites.");
       return;
     }
 
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/items/favorites/toggle", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        alert(err.error || "Something went wrong");
-      } else {
-        setIsFavourite((prev) => !prev); // optimistic UI
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update favorites");
-    }
-
-    setLoading(false);
+    toggleFavorite.mutate(productId, {
+      onSuccess: () => {
+        // Optimistic update (instant feedback)
+        setIsFavourite((prev) => !prev);
+      },
+    });
   };
 
-  if (isLoading) return <div className="loading loading-ring loading-sm" />;
+  if (userLoading)
+    return (
+      <div className="loading loading-ring loading-sm" aria-label="loading" />
+    );
 
   return (
     <button
-      onClick={handleToggleFavourite}
-      disabled={loading}
-      className="size-8 rounded-full bg-gray-200 hover:bg-gray-300 text-base flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer"
+      onClick={handleToggle}
+      disabled={userLoading}
+      className={`size-8 rounded-full bg-gray-200 hover:bg-gray-300 text-base flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer`}
     >
-      {isFavourite ? <GoHeartFill className="text-red-500" /> : <GoHeart />}
+      {isFavourite ? (
+        <GoHeartFill className="text-red-500" />
+      ) : (
+        <GoHeart className="text-gray-600" />
+      )}
     </button>
   );
 }

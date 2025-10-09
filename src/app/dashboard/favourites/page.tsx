@@ -1,38 +1,19 @@
 "use client";
 
 import React from "react";
-import { useUserData } from "@/hooks/useUserData";
 import Image from "next/image";
-import { Product } from "@/types/product";
 import AddToFavourite from "@/components/FavouriteButton";
-import { useQuery } from "@tanstack/react-query";
-import axiosApi from "@/libs/axiosInstance";
 import { FaHeart, FaBoxOpen, FaInfo } from "react-icons/fa";
 import Link from "next/link";
+import { useFavourites } from "@/hooks/useFavCarts";
 
 export default function FavoritesTable() {
-  const { currentUser, isLoading: userLoading } = useUserData();
+  const { data: favorites, isLoading, isError } = useFavourites();
 
-  const fetchFavorites = async (): Promise<Product[]> => {
-    const res = await axiosApi.get("/items/favorites/all");
-    return res.data.items || [];
-  };
-
-  const {
-    data: favorites,
-    isLoading,
-    isError,
-  } = useQuery<Product[]>({
-    queryKey: ["favorites", currentUser?.email],
-    queryFn: fetchFavorites,
-    enabled: !!currentUser?.email, // fetch only if user logged in
-    staleTime: 5 * 60 * 1000, // cache 5 min
-    retry: 1,
-    refetchInterval: 1000,
-  });
+  console.log(favorites);
 
   // Loading states
-  if (userLoading || isLoading)
+  if (isLoading)
     return (
       <div className="flex justify-center items-center h-40 text-gray-500">
         <FaBoxOpen className="animate-pulse text-3xl mr-2 text-gray-400" />
@@ -103,17 +84,17 @@ export default function FavoritesTable() {
                 <td className="px-4 py-3 ">
                   <div className="flex items-center justify-center gap-2">
                     {/* View Product */}
-                  <Link
-                    href={`/shop/${product._id}`}
-                    className="p-2 rounded-full inline-flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
-                    title="Show details"
-                  >
-                    <FaInfo />
-                  </Link>
+                    <Link
+                      href={`/shop/${product._id}`}
+                      className="p-2 rounded-full inline-flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
+                      title="Show details"
+                    >
+                      <FaInfo />
+                    </Link>
 
-                  {/* Remove from favorites */}
+                    {/* Remove from favorites */}
 
-                  <AddToFavourite productId={product._id as string} />
+                    <AddToFavourite productId={product._id as string} />
                   </div>
                 </td>
               </tr>

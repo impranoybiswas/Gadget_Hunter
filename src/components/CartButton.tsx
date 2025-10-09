@@ -1,69 +1,57 @@
 "use client";
 
+import { useToggleCart } from "@/hooks/useFavCarts";
 import { useUserData } from "@/hooks/useUserData";
 import React, { useEffect, useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { LuLoader } from "react-icons/lu";
-import toast from "react-hot-toast";
 
 interface CartButtonProps {
   productId: string;
   maxQuantity: number;
 }
 
-export default function CartButton({ productId, maxQuantity }: CartButtonProps) {
-  const { currentUser, isLoading } = useUserData();
+export default function CartButton({
+  productId,
+  maxQuantity,
+}: CartButtonProps) {
+  const { currentUser, isLoading: userLoading } = useUserData();
   const [quantity, setQuantity] = useState(0);
-  const [loading, setLoading] = useState(false);
+
+  const toggleCart = useToggleCart();
 
   // Load user's existing cart item if found
   useEffect(() => {
     const cartItem = currentUser?.carts?.find(
       (c: { productId: string }) => c.productId === productId
     );
-    if (cartItem) setQuantity(cartItem.quantity);
+    setQuantity(cartItem?.quantity || 0);
   }, [currentUser?.carts, productId]);
 
-  // Update cart on backend and UI
-  const updateCart = async (qty: number) => {
-    if (!currentUser?.email) {
-      toast.error("Please login first!");
-      return;
-    }
+  // Update cart quantity using useToggleCart
+  const updateCart = (qty: number) => {
+    if (!currentUser?.email) return; // backend handles session
 
-    // Check quantity limits before sending request
     if (qty < 1) {
-      toast.error("Minimum 1 item required!");
+      toggleCart.mutate({ productId, quantity: 0 }); // remove item
       return;
     }
     if (qty > maxQuantity) {
-      toast.error("Unable Quantity! Only limited stock available.");
+      // Limit check
       return;
     }
 
-    setLoading(true);
-    try {
-      const res = await fetch("/api/items/carts/toggle", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId, quantity: qty }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        toast.error(err.error || "Failed to update cart!");
-      } else {
-        setQuantity(qty);
-        toast.success("Cart updated successfully!");
+    toggleCart.mutate(
+      { productId, quantity: qty },
+      {
+        onSuccess: () => {
+          setQuantity(qty);
+        },
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong while updating cart!");
-    }
-    setLoading(false);
+    );
   };
 
-  if (isLoading)
+  if (userLoading)
     return (
       <div className="flex justify-center items-center p-2">
         <LuLoader className="animate-spin text-gray-500" size={20} />
@@ -74,9 +62,9 @@ export default function CartButton({ productId, maxQuantity }: CartButtonProps) 
     <div className="flex items-center space-x-2">
       {/* Minus Button */}
       <button
-        disabled={loading || quantity <= 1}
+        disabled={quantity <= 1}
         onClick={() => updateCart(quantity - 1)}
-        className="size-8 rounded-full bg-gray-200 hover:bg-gray-300 text-base flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer"
+        className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer"
       >
         <FaMinus />
       </button>
@@ -85,7 +73,7 @@ export default function CartButton({ productId, maxQuantity }: CartButtonProps) 
       <input
         type="number"
         value={quantity}
-        min={1}
+        min={0}
         max={maxQuantity}
         onChange={(e) => {
           const val = parseInt(e.target.value);
@@ -97,9 +85,9 @@ export default function CartButton({ productId, maxQuantity }: CartButtonProps) 
 
       {/* Plus Button */}
       <button
-        disabled={loading || quantity >= maxQuantity}
+        disabled={quantity >= maxQuantity}
         onClick={() => updateCart(quantity + 1)}
-        className="size-8 rounded-full bg-gray-200 hover:bg-gray-300 text-base flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer"
+        className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer"
       >
         <FaPlus />
       </button>

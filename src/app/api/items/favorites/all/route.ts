@@ -5,7 +5,12 @@ import { ObjectId } from "mongodb";
 
 export async function GET() {
   try {
-    const { email } = await getSessionUser(); 
+    const sessionUser = await getSessionUser();
+
+    if (!sessionUser?.email) {
+      return NextResponse.json({ items: [] });
+    }
+    const { email } = sessionUser;
 
     const users = await getUsersCollection();
     const products = await getItemsCollection();
@@ -16,8 +21,16 @@ export async function GET() {
       return NextResponse.json({ items: [] });
     }
 
+    const favoriteIds = user.favorites
+      .filter((id: string) => ObjectId.isValid(id))
+      .map((id: string) => new ObjectId(id));
+
+    if (!favoriteIds.length) {
+      return NextResponse.json({ items: [] });
+    }
+
     const favoriteProducts = await products
-      .find({ _id: { $in: user.favorites.map((id : string) => new ObjectId(id)) } })
+      .find({ _id: { $in: favoriteIds } })
       .toArray();
 
     return NextResponse.json({ items: favoriteProducts });
