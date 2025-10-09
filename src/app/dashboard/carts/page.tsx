@@ -88,7 +88,7 @@ export default function CartTable() {
                 </td>
                 <td className="px-4 py-3 text-gray-700">{product.price.toFixed(2)}</td>
                 <td className="px-4 py-3">
-                  <CartButton productId={product._id} maxQuantity={product.quantity} />
+                  <CartButton productId={product._id as string} maxQuantity={product.quantity} />
                 </td>
                 <td className="px-4 py-3 font-semibold text-gray-900">
                   {(product.totalPrice || product.price * (product.quantity || 1)).toFixed(2)} BDT
@@ -103,7 +103,7 @@ export default function CartTable() {
                       <FaInfo size={16} />
                     </Link>
                     <button
-                      onClick={() => removeCart.mutate(product._id)}
+                      onClick={() => removeCart.mutate(product._id as string)}
                       className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition"
                       title="Remove item"
                     >
@@ -137,7 +137,7 @@ export default function CartTable() {
               <p className="text-gray-700">Price: {product.price.toFixed(2)} BDT</p>
               <div className="flex items-center gap-2">
                 <span>Qty:</span>
-                <CartButton productId={product._id} maxQuantity={product.quantity} />
+                <CartButton productId={product._id as string} maxQuantity={product.quantity} />
               </div>
               <p className="font-semibold text-gray-900">
                 Total: {(product.totalPrice || product.price * (product.quantity || 1)).toFixed(2)} BDT
@@ -151,7 +151,7 @@ export default function CartTable() {
                 <FaInfo />
               </Link>
               <button
-                onClick={() => removeCart.mutate(product._id)}
+                onClick={() => removeCart.mutate(product._id as string)}
                 className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition"
               >
                 <FaTrashAlt />
