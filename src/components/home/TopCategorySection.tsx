@@ -23,7 +23,7 @@ export function CategorySwiper({ category }: { category: string }) {
   if (isLoading) return <p>Loading...</p>;
   const products = data?.items.slice(0, 5) || [];
   return (
-    <div className="bg-primary min-h-64 rounded-md flex flex-col items-center p-2">
+    <div className="bg-primary min-h-64 rounded-md flex flex-col items-center p-2 ">
       <span className="py-4 font-semibold text-lg uppercase text-white">
         {category}
       </span>

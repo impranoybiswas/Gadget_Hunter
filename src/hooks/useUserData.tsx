@@ -18,6 +18,7 @@ export type User = {
   createdAt: string;
   lastSignInAt: string;
   favorites: string[];
+  carts: { productId: string; quantity: number }[];
 };
 
 /**

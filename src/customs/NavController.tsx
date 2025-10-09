@@ -1,4 +1,5 @@
 "use client";
+
 import ThemeToggler from "@/components/ThemeToggler";
 import { useUserData } from "@/hooks/useUserData";
 import DropDown from "@/ui/DropDown";
@@ -67,22 +68,22 @@ export const UserAvatar = () => {
   if (isLoading) return <span className="loading loading-dots loading-md" />;
   return (
     <DropDown
-      className="bg-base-100"
+      className="bg-primary text-white"
       label={
         <IconButtton
           icon={
-            <Image className="object-cover" src={currentUser.image || ""} alt="avatar" width={100} height={100} />
+            <Image className="object-cover" src={currentUser.image || "./assets/placeholder-profile.svg"} alt="avatar" width={100} height={100} />
           }
         />
       }
     >
       <>
-      <div className="flex flex-col gap-2 border-b px-4 py-2">
+      <div className="flex flex-col gap-1 p-4">
         <h1 className="text-sm font-semibold">{currentUser.name}</h1>
         <p className="text-xs">{currentUser.email}</p>
       </div>
-      <Link href={"/dashboard"} className="flex gap-2 border-b px-4 py-2 hover:text-secondary transition-all duration-300 ease-in-out items-center">Dashboard</Link>
-      <button onClick={() => signOut()} className="flex w-full gap-2 border-b px-4 py-2 hover:text-secondary transition-all duration-300 ease-in-out items-center">Sign Out</button>
+      <Link href={"/dashboard"} className="flex gap-2 border-b-[1px] border-t-[1px] border-base-100 p-4 hover:text-secondary transition-all duration-300 ease-in-out items-center">Dashboard</Link>
+      <button onClick={() => signOut()} className="flex w-full gap-2 p-4 hover:text-secondary transition-all duration-300 ease-in-out items-center">Sign Out</button>
       </>
     </DropDown>
   );

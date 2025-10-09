@@ -104,7 +104,7 @@ export default function ReviewSection() {
             key={data.id}
             className="h-full"
           >
-            <div className="rounded-md border border-base-300 shadow-md p-4 flex flex-col items-center text-center h-full hover:-translate-y-2 transition-all duration-400 ease-in-out mt-3 mb-8">
+            <div className="rounded-md border border-base-300 shadow-md px-5 py-10 flex flex-col items-center text-center h-full hover:-translate-y-2 transition-all duration-400 ease-in-out mt-3 mb-8">
               <Image
                 className="object-cover w-20 h-20 rounded-full mb-3 border-2 border-gray-300"
                 src={data.photo}

@@ -26,7 +26,7 @@ export default function LoginPage() {
   const { status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/auth/profile";
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -153,6 +153,14 @@ export default function LoginPage() {
           <FcGoogle className="w-6 h-6" />
           <span className="font-medium text-gray-700">Continue with Google</span>
         </button>
+
+        {/* Register */}
+        <p className="text-sm text-center mt-6">
+          Don&apos;t have an account?{" "}
+          <Link href="/auth/register" className="text-primary hover:underline">
+            Register
+          </Link>
+        </p>
       </div>
     </div>
   );

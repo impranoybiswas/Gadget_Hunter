@@ -4,9 +4,11 @@ import React from "react";
 import { useUserData } from "@/hooks/useUserData";
 import Image from "next/image";
 import { Product } from "@/types/product";
-import AddToFavourite from "@/components/AddToFavourite";
+import AddToFavourite from "@/components/FavouriteButton";
 import { useQuery } from "@tanstack/react-query";
 import axiosApi from "@/libs/axiosInstance";
+import { FaHeart, FaBoxOpen, FaInfo } from "react-icons/fa";
+import Link from "next/link";
 
 export default function FavoritesTable() {
   const { currentUser, isLoading: userLoading } = useUserData();
@@ -20,51 +22,105 @@ export default function FavoritesTable() {
     data: favorites,
     isLoading,
     isError,
-    refetch,
   } = useQuery<Product[]>({
     queryKey: ["favorites", currentUser?.email],
     queryFn: fetchFavorites,
-    enabled: !!currentUser?.email, // only fetch if user is logged in
-    staleTime: 5 * 60 * 1000, // cache for 5 min
+    enabled: !!currentUser?.email, // fetch only if user logged in
+    staleTime: 5 * 60 * 1000, // cache 5 min
     retry: 1,
+    refetchInterval: 1000,
   });
 
-  if (userLoading || isLoading) return <div>Loading favorites...</div>;
-  if (isError) return <p>Error loading favorites.</p>;
-  if (!favorites || favorites.length === 0) return <p>No favorites found.</p>;
+  // Loading states
+  if (userLoading || isLoading)
+    return (
+      <div className="flex justify-center items-center h-40 text-gray-500">
+        <FaBoxOpen className="animate-pulse text-3xl mr-2 text-gray-400" />
+        Loading your favorites...
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="text-center text-red-500 py-10">
+        Failed to load favorites.
+      </div>
+    );
+
+  if (!favorites || favorites.length === 0)
+    return (
+      <div className="flex flex-col items-center justify-center py-10 text-gray-500">
+        <FaBoxOpen className="text-5xl mb-2 text-gray-400" />
+        <p>No favorites found.</p>
+      </div>
+    );
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="px-4 py-2 text-left">Image</th>
-            <th className="px-4 py-2 text-left">Title & Price</th>
-            <th className="px-4 py-2 text-left">Favorite</th>
-          </tr>
-        </thead>
-        <tbody>
-          {favorites.map((product) => (
-            <tr onClick={() => refetch()} key={product._id} className="border-t">
-              <td className="px-4 py-2">
-                <Image
-                  src={product.images[0] || "/assets/placeholder-image.svg"}
-                  alt={product.name}
-                  width={100}
-                  height={100}
-                  className="w-16 h-16 object-cover rounded"
-                />
-              </td>
-              <td className="px-4 py-2 flex flex-col">
-                {product.name} <span>${product.price}</span>
-              </td>
-              <td className="px-4 py-2">
-                <AddToFavourite productId={product._id as string} />
-              </td>
+    <div className="w-full mt-4">
+      <div className="flex items-center mb-4 space-x-2 text-gray-700">
+        <FaHeart className="text-2xl text-pink-600" />
+        <h2 className="text-xl font-semibold">My Favorites</h2>
+      </div>
+
+      <div className="overflow-x-auto bg-white border border-gray-200 shadow-sm rounded-lg">
+        <table className="min-w-full text-sm text-left">
+          <thead className="bg-gray-100 text-gray-700 uppercase text-xs tracking-wider">
+            <tr>
+              <th className="px-4 py-3">Product</th>
+              <th className="px-4 py-3">Name & Price</th>
+              <th className="px-4 py-3 text-center">Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {favorites.map((product) => (
+              <tr
+                key={product._id}
+                className="border-t hover:bg-gray-50 transition cursor-pointer"
+              >
+                {/* Product Image */}
+                <td className="px-4 py-3">
+                  <Image
+                    src={product.images[0] || "/assets/placeholder-image.svg"}
+                    alt={product.name}
+                    width={80}
+                    height={80}
+                    className="w-16 h-16 object-cover rounded-md shadow-sm"
+                  />
+                </td>
+
+                {/* Product Name + Price */}
+                <td className="px-4 py-3 flex flex-col">
+                  <span className="font-medium text-gray-800">
+                    {product.name}
+                  </span>
+                  <span className="text-gray-700 mt-1">
+                    ${product.price.toFixed(2)}
+                  </span>
+                </td>
+
+                {/* Action Buttons */}
+                <td className="px-4 py-3 ">
+                  <div className="flex items-center justify-center gap-2">
+                    {/* View Product */}
+                  <Link
+                    href={`/shop/${product._id}`}
+                    className="p-2 rounded-full inline-flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
+                    title="Show details"
+                  >
+                    <FaInfo />
+                  </Link>
+
+                  {/* Remove from favorites */}
+
+                  <AddToFavourite productId={product._id as string} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -2,9 +2,10 @@
 
 import { useUserData } from "@/hooks/useUserData";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 
-export default function AddToFavourite({ productId }: { productId: string }) {
+export default function FavouriteButton({ productId }: { productId: string }) {
   const { currentUser, isLoading } = useUserData();
   const [isFavourite, setIsFavourite] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function AddToFavourite({ productId }: { productId: string }) {
 
   const handleToggleFavourite = async () => {
     if (!currentUser?.email) {
-      alert("Please login first!");
+      toast.error("Please login first!");
       return;
     }
 
@@ -33,7 +34,7 @@ export default function AddToFavourite({ productId }: { productId: string }) {
         const err = await res.json();
         alert(err.error || "Something went wrong");
       } else {
-        setIsFavourite(prev => !prev); // optimistic UI
+        setIsFavourite((prev) => !prev); // optimistic UI
       }
     } catch (err) {
       console.error(err);
@@ -49,9 +50,9 @@ export default function AddToFavourite({ productId }: { productId: string }) {
     <button
       onClick={handleToggleFavourite}
       disabled={loading}
-      className="btn btn-sm btn-circle btn-outline bg-base-100 hover:bg-base-300 transition-all duration-300 ease-in-out"
+      className="size-8 rounded-full bg-gray-200 hover:bg-gray-300 text-base flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer"
     >
-      {isFavourite ? <GoHeartFill className="text-red-500" size={22} /> : <GoHeart size={22} />}
+      {isFavourite ? <GoHeartFill className="text-red-500" /> : <GoHeart />}
     </button>
   );
 }

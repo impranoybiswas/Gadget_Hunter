@@ -10,6 +10,7 @@ import { ImageUpload } from "@/customs/ImageUpload";
 import { FcGoogle } from "react-icons/fc";
 import Loading from "@/app/loading";
 import Button from "@/ui/Button";
+import Link from "next/link";
 
 type RegisterFormData = {
   name: string;
@@ -38,7 +39,7 @@ export default function RegisterPage() {
 
   const searchParams = useSearchParams();
 
-  const callbackUrl = searchParams.get("callbackUrl") || "/auth/profile";
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   // Auto redirect if already logged in
   useEffect(() => {
@@ -100,7 +101,6 @@ export default function RegisterPage() {
 
         // Auto login
         await signIn("credentials", { redirect: false, email, password });
-        router.push("/auth/profile");
       } else if (res.status === 400) {
         Swal.fire({
           icon: "warning",
@@ -270,6 +270,14 @@ export default function RegisterPage() {
             Continue with Google
           </span>
         </button>
+
+        {/* Already have an account? */}
+        <p className="text-sm text-gray-500 mt-4">
+          Already have an account?{" "}
+          <Link href="/auth/login" className="text-primary font-medium">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );

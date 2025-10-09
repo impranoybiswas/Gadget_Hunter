@@ -7,8 +7,8 @@ import toast from "react-hot-toast";
 import Button from "@/ui/Button";
 import axiosApi from "@/libs/axiosInstance";
 import { ImageUpload } from "@/customs/ImageUpload";
+import { motion } from "framer-motion";
 
-// Form values type
 type ProfileFormValues = {
   name: string;
   gender: string;
@@ -33,12 +33,8 @@ export default function EditProfilePage() {
     },
   });
 
-  // Watch the "image" field to preview uploaded profile picture
   const image = watch("image");
 
-  /**
-   * Sync form values with current user data
-   */
   useEffect(() => {
     if (currentUser) {
       reset({
@@ -49,14 +45,9 @@ export default function EditProfilePage() {
     }
   }, [currentUser, reset]);
 
-  /**
-   * Handle profile update submission
-   */
   const onSubmit = async (data: ProfileFormValues) => {
     try {
-      // ✅ Use PUT to update user profile (adjust endpoint if needed)
       await axiosApi.patch(`/user`, data);
-
       toast.success("Profile updated successfully!");
     } catch (err: unknown) {
       console.error("Profile update failed:", err);
@@ -65,63 +56,84 @@ export default function EditProfilePage() {
   };
 
   return (
-    <section className="w-full mx-auto flex flex-col gap-6">
-      <h1 className="text-3xl font-semibold mb-6 text-gray-800">
-        Edit Profile
-      </h1>
-      <form
+    <section className="max-w-3xl mx-auto w-full p-4 sm:p-6 lg:p-8">
+      {/* Header */}
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-semibold text-gray-800 mb-2">
+          Edit Profile
+        </h1>
+        <p className="text-gray-500 text-sm">
+          Update your personal information and profile picture.
+        </p>
+      </div>
+
+      <motion.form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 bg-white shadow-md rounded-lg p-6 border"
+        className="bg-white shadow-lg rounded-2xl border border-gray-100 p-6 md:p-8 space-y-6"
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
       >
-        {/* Name Field */}
+        {/* Form Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Name */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-2">
+              Full Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              {...register("name", { required: "Name is required" })}
+              placeholder="Enter your full name"
+              className="rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary p-2.5 outline-none transition"
+            />
+          </div>
+
+          {/* Gender */}
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-2">
+              Gender
+            </label>
+            <select
+              {...register("gender")}
+              className="rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary p-2.5 outline-none transition"
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Image Upload */}
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Full Name
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Profile Picture
           </label>
-          <input
-            type="text"
-            {...register("name", { required: "Name is required" })}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2"
-          />
+          <div className="flex flex-col sm:flex-row gap-6 items-center">
+            <ImageUpload
+              folder="gadget_hunters/profile_images"
+              label="Upload New Image"
+              onUploadSuccess={(url) => setValue("image", url, { shouldValidate: true })}
+              imageUrl={image}
+            />
+            
+          </div>
         </div>
 
-        {/* Gender Select */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700">
-            Gender
-          </label>
-          <select
-            {...register("gender")}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2"
-          >
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
+        {/* Submit */}
+        <div className="pt-4 flex justify-end">
+          <motion.div whileTap={{ scale: 0.97 }}>
+            <Button
+              type="submit"
+              label={isSubmitting ? "Updating..." : "Update Profile"}
+              disabled={isSubmitting}
+              isOutline={false}
+              isLarge={true}
+            />
+          </motion.div>
         </div>
-
-        {/* Profile Image Upload */}
-        <div>
-          <ImageUpload
-            folder="gadget_hunters/profile_images"
-            label="Profile Picture"
-            onUploadSuccess={(url) => setValue("image", url, { shouldValidate: true })}
-            imageUrl={image}
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="pt-4">
-          <Button
-          isOutline={false}
-          isLarge={true}
-            type="submit"
-            label={isSubmitting ? "Updating..." : "Update Profile"}
-            disabled={isSubmitting}
-          />
-        </div>
-      </form>
+      </motion.form>
     </section>
   );
 }

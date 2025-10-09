@@ -7,20 +7,24 @@ interface DropDownProps {
   className?: string;
 }
 
-export default function Drawer({ label, lebelClose, children, className }: DropDownProps) {
+export default function Drawer({
+  label,
+  lebelClose,
+  children,
+  className,
+}: DropDownProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <>
-      <div 
-        className="cursor-pointer" 
-        onClick={() => setIsOpen(!isOpen)}>
+      <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? lebelClose || label : label}
       </div>
 
       <div
         onClick={() => setIsOpen(false)}
-        className={`absolute top-16 right-0 z-40 h-[calc(100dvh-64px)] ${className} transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "w-full p-4" : "w-0 p-0"}`}>
+        className={`absolute top-14 right-0 z-50 h-dvh ${className} transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "w-full p-4" : "w-0 p-0"}`}
+      >
         {children}
       </div>
     </>

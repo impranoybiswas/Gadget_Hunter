@@ -19,7 +19,7 @@ export default function Navbar() {
 
       <span className="w-full absolute left-0 top-16 bg-gray-900 font-semibold block md:hidden py-2 px-4 border-b border-gray-700 z-50">DASHBOARD</span>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-md">
         {isLoading ? (
           <span className="loading loading-dots loading-md" />
         ) : (
@@ -27,16 +27,16 @@ export default function Navbar() {
             <Image
               src={
                 currentUser?.image ||
-                "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                "./assets/placeholder-profile.svg"
               }
               alt="avatar"
               width={100}
               height={100}
-              className="size-6 md:size-8 rounded-full object-cover"
+              className="size-6 md:size-8 rounded-md object-cover"
             />
             <div className="hidden md:flex flex-col">
               <span className="text-sm font-semibold">{currentUser?.name}</span>
-              <span className="text-xs opacity-70">{currentUser?.email}</span>
+              <span className="text-xs opacity-60">{currentUser?.email}</span>
             </div>
           </>
         )}

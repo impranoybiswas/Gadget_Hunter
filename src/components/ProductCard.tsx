@@ -3,13 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { TbCurrencyTaka } from "react-icons/tb";
-import AddToFavourite from "./AddToFavourite";
+import AddToFavourite from "./FavouriteButton";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { _id, name, brand, price, images } = product;
 
   return (
-    <div className="group relative border border-base-300 rounded-md shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden bg-base-100 flex flex-col p-2 hover:-translate-y-2">
+    <div className="group relative border border-base-300 rounded-md shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden bg-base-100 flex flex-col p-2 hover:-translate-y-1">
       {/* Thumbnail */}
       <div className="relative w-full h-60 overflow-hidden bg-gray-50 border border-base-300 rounded-md">
         <Image
