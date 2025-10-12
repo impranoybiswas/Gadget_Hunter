@@ -4,56 +4,80 @@ import Section from "@/ui/Section";
 import Image from "next/image";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function TopCategorySection() {
+  const categories = ["Mobile", "Tablet", "Smart Watch", "Earbuds"];
+
   return (
-    <Section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-      <CategorySwiper category="mobile" />
-      <CategorySwiper category="tablet" />
-      <CategorySwiper category="smart watch" />
-      <CategorySwiper category="earbuds" />
+    <Section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-10">
+      {categories.map((category) => (
+        <CategorySwiper key={category} category={category} />
+      ))}
     </Section>
   );
 }
 
-export function CategorySwiper({ category }: { category: string }) {
-  const { data, isLoading } = useGetItems(1, "", category, "");
-  if (isLoading) return <p>Loading...</p>;
+function CategorySwiper({ category }: { category: string }) {
+  const { data, isLoading } = useGetItems(1, "", category.toLowerCase(), "", true);
+
+  if (isLoading)
+    return (
+      <div className="bg-gradient-to-br from-primary/90 to-primary rounded-xl flex justify-center items-center h-70">
+        <p className="text-white text-lg animate-pulse">Loading {category}...</p>
+      </div>
+    );
+
   const products = data?.items.slice(0, 5) || [];
+
   return (
-    <div className="bg-primary min-h-64 rounded-md flex flex-col items-center p-2 ">
-      <span className="py-4 font-semibold text-lg uppercase text-white">
-        {category}
-      </span>
+    <motion.div
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="bg-gradient-to-br from-primary/90 to-primary rounded-md shadow overflow-hidden p-2"
+    >
+      <div className="text-center py-3">
+        <h3 className="text-white text-xl font-semibold tracking-wide uppercase">
+          {category}
+        </h3>
+      </div>
+
       <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={20}
+        modules={[Pagination, Autoplay]}
+        spaceBetween={10}
         slidesPerView={1}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 2000 }}
-        loop={true}
-        className="w-full h-full"
+        autoplay={{ delay: 2500, disableOnInteraction: false }}
+        loop
+        className="w-full h-72"
       >
-        {products.map((data, index) => (
-          <SwiperSlide key={index} className="w-full h-full rounded-md">
+        {products.map((item, index) => (
+          <SwiperSlide key={index}>
             <Link
-              href={`/shop/${data._id}`}
-              className="flex flex-col text-lg md:text-xl font-semibold text-shadow-xs text-primary bg-base-100 pb-5 text-center rounded-md mb-2 w-full border border-base-300 p-2"
+              href={`/shop/${item._id}`}
+              className="relative block group h-72 w-full overflow-hidden rounded-md"
             >
               <Image
-                className="object-cover w-full h-40 rounded-md mb-4 border border-base-300"
-                src={data.images[0] || "./assets/placeholder-image.svg"}
-                alt="logo"
-                height={500}
-                width={500}
+                src={item.images?.[0] || "/assets/placeholder-image.svg"}
+                alt={item.name}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
               />
-              {data.name}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-end items-center text-center p-4">
+                <h4 className="text-white text-base md:text-lg font-semibold truncate w-full">
+                  {item.name}
+                </h4>
+                <p className="text-white/80 text-sm pb-5">
+                  ৳{item.price?.toLocaleString("bn-BD") || "N/A"}
+                </p>
+              </div>
             </Link>
           </SwiperSlide>
         ))}
       </Swiper>
-    </div>
+    </motion.div>
   );
 }

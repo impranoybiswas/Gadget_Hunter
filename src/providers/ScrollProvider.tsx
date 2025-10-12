@@ -10,7 +10,7 @@ export const ScrollContext = createContext<ScrollContextType | undefined>(
   undefined
 );
 
-function ScrollProvider({ children }: { children: ReactNode }) {
+export default function ScrollProvider({ children }: { children: ReactNode }) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -28,5 +28,3 @@ function ScrollProvider({ children }: { children: ReactNode }) {
     </ScrollContext.Provider>
   );
 }
-
-export default ScrollProvider;

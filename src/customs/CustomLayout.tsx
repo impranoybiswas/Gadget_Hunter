@@ -8,6 +8,8 @@ import { SessionProvider } from "next-auth/react";
 import QueryProvider from "@/providers/QueryProvider";
 import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer";
+import ScrollProvider from "@/providers/ScrollProvider";
+import GoToTop from "@/components/GoToTop";
 
 export default function CoustomLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -18,10 +20,13 @@ export default function CoustomLayout({ children }: { children: ReactNode }) {
     <ThemeProvider>
       <SessionProvider>
         <QueryProvider>
-          <Toaster />
-          {hideLayout || <Navbar />}
-          {children}
-          {hideLayout || <Footer />}
+          <ScrollProvider>
+            <Toaster />
+            {hideLayout || <Navbar />}
+            {children}
+            <GoToTop/>
+            {hideLayout || <Footer />}
+          </ScrollProvider>
         </QueryProvider>
       </SessionProvider>
     </ThemeProvider>

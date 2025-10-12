@@ -2,12 +2,12 @@
 import Image from "next/image";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import Section from "@/ui/Section";
 import { FaStar } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const reviews = [
@@ -85,45 +85,66 @@ const reviews = [
 
 export default function ReviewSection() {
   return (
-    <Section title="Reviews" subtitle="What our customers say" className="mb-5">
+    <Section
+      title="Customer Reviews"
+      subtitle="Hear from our happy customers"
+      className="mb-10"
+    >
       <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={20}
+        modules={[Pagination, Autoplay]}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 2500 }}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
         loop={true}
-        className="w-full h-full"
+        spaceBetween={24}
+        className="w-full"
         breakpoints={{
-          320: { slidesPerView: 2 },
-          768: { slidesPerView: 3 },
-          1024: { slidesPerView: 5 },
+          320: { slidesPerView: 1.3 },
+          640: { slidesPerView: 2 },
+          1024: { slidesPerView: 4 },
         }}
       >
-        {reviews.map((data) => (
-          <SwiperSlide
-            key={data.id}
-            className="h-full"
-          >
-            <div className="rounded-md border border-base-300 shadow-md px-5 py-10 flex flex-col items-center text-center h-full hover:-translate-y-2 transition-all duration-400 ease-in-out mt-3 mb-8">
-              <Image
-                className="object-cover w-20 h-20 rounded-full mb-3 border-2 border-gray-300"
-                src={data.photo}
-                alt={data.name}
-                height={80}
-                width={80}
-              />
-              <h3 className="font-semibold text-gray-800 dark:text-white">
-                {data.name}
-              </h3>
-              <div className="flex justify-center my-2">
-                {Array.from({ length: data.rating }).map((_, i) => (
-                  <FaStar key={i} className="text-yellow-400" />
-                ))}
+        {reviews.map((review) => (
+          <SwiperSlide key={review.id} className="w-full py-10 px-1">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 10 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="bg-white dark:bg-base-200 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-2 transition-all duration-500 ease-in-out p-5 text-center h-full flex flex-col justify-between"
+            >
+              <div className="flex flex-col items-center">
+                <div className="relative mb-4">
+                  <Image
+                    className="rounded-full border-4 border-primary/30 object-cover"
+                    src={review.photo}
+                    alt={review.name}
+                    width={80}
+                    height={80}
+                  />
+                  <span className="absolute -bottom-1 right-0 bg-primary text-white text-xs font-semibold px-2 py-0.5 rounded-full shadow">
+                    ★ {review.rating}
+                  </span>
+                </div>
+
+                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+                  {review.name}
+                </h3>
+
+                <div className="flex justify-center mt-2 mb-3">
+                  {Array.from({ length: review.rating }).map((_, i) => (
+                    <FaStar key={i} className="text-yellow-400 text-sm" />
+                  ))}
+                </div>
+
+                <p className="text-sm text-gray-600 dark:text-gray-300 italic leading-relaxed line-clamp-2">
+                  “{review.review}”
+                </p>
               </div>
-              <p className="text-sm opacity-80 line-clamp-2">
-                “{data.review}”
-              </p>
-            </div>
+
+              <div className="mt-5">
+                <div className="w-16 h-1 bg-primary mx-auto rounded-full"></div>
+              </div>
+            </motion.div>
           </SwiperSlide>
         ))}
       </Swiper>

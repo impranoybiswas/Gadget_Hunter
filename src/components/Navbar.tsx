@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import SiteTitle from "@/customs/SiteTitle";
 import Link from "next/link";
@@ -11,7 +12,7 @@ const navLink = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Shop", href: "/shop" },
-  { name: "Blog", href: "/blog" },
+  { name: "Blogs", href: "/blogs" },
   { name: "Contact", href: "/contact" },
 ];
 
