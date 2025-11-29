@@ -37,7 +37,7 @@ function CategorySwiper({ category }: { category: string }) {
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="bg-gradient-to-br from-primary/90 to-primary rounded-md shadow overflow-hidden p-2"
+      className="bg-gradient-to-br from-primary/90 to-primary rounded-2xl shadow overflow-hidden p-2"
     >
       <div className="text-center py-3">
         <h3 className="text-white text-xl font-semibold tracking-wide uppercase">
@@ -58,7 +58,7 @@ function CategorySwiper({ category }: { category: string }) {
           <SwiperSlide key={index}>
             <Link
               href={`/shop/${item._id}`}
-              className="relative block group h-72 w-full overflow-hidden rounded-md"
+              className="relative block group h-72 w-full overflow-hidden rounded-xl"
             >
               <Image
                 src={item.images?.[0] || "/assets/placeholder-image.svg"}

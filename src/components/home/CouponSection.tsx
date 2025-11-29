@@ -7,8 +7,16 @@ import { motion } from "framer-motion";
 
 const coupons = [
   { code: "SAVE10", discount: "10%", desc: "Get 10% off on all mobiles" },
-  { code: "NEWUSER20", discount: "20%", desc: "Welcome gift for first-time buyers" },
-  { code: "NEW30", discount: "30%", desc: "Extra 30% off on your next purchase" },
+  {
+    code: "NEWUSER20",
+    discount: "20%",
+    desc: "Welcome gift for first-time buyers",
+  },
+  {
+    code: "NEW30",
+    discount: "30%",
+    desc: "Extra 30% off on your next purchase",
+  },
   { code: "PACKME", discount: "25%", desc: "Bundle offers with 25% savings" },
 ];
 
@@ -53,12 +61,14 @@ export default function CouponSection() {
           transition={{ duration: 0.5, delay: index * 0.1 }}
           className="relative bg-gradient-to-br from-primary to-primary/80 text-white rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500 ease-in-out p-6 flex flex-col items-center justify-between text-center"
         >
-          <div className="bg-yellow-400 text-primary rounded-full w-24 h-24 flex flex-col items-center justify-center shadow-inner font-extrabold text-2xl tracking-tight mb-4 border-4 border-white">
+          <div className="bg-yellow-400 text-primary rounded-full size-30 flex flex-col items-center justify-center shadow-inner font-extrabold text-2xl tracking-tight mb-4 border-6 border-white">
             {coupon.discount}
             <span className="text-sm font-semibold -mt-1">OFF</span>
           </div>
 
-          <p className="text-sm md:text-base font-medium opacity-90 mb-6 px-2">{coupon.desc}</p>
+          <p className="text-sm md:text-base font-medium opacity-90 mb-6 px-2">
+            {coupon.desc}
+          </p>
 
           <button
             onClick={() => handleCopy(coupon.code)}
@@ -76,10 +86,6 @@ export default function CouponSection() {
               </>
             )}
           </button>
-
-          <div className="absolute top-2 right-2 bg-yellow-400 text-primary text-xs font-semibold px-3 py-1 rounded-full shadow-md uppercase tracking-wide">
-            Deal
-          </div>
         </motion.div>
       ))}
     </Section>

@@ -17,7 +17,7 @@ type ProductFormValues = {
   category: string;
   warranty: string;
   description: string;
-  isBrandNew: string; // "true" | "false"
+  isBrandNew: string;
 };
 
 export default function AddProduct() {

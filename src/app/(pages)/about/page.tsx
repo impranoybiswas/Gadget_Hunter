@@ -86,7 +86,7 @@ export default function About() {
       </Section>
 
       {/* Vision & Mission Section */}
-      <Section className="py-16 bg-gray-50 rounded-lg">
+      <Section className="p-12 bg-gray-50 rounded-lg">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-10">
           Our Vision & Mission
         </h2>
