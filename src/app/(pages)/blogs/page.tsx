@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Container from "@/ui/Container";
 import Section from "@/ui/Section";
-
 import Button from "@/ui/Button";
 import BlogCard, { Blog } from "@/components/BlogCard";
 
@@ -17,7 +16,7 @@ export default function Blogs() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newBlog.title || !newBlog.author || !newBlog.content) return;
+    if (!newBlog.title.trim() || !newBlog.author.trim() || !newBlog.content.trim()) return;
     const blog: Blog = { ...newBlog, id: Date.now().toString(), date: new Date().toISOString() };
     setBlogs([blog, ...blogs]);
     setNewBlog({ title: "", author: "", content: "" });
@@ -26,15 +25,21 @@ export default function Blogs() {
   return (
     <Container>
       {/* Hero Section */}
-      <Section title="Blogs" subtitle="Read and share tech insights">
-        <p className="text-gray-700 text-base md:text-lg max-w-2xl mx-auto text-center">
-          Explore the latest tech trends, gadgets reviews, and insights from our community.
+      <Section
+        title="Tech Blog"
+        subtitle="Insights, Reviews & Tech Trends"
+        className="text-center"
+      >
+        <p className="text-gray-700 text-base md:text-lg max-w-2xl mx-auto">
+          Discover the latest technology trends, gadget reviews, and insights from our community. Share your expertise and connect with other tech enthusiasts.
         </p>
       </Section>
 
       {/* Add New Blog Form */}
-      <Section className="py-10 max-w-3xl mx-auto">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Add a New Blog</h2>
+      <Section className="py-12 max-w-3xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">
+          Share Your Insights
+        </h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
@@ -55,7 +60,7 @@ export default function Blogs() {
           <textarea
             name="content"
             rows={6}
-            placeholder="Blog Content"
+            placeholder="Write your blog content here..."
             value={newBlog.content}
             onChange={handleChange}
             className="border border-gray-300 p-3 rounded-md focus:outline-primary focus:ring-1 focus:ring-primary transition"
@@ -63,19 +68,24 @@ export default function Blogs() {
           <Button
             type="submit"
             label="Post Blog"
-            isLarge={false}
+            isLarge={true}
             isOutline={false}
             className="bg-primary text-white hover:bg-primary-dark transition py-3 rounded-md"
           />
+          <p className="text-sm text-gray-500 mt-1">
+            Please ensure your content is informative and relevant to our tech community.
+          </p>
         </form>
       </Section>
 
       {/* Blog Grid */}
-      <Section className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Section className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogs.length > 0 ? (
           blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)
         ) : (
-          <p className="text-center text-gray-500 col-span-full">No blogs yet. Be the first to post!</p>
+          <p className="text-center text-gray-500 col-span-full text-lg">
+            No blogs have been posted yet. Be the first to share your insights!
+          </p>
         )}
       </Section>
     </Container>

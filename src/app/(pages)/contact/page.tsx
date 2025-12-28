@@ -4,7 +4,7 @@ import Container from "@/ui/Container";
 import Section from "@/ui/Section";
 import Button from "@/ui/Button";
 import React, { useState } from "react";
-import {FaEnvelope, FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa6";
+import { FaEnvelope, FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa6";
 import { FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 
 export default function Contact() {
@@ -16,7 +16,7 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Message sent successfully!");
+    alert("Your message has been sent successfully!");
     setForm({ name: "", email: "", message: "" });
   };
 
@@ -25,21 +25,21 @@ export default function Contact() {
       {/* Hero / Title */}
       <Section
         title="Contact Us"
-        subtitle="We'd love to hear from you"
+        subtitle="We’re Here to Help"
         className="text-center"
       >
         <p className="text-gray-700 text-base md:text-lg max-w-2xl mx-auto">
-          Have a question, feedback, or need support? Reach out to Gadget Hunter anytime. Our team is here to assist you.
+          Whether you have questions, feedback, or need assistance, our team at Gadget Hunter is ready to provide support. Reach out and we’ll respond promptly.
         </p>
       </Section>
 
       {/* Contact Info & Form */}
-      <Section className="grid grid-cols-1 md:grid-cols-2 gap-10 py-16">
+      <Section className="grid grid-cols-1 md:grid-cols-2 gap-12 py-16">
         {/* Contact Details */}
         <div className="flex flex-col gap-8">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800">Get in Touch</h2>
           <p className="text-gray-600 text-base md:text-lg">
-            We are always ready to answer your questions or help with your purchases. Contact us through any of the following channels:
+            Our team is available to answer any questions you may have. Connect with us through any of the following channels:
           </p>
 
           <div className="flex flex-col gap-6 text-gray-700">
@@ -67,14 +67,14 @@ export default function Contact() {
         {/* Contact Form */}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 bg-gray-50 p-8 rounded-lg shadow hover:shadow-lg transition"
+          className="flex flex-col gap-4 bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition"
         >
           <input
             type="text"
             name="name"
             value={form.name}
             onChange={handleChange}
-            placeholder="Your Name"
+            placeholder="Full Name"
             required
             className="border border-gray-300 rounded-md p-3 focus:outline-primary focus:ring-1 focus:ring-primary transition"
           />
@@ -83,7 +83,7 @@ export default function Contact() {
             name="email"
             value={form.email}
             onChange={handleChange}
-            placeholder="Your Email"
+            placeholder="Email Address"
             required
             className="border border-gray-300 rounded-md p-3 focus:outline-primary focus:ring-1 focus:ring-primary transition"
           />
@@ -103,6 +103,9 @@ export default function Contact() {
             isOutline={false}
             className="bg-primary text-white hover:bg-primary-dark transition-colors py-3 rounded-md mt-2"
           />
+          <p className="text-sm text-gray-500 mt-2">
+            We respect your privacy. Your information will not be shared.
+          </p>
         </form>
       </Section>
     </Container>

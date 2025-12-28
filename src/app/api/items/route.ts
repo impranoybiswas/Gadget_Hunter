@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const category = searchParams.get("category") || "";
     const brand = searchParams.get("brand") || "";
-    const all = searchParams.get("all") === "true"; // ✅ new param
+    const all = searchParams.get("all") === "true"; //
 
     const query = {
       name: { $regex: search, $options: "i" },

@@ -26,3 +26,9 @@ export interface BannerItem {
   subtitle: string;
   image: string;
 }
+
+export interface Payment {
+  tranId: string;
+  amount: number;
+  status: string;
+}

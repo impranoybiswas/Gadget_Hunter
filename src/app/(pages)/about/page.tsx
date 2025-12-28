@@ -4,14 +4,7 @@ import Container from "@/ui/Container";
 import Section from "@/ui/Section";
 import React from "react";
 import { FaMobile } from "react-icons/fa";
-import {
-  FaLaptop,
-  FaHeadphones,
-  FaStar,
-  FaBolt,
-  FaRocket,
-  FaShield,
-} from "react-icons/fa6";
+import { FaLaptop, FaHeadphones, FaStar, FaBolt, FaRocket, FaShield } from "react-icons/fa6";
 
 export default function About() {
   return (
@@ -19,35 +12,25 @@ export default function About() {
       {/* Hero Section */}
       <Section
         title="About Gadget Hunter"
-        subtitle="Your ultimate destination for premium tech gadgets"
+        subtitle="Your Ultimate Destination for Premium Tech Gadgets"
         className="text-center"
       >
         <p className="text-gray-700 text-lg md:text-xl leading-relaxed max-w-4xl mx-auto">
-          At <span className="font-semibold">Gadget Hunter</span>, we are
-          passionate about connecting tech enthusiasts with the latest and most
-          innovative gadgets. From smartphones and laptops to headphones and
-          smartwatches, our mission is to bring quality, innovation, and
-          reliability to your fingertips.
+          At <span className="font-semibold">Gadget Hunter</span>, we are dedicated to connecting tech enthusiasts with the latest, most innovative gadgets. From smartphones and laptops to headphones and smartwatches, our mission is to deliver quality, innovation, and reliability directly to your fingertips.
         </p>
-        
       </Section>
 
       {/* Our Story Section */}
-      <Section className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <Section className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="flex flex-col justify-center gap-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-            Our Story
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800">Our Story</h2>
           <p className="text-gray-700 text-base md:text-lg leading-relaxed">
-            Gadget Hunter was founded with a vision to make the latest tech
-            accessible, reliable, and exciting for everyone. We curate only the
-            best gadgets from trusted brands, provide honest reviews, and ensure
-            a seamless shopping experience for tech lovers worldwide.
+            Founded with a vision to make cutting-edge technology accessible, reliable, and exciting for everyone, Gadget Hunter curates only the best gadgets from trusted brands. We provide honest reviews, expert guidance, and a seamless shopping experience for tech enthusiasts worldwide.
           </p>
-          <div className="flex gap-6 mt-4">
-            <FaRocket className="text-4xl text-primary" />
-            <FaBolt className="text-4xl text-primary" />
-            <FaShield className="text-4xl text-primary" />
+          <div className="flex gap-6 mt-4 text-primary">
+            <FaRocket className="text-4xl" />
+            <FaBolt className="text-4xl" />
+            <FaShield className="text-4xl" />
           </div>
         </div>
 
@@ -57,28 +40,27 @@ export default function About() {
             <div>
               <h3 className="font-semibold text-xl">Top-Quality Gadgets</h3>
               <p className="text-gray-600 text-sm md:text-base">
-                We source only the best gadgets from trusted brands to ensure
-                quality and reliability.
+                We source only premium gadgets from verified brands to ensure quality, performance, and reliability.
               </p>
             </div>
           </div>
+
           <div className="flex items-center gap-4 bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition-all">
             <FaLaptop className="text-4xl text-primary" />
             <div>
               <h3 className="font-semibold text-xl">Trusted Reviews</h3>
               <p className="text-gray-600 text-sm md:text-base">
-                Honest reviews and recommendations to help you make informed
-                tech decisions.
+                Honest and insightful reviews to help you make informed technology choices.
               </p>
             </div>
           </div>
+
           <div className="flex items-center gap-4 bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition-all">
             <FaHeadphones className="text-4xl text-primary" />
             <div>
-              <h3 className="font-semibold text-xl">Excellent Support</h3>
+              <h3 className="font-semibold text-xl">Exceptional Support</h3>
               <p className="text-gray-600 text-sm md:text-base">
-                Fast and reliable customer service ensures your shopping
-                experience is seamless.
+                Responsive and knowledgeable customer service ensures a seamless shopping experience.
               </p>
             </div>
           </div>
@@ -86,8 +68,8 @@ export default function About() {
       </Section>
 
       {/* Vision & Mission Section */}
-      <Section className="p-12 bg-gray-50 rounded-lg">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-10">
+      <Section className="p-12 bg-gray-50 rounded-xl mt-16">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
           Our Vision & Mission
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -95,24 +77,23 @@ export default function About() {
             <FaStar className="text-4xl text-primary" />
             <h3 className="font-semibold text-xl">Customer-Centric</h3>
             <p className="text-gray-600 text-sm md:text-base">
-              Our focus is on providing the best experience for every gadget
-              enthusiast.
+              We prioritize delivering the best experience for every tech enthusiast.
             </p>
           </div>
+
           <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-lg transition-all">
             <FaBolt className="text-4xl text-primary" />
             <h3 className="font-semibold text-xl">Innovation</h3>
             <p className="text-gray-600 text-sm md:text-base">
-              We bring the latest technology to your hands with speed and
-              reliability.
+              Bringing the latest technology to your hands quickly and reliably.
             </p>
           </div>
+
           <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-lg shadow hover:shadow-lg transition-all">
             <FaShield className="text-4xl text-primary" />
             <h3 className="font-semibold text-xl">Trust & Quality</h3>
             <p className="text-gray-600 text-sm md:text-base">
-              Only verified brands and products, ensuring safety and
-              satisfaction.
+              Only verified brands and products, ensuring safety, satisfaction, and peace of mind.
             </p>
           </div>
         </div>

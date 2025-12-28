@@ -1,7 +1,8 @@
 {
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#02342F",
-        "titleBar.activeBackground": "#034842",
-        "titleBar.activeForeground": "#E9FEFC"
-    }
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#432619",
+    "titleBar.activeBackground": "#5E3623",
+    "titleBar.activeForeground": "#FCF9F7"
+  },
+  "cSpell.words": ["Eventcheckout"]
 }
