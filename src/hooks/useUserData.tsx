@@ -3,23 +3,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import axiosApi from "@/libs/axiosInstance";
+import { User } from "next-auth";
 
 /**
  * User type returned from backend
  */
-export type User = {
-  _id: string;
-  email: string;
-  name: string;
-  provider: string;
-  image: string;
-  gender: string;
-  role: string;
-  createdAt: string;
-  lastSignInAt: string;
-  favorites: string[];
-  carts: { productId?: string; quantity?: number }[];
-};
+
 
 /**
  * Fetch current logged-in user (backend verifies via session)

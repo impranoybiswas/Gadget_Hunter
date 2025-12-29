@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     for (const item of items) {
       await users?.updateOne(
         { email: trx.user },
-        { $pull: { carts: { productId: item.id } } }
+        { $pull: { carts : { productId: item.id } } } as unknown as Document
       );
     }
 
