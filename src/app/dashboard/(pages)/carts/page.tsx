@@ -3,11 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  FaTrashAlt,
-  FaBoxOpen,
-  FaInfo,
-} from "react-icons/fa";
+import { FaTrashAlt, FaBoxOpen, FaInfo } from "react-icons/fa";
 import { LuLoader } from "react-icons/lu";
 import { useCarts, useRemoveCart } from "@/hooks/useFavCarts";
 import CartButton from "@/components/CartButton";
@@ -77,6 +73,26 @@ export default function CartTable() {
 
   return (
     <section className="w-full space-y-4">
+      {/* ================= Summary + Checkout ================= */}
+      <div className="flex flex-col md:flex-row items-center justify-end gap-4 mt-6 w-full">
+        {/* Total Amount */}
+        <div className="flex flex-row items-center gap-2 bg-gray-50 h-12 px-6 rounded-lg border border-gray-200 w-full md:w-auto">
+          <span className="text-sm text-gray-600 font-medium">
+            Selected Total:
+          </span>
+          <span className="text-xl font-bold text-green-700">
+            BDT {selectedTotal.toFixed(2)}
+          </span>
+        </div>
+
+        {/* Checkout Button */}
+        <div className="w-full md:w-auto">
+          <CheckoutButton
+            selectedProducts={selectedProducts}
+            cartTotal={selectedTotal}
+          />
+        </div>
+      </div>
 
       {/* ================= Desktop Table ================= */}
       <div className="hidden md:block overflow-x-auto bg-white border border-gray-200 shadow-sm rounded-xl">
@@ -95,10 +111,7 @@ export default function CartTable() {
 
           <tbody>
             {carts.map((product) => (
-              <tr
-                key={product._id}
-                className="border-t hover:bg-gray-50"
-              >
+              <tr key={product._id} className="border-t hover:bg-gray-50">
                 <td className="px-4 py-3 text-center">
                   <input
                     type="checkbox"
@@ -115,7 +128,9 @@ export default function CartTable() {
                 <td className="px-4 py-3">
                   <div className="relative size-12">
                     <Image
-                      src={product.images?.[0] || "/assets/placeholder-image.svg"}
+                      src={
+                        product.images?.[0] || "/assets/placeholder-image.svg"
+                      }
                       alt={product.name}
                       fill
                       className="object-cover rounded-lg"
@@ -127,9 +142,7 @@ export default function CartTable() {
                   {product.name}
                 </td>
 
-                <td className="px-4 py-3">
-                  {product.price.toFixed(2)} BDT
-                </td>
+                <td className="px-4 py-3">{product.price.toFixed(2)} BDT</td>
 
                 <td className="px-4 py-3">
                   <CartButton
@@ -139,7 +152,8 @@ export default function CartTable() {
                 </td>
 
                 <td className="px-4 py-3 font-semibold">
-                  {(product.totalPrice ||
+                  {(
+                    product.totalPrice ||
                     product.price * (product.quantity || 1)
                   ).toFixed(2)}{" "}
                   BDT
@@ -155,9 +169,7 @@ export default function CartTable() {
                     </Link>
 
                     <button
-                      onClick={() =>
-                        removeCart.mutate(product._id as string)
-                      }
+                      onClick={() => removeCart.mutate(product._id as string)}
                       className="p-2 bg-red-100 text-red-600 rounded-full"
                     >
                       <FaTrashAlt />
@@ -181,12 +193,8 @@ export default function CartTable() {
               <input
                 type="checkbox"
                 className="w-4 h-4 accent-green-600"
-                checked={selectedProducts.some(
-                  (p) => p._id === product._id
-                )}
-                onChange={(e) =>
-                  handleSelectProduct(product, e.target.checked)
-                }
+                checked={selectedProducts.some((p) => p._id === product._id)}
+                onChange={(e) => handleSelectProduct(product, e.target.checked)}
               />
               <p className="font-medium">{product.name}</p>
             </div>
@@ -212,8 +220,8 @@ export default function CartTable() {
 
             <p className="font-semibold">
               Total:{" "}
-              {(product.totalPrice ||
-                product.price * (product.quantity || 1)
+              {(
+                product.totalPrice || product.price * (product.quantity || 1)
               ).toFixed(2)}{" "}
               BDT
             </p>
@@ -227,9 +235,7 @@ export default function CartTable() {
               </Link>
 
               <button
-                onClick={() =>
-                  removeCart.mutate(product._id as string)
-                }
+                onClick={() => removeCart.mutate(product._id as string)}
                 className="p-2 bg-red-100 text-red-600 rounded-full"
               >
                 <FaTrashAlt />
@@ -237,21 +243,6 @@ export default function CartTable() {
             </div>
           </div>
         ))}
-      </div>
-
-      {/* ================= Summary + Checkout ================= */}
-      <div className="flex flex-col md:flex-row justify-end gap-4 mt-4">
-        <div className="bg-gray-50 border px-6 py-4 rounded-xl">
-          <p className="text-sm text-gray-600">Selected Total</p>
-          <p className="text-lg font-semibold text-green-700">
-            BDT {selectedTotal.toFixed(2)}
-          </p>
-        </div>
-
-        <CheckoutButton
-          selectedProducts={selectedProducts}
-        cartTotal={selectedTotal}
-        />
       </div>
     </section>
   );

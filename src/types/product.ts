@@ -30,6 +30,10 @@ export interface BannerItem {
 
 export interface Payment {
   tranId: string;
+  user: string;
+  items: { id: string; quantity: number }[];
   amount: number;
   status: string;
+  createdAt: string;
+  paidAt?: string;
 }

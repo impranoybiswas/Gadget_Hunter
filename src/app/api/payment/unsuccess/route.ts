@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     // 🛡️ Prevent double execution
     if (trx.status === "PAID") {
-      return NextResponse.redirect(process.env.NEXT_PUBLIC_BASE_URL!, {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/carts`, {
         status: 303,
       });
     }
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     // Delete transaction record
     await payments?.deleteOne({ tranId });
 
-    return NextResponse.redirect(process.env.NEXT_PUBLIC_BASE_URL!, {
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/carts`, {
       status: 303,
     });
   } catch (err) {

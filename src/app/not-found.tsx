@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
 
 import Container from "@/ui/Container";
 import Section from "@/ui/Section";
+import Link from "next/link";
 
 export default function NotFound() {
   return (

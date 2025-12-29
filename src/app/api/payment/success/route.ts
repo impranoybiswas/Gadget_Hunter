@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const valId = form.get("val_id");
 
     if (!tranIdRaw || paymentStatus !== "VALID") {
-      return NextResponse.redirect(process.env.NEXT_PUBLIC_BASE_URL!, {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/carts`, {
         status: 303,
       });
     }
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     // 🛡️ Prevent double execution
     if (trx.status === "PAID") {
-      return NextResponse.redirect(process.env.NEXT_PUBLIC_BASE_URL!, {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/success?tranId=${tranId}`, {
         status: 303,
       });
     }
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    return NextResponse.redirect(process.env.NEXT_PUBLIC_BASE_URL!, {
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/success?tranId=${tranId}`, {
       status: 303,
     });
   } catch (error) {

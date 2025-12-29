@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCollection } from "@/libs/connectDB";
+import { getPaymentsCollection } from "@/libs/collection";
 
 export async function POST(req: NextRequest) {
+
   try {
     const body = await req.json();
 
@@ -16,10 +17,10 @@ export async function POST(req: NextRequest) {
     // robust & unique transaction id
     const tranId = `EVT_${Date.now()}_${Math.floor(100000 + Math.random() * 900000)}`;
 
-    const payments = await getCollection("payments");
+    const payments = await getPaymentsCollection();
 
     // save initial transaction record
-    await payments?.insertOne({
+    await payments.insertOne({
       tranId,
       user: body.customer?.email,
       items: body.items,
@@ -75,8 +76,5 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
-  const payments = await getCollection("payments");
-  const result = await payments?.find({}).toArray();
-  return NextResponse.json({ message: "Payment route", result });
-}
+
+

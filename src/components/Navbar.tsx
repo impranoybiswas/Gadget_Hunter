@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import SiteTitle from "@/customs/SiteTitle";
 import Link from "next/link";
 import NavController from "@/customs/NavController";

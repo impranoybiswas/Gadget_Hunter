@@ -15,3 +15,11 @@ export async function getUsersCollection() {
   }
   return collection;
 }
+
+export async function getPaymentsCollection() {
+  const collection = await getCollection("payments");
+  if (!collection) {
+    throw new Error("Failed to connect to collection");
+  }
+  return collection;
+}

@@ -39,6 +39,7 @@ export function PayButton({ cartTotal, selectedProducts }: { cartTotal: number, 
 
       if (data?.GatewayPageURL) {
         window.location.href = data.GatewayPageURL;
+        console.log("Redirecting to payment gateway...");
       } else {
         alert("Payment initiation failed!");
       }

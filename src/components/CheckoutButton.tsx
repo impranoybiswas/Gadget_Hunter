@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { Product } from "@/types/product";
 import Modal from "@/ui/Modal";
 import { PayButton } from "./PayButton";
+import Button from "@/ui/Button";
+import { FaCartShopping } from "react-icons/fa6";
 
 type Props = {
   selectedProducts: Product[];
@@ -11,67 +12,81 @@ type Props = {
 };
 
 export default function CheckoutButton({ selectedProducts, cartTotal }: Props) {
-
-
   return (
-    <Modal lebel="Checkout Now" disabled={selectedProducts.length === 0}>
+    <Modal
+      lebel={
+        <Button
+          label="Checkout"
+          leftIcon={<FaCartShopping />}
+          isLarge
+          isOutline={false}
+          disabled={selectedProducts.length === 0}
+        />
+      }
+    >
       <div className="space-y-4">
-
         {/* Header */}
-        <h2 className="text-lg font-semibold text-gray-800">
-          Order Summary
-        </h2>
+        <h2 className="text-lg font-semibold text-gray-800">Order Summary</h2>
 
-        {/* Selected Products */}
-        <div className="max-h-64 overflow-y-auto space-y-3">
-          {selectedProducts.map((product) => (
-            <div
-              key={product._id}
-              className="flex items-center gap-3 border rounded-lg p-3"
-            >
-              <div className="relative w-14 h-14 flex-shrink-0">
-                <Image
-                  src={product.images?.[0] || "/assets/placeholder-image.svg"}
-                  alt={product.name}
-                  fill
-                  className="object-cover rounded-md"
-                />
-              </div>
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border border-gray-200 rounded-lg">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="p-2 text-sm font-medium text-gray-700">Product</th>
+                <th className="p-2 text-sm font-medium text-gray-700">Qty</th>
+                <th className="p-2 text-sm font-medium text-gray-700">Unit Price</th>
+                <th className="p-2 text-sm font-medium text-gray-700">Total Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedProducts.map((product) => (
+                <tr
+                  key={product._id}
+                  className="border-b last:border-b-0 hover:bg-gray-50"
+                >
+                  {/* Product */}
+                  <td className="p-2 text-gray-800 font-medium text-sm tracking-tight">
+                
+                    {product.name}
+                  </td>
 
-              <div className="flex-1">
-                <p className="font-medium text-gray-800">
-                  {product.name}
-                </p>
-                <p className="text-sm text-gray-600">
-                  Qty: {product.quantity || 1}
-                </p>
-              </div>
+                  {/* Quantity */}
+                  <td className="p-2 text-sm text-gray-700">
+                    {product.cartQuantity || 1}
+                  </td>
 
-              <p className="font-semibold text-gray-900">
-                BDT{" "}
-                {(product.totalPrice ||
-                  product.price * (product.quantity || 1)
-                ).toFixed(2)}
-              </p>
-            </div>
-          ))}
+                  {/* Base Price */}
+                  <td className="p-2 text-sm text-gray-700">
+                    BDT {product.price.toFixed(2)}
+                  </td>
+
+                  {/* Total Price */}
+                  <td className="p-2 text-sm font-semibold text-green-700">
+                    BDT{" "}
+                    {(
+                      product.totalPrice ||
+                      product.price * (product.cartQuantity || 1)
+                    ).toFixed(2)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* Total */}
         <div className="flex justify-between items-center border-t pt-4">
-          <span className="text-gray-700 font-medium">
-            Total Amount
-          </span>
+          <span className="text-gray-700 font-medium">Total Amount</span>
           <span className="text-lg font-bold text-green-700">
             BDT {cartTotal.toFixed(2)}
           </span>
         </div>
 
         {/* Pay Now */}
-        <div className="pt-2">
+        <div className="pt-2 float-end">
           <PayButton cartTotal={cartTotal} selectedProducts={selectedProducts} />
         </div>
-
       </div>
     </Modal>
   );
