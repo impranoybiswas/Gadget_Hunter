@@ -1,24 +1,33 @@
 "use client";
 
+import { useUserData } from "@/hooks/useUserData";
+import { Product } from "@/types/product";
 import Button from "@/ui/Button";
 import { useState } from "react";
 
-export function PayButton({ cartTotal }: { cartTotal: number }) {
+export function PayButton({ cartTotal, selectedProducts }: { cartTotal: number, selectedProducts: Product[] }) {
   const [loading, setLoading] = useState(false);
+  const { currentUser } = useUserData()
+
+  const items = selectedProducts.map(p => ({
+    id: p._id,
+    quantity: p.cartQuantity,
+  }));
 
   async function handleCheckout() {
     setLoading(true);
     try {
-      const res = await fetch("/api/payment", {
+      const res = await fetch("/api/payment/init", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: cartTotal,
+          items : items,
           customer: {
-            name: "Customer Name",
-            email: "customer@example.com",
-            address: "Dhaka",
-            phone: "01700000000",
+            name: currentUser?.name || "N/A",
+            email: currentUser?.email || "N/A",
+            address: "N/A",
+            phone: "N/A",
           },
         }),
       });

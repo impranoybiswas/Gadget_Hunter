@@ -11,6 +11,7 @@ export interface Product {
   images: string[];
   totalPrice?: number;
   totalProducts?: number ;
+  cartQuantity?: number;
 }
 
 export interface PaginatedResponse {

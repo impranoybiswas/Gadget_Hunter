@@ -21,6 +21,8 @@ export async function POST(req: NextRequest) {
     // save initial transaction record
     await payments?.insertOne({
       tranId,
+      user: body.customer?.email,
+      items: body.items,
       amount,
       status: "INITIATED",
       createdAt: new Date(),
@@ -53,28 +55,28 @@ export async function POST(req: NextRequest) {
     };
 
     const response = await fetch(
-        "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(payload),
-        }
-      );
-  
-      const result = await response.json();
-      console.log(result);
-      return NextResponse.json(result);
-    } catch (err) {
-      console.error("Payment initiation error:", err);
-      return NextResponse.json(
-        { error: "Payment initiation failed" },
-        { status: 500 }
-      );
-    }
-  }
+      "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(payload),
+      }
+    );
 
-  export async function GET(req: NextRequest) {
-    const payments = await getCollection("payments");
-    const result = await payments?.find({}).toArray();
-    return NextResponse.json({ message: "Payment route", result });
+    const result = await response.json();
+    console.log(result);
+    return NextResponse.json(result);
+  } catch (err) {
+    console.error("Payment initiation error:", err);
+    return NextResponse.json(
+      { error: "Payment initiation failed" },
+      { status: 500 }
+    );
   }
+}
+
+export async function GET() {
+  const payments = await getCollection("payments");
+  const result = await payments?.find({}).toArray();
+  return NextResponse.json({ message: "Payment route", result });
+}

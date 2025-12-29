@@ -7,15 +7,11 @@ import { PayButton } from "./PayButton";
 
 type Props = {
   selectedProducts: Product[];
+  cartTotal: number;
 };
 
-export default function CheckoutButton({ selectedProducts }: Props) {
+export default function CheckoutButton({ selectedProducts, cartTotal }: Props) {
 
-  const total = selectedProducts.reduce(
-    (acc, item) =>
-      acc + (item.totalPrice || item.price * (item.quantity || 1)),
-    0
-  );
 
   return (
     <Modal lebel="Checkout Now" disabled={selectedProducts.length === 0}>
@@ -67,13 +63,13 @@ export default function CheckoutButton({ selectedProducts }: Props) {
             Total Amount
           </span>
           <span className="text-lg font-bold text-green-700">
-            BDT {total.toFixed(2)}
+            BDT {cartTotal.toFixed(2)}
           </span>
         </div>
 
         {/* Pay Now */}
         <div className="pt-2">
-          <PayButton cartTotal={total} />
+          <PayButton cartTotal={cartTotal} selectedProducts={selectedProducts} />
         </div>
 
       </div>

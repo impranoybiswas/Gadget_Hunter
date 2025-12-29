@@ -5,7 +5,7 @@ import { Payment } from "@/types/product";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchPayments = async (): Promise<Payment[]> => {
-  const res = await axiosApi.get("/payment");
+  const res = await axiosApi.get("/payment/init");
   return res.data;
 };
 

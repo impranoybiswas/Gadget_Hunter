@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -9,12 +9,9 @@ import {
   FaInfo,
 } from "react-icons/fa";
 import { LuLoader } from "react-icons/lu";
-
 import { useCarts, useRemoveCart } from "@/hooks/useFavCarts";
-
 import CartButton from "@/components/CartButton";
 import CheckoutButton from "@/components/CheckoutButton";
-
 import { Product } from "@/types/product";
 
 export default function CartTable() {
@@ -35,7 +32,7 @@ export default function CartTable() {
   };
 
   // grand total of ALL carts
-  const grandTotal = useMemo(() => {
+  useMemo(() => {
     return carts.reduce(
       (acc, item) =>
         acc + (item.totalPrice || item.price * (item.quantity || 1)),
@@ -253,7 +250,7 @@ export default function CartTable() {
 
         <CheckoutButton
           selectedProducts={selectedProducts}
-        
+        cartTotal={selectedTotal}
         />
       </div>
     </section>
