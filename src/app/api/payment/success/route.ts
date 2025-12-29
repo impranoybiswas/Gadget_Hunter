@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getCollection } from "@/libs/connectDB";
+import { getItemsCollection, getUsersCollection } from "@/libs/collection";
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,12 +21,16 @@ export async function POST(req: NextRequest) {
     const tranId = tranIdRaw.toString().trim();
 
     const payments = await getCollection("payments");
-    const products = await getCollection("products");
+    const products = await getItemsCollection();
+    const users = await getUsersCollection();
 
     const trx = await payments?.findOne({ tranId });
 
     if (!trx) {
-      return NextResponse.json({ error: "Transaction not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Transaction not found" },
+        { status: 404 }
+      );
     }
 
     // 🛡️ Prevent double execution
@@ -41,6 +47,14 @@ export async function POST(req: NextRequest) {
       await products?.updateOne(
         { _id: new ObjectId(item.id) },
         { $inc: { quantity: -item.quantity } }
+      );
+    }
+
+    // 🔁 Reduce product from user carts
+    for (const item of items) {
+      await users?.updateOne(
+        { email: trx.user },
+        { $pull: { carts: { productId: item.id } } }
       );
     }
 
