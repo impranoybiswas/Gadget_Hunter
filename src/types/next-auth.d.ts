@@ -30,13 +30,5 @@ declare module "next-auth" {
     _id: string;
     email: string;
     name: string;
-    provider: string;
-    image: string;
-    gender: string;
-    role: string;
-    createdAt: string;
-    lastSignInAt: string;
-    favorites: string[];
-    carts: { productId?: string; quantity?: number }[];
   }
 }

@@ -3,18 +3,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import axiosApi from "@/libs/axiosInstance";
-import { User } from "next-auth";
+import { DBUser } from "@/types/dbUser";
 
 /**
  * User type returned from backend
  */
 
-
 /**
  * Fetch current logged-in user (backend verifies via session)
  */
-const fetchUser = async (): Promise<User> => {
-  const response = await axiosApi.get<User>("/user");
+const fetchUser = async (): Promise<DBUser> => {
+  const response = await axiosApi.get<DBUser>("/user");
   return response.data;
 };
 
@@ -24,7 +23,7 @@ const fetchUser = async (): Promise<User> => {
 export function useUserData() {
   const { data: session, status } = useSession();
 
-  const query = useQuery<User>({
+  const query = useQuery<DBUser>({
     queryKey: ["user"],
     queryFn: fetchUser,
     enabled: status === "authenticated", // run only if logged in
