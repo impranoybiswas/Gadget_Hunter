@@ -21,14 +21,13 @@ declare module "next-auth" {
       id: string;
       name?: string | null;
       email?: string | null;
-      image?: string | null;
       role?: string;
     } & DefaultSession["user"];
   }
 
-  export interface User extends DefaultUser {
-    _id: string;
+  interface User extends DefaultUser {
+    id: string;
     email: string;
-    name: string;
+    role: string;
   }
 }
