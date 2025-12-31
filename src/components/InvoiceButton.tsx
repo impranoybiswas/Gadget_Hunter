@@ -17,7 +17,7 @@ export default function InvoiceButton({ payment }: { payment: Payment }) {
 
   const itemsIds = new Set(items.map((i) => i.id));
 
-  const paidProducts = products?.items.filter((p) => itemsIds.has(p._id)) ?? [];
+  const paidProducts = products?.items.filter((p) => itemsIds.has(p._id as string)) ?? [];
 
 
   const handleDownloadInvoice = () => {
