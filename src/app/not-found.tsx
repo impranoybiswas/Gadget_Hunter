@@ -1,18 +1,19 @@
 "use client";
 
-import { FaSearch, FaShoppingCart } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 
 import Container from "@/ui/Container";
 import Section from "@/ui/Section";
-import Link from "next/link";
+
+import GoBackButton from "@/components/GoBackButton";
 
 export default function NotFound() {
   return (
     <Container>
-      <Section>
-        <div className="text-7xl font-bold text-gray-800">404</div>
+      <Section className="flex flex-col items-center">
+        <div className="text-8xl font-bold text-gray-800 mt-20">404</div>
 
-        <div className="flex items-center gap-3 text-2xl font-semibold mt-4 text-gray-700">
+        <div className="flex items-center gap-3 text-2xl font-semibold mt-6 text-gray-700">
           <FaSearch className="text-sky-600" />
           Page Not Found
         </div>
@@ -22,22 +23,7 @@ export default function NotFound() {
           Let’s get you back to shopping amazing gadgets.
         </p>
 
-        <div className="mt-8 flex gap-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-sky-600 text-white hover:bg-sky-700 transition"
-          >
-            <FaShoppingCart />
-            Back to Home
-          </Link>
-
-          <Link
-            href="/shop"
-            className="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-          >
-            Browse Products
-          </Link>
-        </div>
+        <GoBackButton/>
 
         <div className="mt-12 text-sm text-gray-400">
           © {new Date().getFullYear()} Gadget Hunter

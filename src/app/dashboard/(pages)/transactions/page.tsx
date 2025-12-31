@@ -7,7 +7,9 @@ import { useGetItem } from "@/hooks/useItems";
 
 export default function Transactions() {
   const { currentUser, isLoading: userLoading } = useUserData();
-  const { data: payments, isLoading } = useGetPayments(currentUser?.email ? { email: currentUser.email } : undefined);
+  const { data: payments, isLoading } = useGetPayments(
+    currentUser?.email ? { email: currentUser.email } : undefined
+  );
 
   if (userLoading || isLoading) {
     return <p className="text-gray-400 text-sm">Loading transactions...</p>;
@@ -32,10 +34,7 @@ export default function Transactions() {
 
           <tbody>
             {payments.map((payment) => (
-              <tr
-                key={payment.tranId}
-                className="hover:bg-gray-50 transition"
-              >
+              <tr key={payment.tranId} className="hover:bg-gray-50 transition">
                 <td className="px-4 py-3 border-t font-mono text-xs border-t-gray-200">
                   {payment.tranId}
                 </td>
@@ -64,10 +63,6 @@ export default function Transactions() {
   );
 }
 
-
-
-
-
 interface Props {
   id: string;
   qty: number;
@@ -91,4 +86,3 @@ export function PaidItem({ id, qty }: Props) {
     </div>
   );
 }
-

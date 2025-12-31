@@ -14,9 +14,10 @@ export default function CartTable() {
   const { data: carts = [], isLoading, isError } = useCarts();
   const removeCart = useRemoveCart();
 
+  // Selected products state
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
 
-  // handle checkbox select / deselect
+  // Handle checkbox select/deselect
   const handleSelectProduct = (product: Product, checked: boolean) => {
     setSelectedProducts((prev) => {
       if (checked) {
@@ -27,23 +28,21 @@ export default function CartTable() {
     });
   };
 
-  // grand total of ALL carts
-  useMemo(() => {
-    return carts.reduce(
-      (acc, item) =>
-        acc + (item.totalPrice || item.price * (item.quantity || 1)),
-      0
-    );
-  }, [carts]);
+  // Update selectedProducts if quantity changes in cart
+  const updatedSelectedProducts = useMemo(() => {
+    return selectedProducts.map((p) => {
+      const updated = carts.find((c) => c._id === p._id);
+      return updated || p;
+    });
+  }, [selectedProducts, carts]);
 
-  // total of SELECTED carts (checkout total)
+  // Total of selected products
   const selectedTotal = useMemo(() => {
-    return selectedProducts.reduce(
-      (acc, item) =>
-        acc + (item.totalPrice || item.price * (item.quantity || 1)),
+    return updatedSelectedProducts.reduce(
+      (acc, item) => acc + (item.totalPrice || item.price * (item.quantity || 1)),
       0
     );
-  }, [selectedProducts]);
+  }, [updatedSelectedProducts]);
 
   if (isLoading) {
     return (
@@ -88,7 +87,7 @@ export default function CartTable() {
         {/* Checkout Button */}
         <div className="w-full md:w-auto">
           <CheckoutButton
-            selectedProducts={selectedProducts}
+            selectedProducts={updatedSelectedProducts}
             cartTotal={selectedTotal}
           />
         </div>
@@ -126,7 +125,7 @@ export default function CartTable() {
                 </td>
 
                 <td className="px-4 py-3">
-                  <div className="relative size-12">
+                  <div className="relative w-12 h-12">
                     <Image
                       src={
                         product.images?.[0] || "/assets/placeholder-image.svg"
@@ -194,7 +193,9 @@ export default function CartTable() {
                 type="checkbox"
                 className="w-4 h-4 accent-green-600"
                 checked={selectedProducts.some((p) => p._id === product._id)}
-                onChange={(e) => handleSelectProduct(product, e.target.checked)}
+                onChange={(e) =>
+                  handleSelectProduct(product, e.target.checked)
+                }
               />
               <p className="font-medium">{product.name}</p>
             </div>

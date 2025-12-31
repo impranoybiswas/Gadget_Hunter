@@ -4,22 +4,21 @@ import { useSearchParams } from "next/navigation";
 import { useGetPayments } from "@/hooks/usePayments";
 import Container from "@/ui/Container";
 import Section from "@/ui/Section";
-import Link from "next/link";
-import { FaFilePdf, FaHome, FaShoppingCart } from "react-icons/fa";
 import { useGetItem } from "@/hooks/useItems";
-import Button from "@/ui/Button";
 import { useUserData } from "@/hooks/useUserData";
+import InvoiceButton from "@/components/InvoiceButton";
+import GoBackButton from "@/components/GoBackButton";
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
   const tranId = searchParams.get("tranId");
-  const {status} = useUserData();
+  const { currentUser, status } = useUserData();
 
   const { data, isLoading, error } = useGetPayments(
     tranId ? { tranId } : undefined
   );
 
-  if (isLoading) {
+  if (isLoading && status === "loading") {
     return (
       <Container>
         <Section>
@@ -49,23 +48,7 @@ export default function SuccessPage() {
         <Section>
           <div className="w-full h-100 flex flex-col items-center justify-center uppercase text-red-500 text-3xl font-semibold">
             Invalid payment
-            <div className="mt-8 flex gap-4 text-base">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-600 text-white hover:bg-sky-700 transition"
-              >
-                <FaHome />
-                Back to Home
-              </Link>
-
-              <Link
-                href="/shop"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-              >
-                <FaShoppingCart />
-                Browse Products
-              </Link>
-            </div>
+            <GoBackButton />
           </div>
         </Section>
       </Container>
@@ -73,6 +56,31 @@ export default function SuccessPage() {
   }
 
   const payment = data?.[0]; // tranId unique → single result
+
+  if (status !== "authenticated") {
+    return (
+      <Container>
+        <Section>
+          <div className="w-full h-100 flex flex-col items-center justify-center uppercase text-red-500 text-3xl font-semibold">
+            You are not authenticated
+          </div>
+        </Section>
+      </Container>
+    );
+  }
+
+  if (payment.user !== currentUser?.email) {
+    return (
+      <Container>
+        <Section>
+          <div className="w-full h-100 flex flex-col items-center justify-center uppercase text-red-500 text-3xl font-semibold">
+            This payment is not confirmed by your Account.
+          </div>
+        </Section>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Section className="flex items-center flex-col">
@@ -83,15 +91,13 @@ export default function SuccessPage() {
         {payment && (
           <div className="mt-4 space-y-3">
             <div className="text-sm">
-            <p>
-              <strong>User Email:</strong> {payment.user}
-            </p>
-            <p>
-              <strong>Transaction ID:</strong> {payment.tranId}
-            </p>
+              <p>
+                <strong>User Email:</strong> {payment.user}
+              </p>
+              <p>
+                <strong>Transaction ID:</strong> {payment.tranId}
+              </p>
             </div>
-          
-            
 
             <div className="overflow-x-auto">
               {/* Table */}
@@ -118,7 +124,7 @@ export default function SuccessPage() {
                       className="border-b last:border-b-0 hover:bg-gray-50"
                       key={item.id}
                     >
-                      <PaidItem id={item.id} />
+                      <PaidItem item={item} />
                     </tr>
                   ))}
 
@@ -126,7 +132,9 @@ export default function SuccessPage() {
                     <td colSpan={3} className="text-right py-2 px-3">
                       Total Price :
                     </td>
-                    <td className="text-right p-2">BDT {payment.amount}</td>
+                    <td className="text-right p-2">
+                      BDT {payment.amount.toLocaleString("en-US")}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -137,47 +145,29 @@ export default function SuccessPage() {
 
         {/* Download Invoice Button */}
 
-        {
-          status === "authenticated" &&( <Button
-          isLarge
-          isOutline={false}
-          label="Download Invoice"
-          leftIcon={<FaFilePdf />}
-          onClick={() => alert("Nice")}
-          className="mt-8"
-          />)
-        }
+        {status === "authenticated" && currentUser?.email === payment.user && (
+          <InvoiceButton payment={payment} />
+        )}
 
-        <div className="mt-8 flex gap-4 text-base">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-600 text-white hover:bg-sky-700 transition"
-          >
-            <FaHome />
-            Back to Home
-          </Link>
-
-          <Link
-            href="/shop"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-          >
-            <FaShoppingCart />
-            Browse Products
-          </Link>
-        </div>
+        <GoBackButton />
       </Section>
     </Container>
   );
 }
 
-export function PaidItem({ id }: { id: string }) {
-  const { data: item, isLoading } = useGetItem(id);
+interface Item {
+  id: string;
+  quantity: number;
+}
+
+export function PaidItem({ item }: { item: Item }) {
+  const { data: product, isLoading } = useGetItem(item.id);
 
   if (isLoading) {
     return <div className="text-gray-400">Loading item...</div>;
   }
 
-  if (!item) {
+  if (!product) {
     return <div className="text-red-500">Item not found</div>;
   }
 
@@ -185,20 +175,22 @@ export function PaidItem({ id }: { id: string }) {
     <>
       {/* Product */}
       <td className="p-2 text-gray-800 font-medium text-sm tracking-tight">
-        {item.name}
+        {product.name}
       </td>
 
       {/* Quantity */}
-      <td className="p-2 text-sm text-gray-700 text-center">{item.cartQuantity || 1}</td>
+      <td className="p-2 text-sm text-gray-700 text-center">
+        {item.quantity || 1}
+      </td>
 
       {/* Base Price */}
       <td className="p-2 text-sm text-gray-700 text-right">
-        {item.price.toFixed(2)}
+        {product.price.toFixed(2)}
       </td>
 
       {/* Total Price */}
       <td className="p-2 text-sm font-semibold text-green-700 text-right">
-        {(item.totalPrice || item.price * (item.cartQuantity || 1)).toFixed(2)}
+        {(product.price * (item.quantity || 1)).toFixed(2)}
       </td>
     </>
   );

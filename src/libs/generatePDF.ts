@@ -2,7 +2,8 @@ import { format } from "date-fns";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { ToWords } from "to-words";
-import QRCode from "qrcode";
+import { Payment, Product } from "@/types/product";
+import JsBarcode from "jsbarcode";
 
 // ToWords instance for currency in words
 const toWords = new ToWords({
@@ -19,245 +20,98 @@ const toWords = new ToWords({
   },
 });
 
-export const generatePDF = async () => {
-//   const doc = new jsPDF();
-//   const total = selectedCustomer.price * quantity;
-//   const totalFormatted = total.toLocaleString("en-US");
-//   const totalInWords = toWords.convert(total);
-//   const unitPrice = selectedCustomer.price.toLocaleString("en-US");
+export const generatePDF = async (payment: Payment, products: Product[]) => {
+  const doc = new jsPDF({
+    orientation: "p",
+    unit: "mm",
+    format: "a5",
+  });
 
-//   const infoStartY = 40;
-//   const infoStartX = 14;
-//   const infoStartX2 = 42;
+  const totalAmount = toWords.convert(payment.amount);
 
-//   // Centered Header Title
-//   doc.setFont("helvetica", "bold");
-//   doc.setFontSize(20);
-//   doc.text("SALES INVOICE", 105, infoStartY, { align: "center" });
+  // Centered Header Title
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.text("Gadget Hunter", 75, 20, { align: "center" });
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(13);
+  doc.text("Online Invoice", 75, 28, { align: "center" });
 
-//   // Invoice + Date line
-//   doc.setFontSize(12);
-//   doc.setFont("helvetica", "bold");
-//   doc.text(`Invoice No`, infoStartX, infoStartY + 16);
-//   doc.setFont("levetica", "normal");
-//   doc.text(`${":  " + invoice}`, infoStartX2, infoStartY + 16);
+  doc.setFontSize(11);
+  doc.setTextColor(0, 0, 62);
+  doc.text(
+    `Date: ${format(new Date(payment.createdAt), "dd/MM/yyyy")}`,
+    14,
+    35,
+    { align: "left" }
+  );
+  doc.text(`Transaction ID: ${payment.tranId}`, 14, 40, { align: "left" });
+  doc.text(`User Email: ${payment.user}`, 14, 45, { align: "left" });
 
-//   doc.setFont("helvetica", "bold");
-//   doc.text(`Date`, infoStartX, infoStartY + 22);
-//   doc.setFont("levetica", "normal");
-//   doc.text(
-//     `${":  " + format(new Date(date), "dd MMM yyyy")}`,
-//     infoStartX2,
-//     infoStartY + 22
-//   );
+  const canvas = document.createElement("canvas");
 
-//   // Customer Info
-//   doc.setFont("helvetica", "bold");
-//   doc.text(`Customer ID`, infoStartX, infoStartY + 28);
-//   doc.setFont("levetica", "normal");
-//   doc.text(
-//     `${":  " + selectedCustomer.customerId || "N/A"}`,
-//     infoStartX2,
-//     infoStartY + 28
-//   );
+  JsBarcode(canvas, payment.tranId, {
+    format: "CODE128",
+    width: 2,
+    height: 50,
+  });
 
-//   doc.setFont("helvetica", "bold");
-//   doc.text(`Customer`, infoStartX, infoStartY + 34);
-//   doc.setFont("levetica", "normal");
-//   doc.text(`${":  " + selectedCustomer.name}`, infoStartX2, infoStartY + 34);
+  doc.addImage(canvas.toDataURL("image/png"), "PNG", 45, 50, 60, 15);
 
-//   doc.setFont("helvetica", "bold");
-//   doc.text(`Address`, infoStartX, infoStartY + 40);
-//   doc.setFont("levetica", "normal");
-//   doc.text(
-//     `${":  " + selectedCustomer.address || "Not provided"}`,
-//     infoStartX2,
-//     infoStartY + 40
-//   );
+  const bodyRows = products.map((product, i) => [
+    product.name,
+    payment.items[i].quantity,
+    product.price.toLocaleString("en-US"),
+    (product.price * payment.items[i].quantity).toLocaleString("en-US"),
+  ]);
 
-//   // Table Section
-//   autoTable(doc, {
-//     startY: infoStartY + 55,
-//     head: [
-//       [
-//         "Product",
-//         "Quantity",
-//         {
-//           content: "Unit Price (BDT)",
-//           styles: { halign: "right", cellWidth: 35 },
-//         },
-//         {
-//           content: "Amount (BDT)",
-//           styles: { halign: "right", cellWidth: 35 },
-//         },
-//       ],
-//     ],
-//     body: [
-//       [selectedCustomer.product, quantity, unitPrice, totalFormatted],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       ["", "", "", ""],
-//       [
-//         { content: `In Word : ${totalInWords}`, colSpan: 2 },
-//         {
-//           content: "Total (BDT)",
-//           styles: { halign: "right", cellWidth: 20, fontStyle: "bold" },
-//         },
-//         totalFormatted,
-//       ],
-//     ],
-//     styles: {
-//       fillColor: [255, 255, 255],
-//       textColor: [0, 0, 0],
-//       lineColor: [0, 0, 0],
-//       fontSize: 11,
-//       lineWidth: 0.1,
-//     },
+  autoTable(doc, {
+    startY: 70,
+    theme: "grid",
+    head: [["Product", "Quantity", "Unit Price", "Total Price"]],
+    body: [
+      ...bodyRows,
+      [
+        {
+          colSpan: 3,
+          content: "Total(BDT)",
+          styles: { halign: "right", fontStyle: "bold" },
+        },
+        {
+          content: payment.amount.toLocaleString("en-US"),
+          styles: { halign: "right", fontStyle: "bold" },
+        },
+      ],
+      [
+        {
+          content: `In Words :  ${totalAmount}`,
+          styles: { halign: "left", fontSize: 9 },
+          colSpan: 4,
+        },
+      ],
+    ],
+    styles: {
+      font: "helvetica",
+      fontSize: 10,
+      overflow: "linebreak",
+    },
+    bodyStyles: {
+      valign: "middle",
+    },
+    columnStyles: {
+      0: { halign: "left" },
+      1: { halign: "center" },
+      2: { halign: "right" },
+      3: { halign: "right" },
+    },
+  });
 
-//     headStyles: {
-//       fontStyle: "bold",
-//     },
 
-//     columnStyles: {
-//       0: { halign: "left" },
-//       1: { halign: "center", cellWidth: 20 },
-//       2: { halign: "right", cellWidth: 40 },
-//       3: { halign: "right", cellWidth: 40 },
-//     },
-//   });
 
-//   // Prepare plain text (not JSON) for QR and display
-//   const qrText = `HEALTHCARE SOLUTIONS LTD
+  doc.setFontSize(8);
+  doc.setTextColor(0, 0, 62);
+  doc.text("Thank you for shopping with us!", 70, 190, { align: "center" });
 
-// Invoice: ${invoice}
-// Date: ${format(new Date(date), "dd MMM yyyy")}
-// Customer: ${selectedCustomer.name}
-// Total Amount: ৳${totalFormatted}`;
-
-//   // Generate QR (base64 PNG)
-//   const qrDataUrl = await QRCode.toDataURL(qrText, {
-//     errorCorrectionLevel: "H",
-//   });
-
-//   // Place QR under the table, centered
-
-//   doc.addImage(qrDataUrl, "PNG", 166, infoStartY + 11, 30, 30);
-
-//   doc.setFont("helvetica", "normal");
-//   doc.text(`________________________`, 14, 265);
-//   doc.text(`Authorized Signature`, 22, 272);
-
-//   doc.text(`________________________`, 80, 265);
-//   doc.text(`Store-in-Charge`, 93, 272);
-
-//   doc.text(`________________________`, 145, 265);
-//   doc.text(`Received By`, 160, 272);
-
-//   //Delivery Challan
-//   if (!selectedCustomer.isMonthly) {
-//     doc.addPage();
-
-//     // Centered Header Title
-//     doc.setFont("helvetica", "bold");
-//     doc.setFontSize(20);
-//     doc.text("DELIVERY CHALLAN", 105, infoStartY, { align: "center" });
-
-//     // Invoice + Date line
-//     doc.setFontSize(12);
-//     doc.setFont("helvetica", "bold");
-//     doc.text(`Invoice No`, infoStartX, infoStartY + 16);
-//     doc.setFont("levetica", "normal");
-//     doc.text(`${":  " + invoice}`, infoStartX2, infoStartY + 16);
-
-//     doc.setFont("helvetica", "bold");
-//     doc.text(`Date`, infoStartX, infoStartY + 22);
-//     doc.setFont("levetica", "normal");
-//     doc.text(
-//       `${":  " + format(new Date(date), "dd MMM yyyy")}`,
-//       infoStartX2,
-//       infoStartY + 22
-//     );
-
-//     // Customer Info
-//     doc.setFont("helvetica", "bold");
-//     doc.text(`Customer ID`, infoStartX, infoStartY + 28);
-//     doc.setFont("levetica", "normal");
-//     doc.text(
-//       `${":  " + selectedCustomer.customerId || "N/A"}`,
-//       infoStartX2,
-//       infoStartY + 28
-//     );
-
-//     doc.setFont("helvetica", "bold");
-//     doc.text(`Customer`, infoStartX, infoStartY + 34);
-//     doc.setFont("levetica", "normal");
-//     doc.text(`${":  " + selectedCustomer.name}`, infoStartX2, infoStartY + 34);
-
-//     doc.setFont("helvetica", "bold");
-//     doc.text(`Address`, infoStartX, infoStartY + 40);
-//     doc.setFont("levetica", "normal");
-//     doc.text(
-//       `${":  " + selectedCustomer.address || "Not provided"}`,
-//       infoStartX2,
-//       infoStartY + 40
-//     );
-
-//     // Table Section
-//     autoTable(doc, {
-//       startY: infoStartY + 55,
-//       head: [["Name of the Product", "Quantity", "Date of Expiry"]],
-//       body: [
-//         [selectedCustomer.product, quantity, expiryDate],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//         ["", "", ""],
-//       ],
-//       styles: {
-//         fillColor: [255, 255, 255],
-//         textColor: [0, 0, 0],
-//         lineColor: [0, 0, 0],
-//         fontSize: 11,
-//         lineWidth: 0.1,
-//       },
-
-//       headStyles: {
-//         fontStyle: "bold",
-//         halign: "center",
-//       },
-
-//       columnStyles: {
-//         0: { halign: "left" },
-//         1: { halign: "center", cellWidth: 25 },
-//         2: { halign: "center", cellWidth: 50 },
-//       },
-//     });
-
-//     doc.setFont("helvetica", "normal");
-//     doc.text(`________________________`, 14, 265);
-//     doc.text(`Authorized Signature`, 22, 272);
-
-//     doc.text(`________________________`, 80, 265);
-//     doc.text(`Store-in-Charge`, 93, 272);
-
-//     doc.text(`________________________`, 145, 265);
-//     doc.text(`Received By`, 160, 272);
-//   }
-
-//   // Save PDF
-//   doc.save(`hsl-${invoice}.pdf`);
+  // Save PDF
+  doc.save(`invoice.pdf`);
 };
