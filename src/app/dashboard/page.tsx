@@ -96,20 +96,20 @@ export default function DashboardHome() {
         {stateCards.map((card, i) => (
           <div
             key={i}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 flex flex-col gap-4 border border-gray-100"
+            className="bg-base-100 p-6 rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 flex flex-col gap-4 border border-base-content/10"
           >
             <div className="flex items-center justify-between">
               <div className={`p-3 rounded-full ${card.color}`}>
                 {card.icon}
               </div>
-              <span className="text-sm text-green-500 font-semibold">
+              <span className="text-sm text-success font-semibold">
                 {card.growth}
               </span>
             </div>
 
             <div>
-              <p className="text-gray-500 text-sm">{card.name}</p>
-              <p className="text-3xl font-bold text-gray-800 mt-1">
+              <p className="text-base-content/50 text-sm">{card.name}</p>
+              <p className="text-3xl font-bold text-base-content mt-1">
                 {formatNumber(card.value)}
               </p>
             </div>
@@ -122,8 +122,8 @@ export default function DashboardHome() {
        ========================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pie Chart */}
-        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          <h3 className="text-lg font-semibold mb-4 text-gray-700">
+        <div className="bg-base-100 p-6 rounded-xl shadow-md border border-base-content/10">
+          <h3 className="text-lg font-semibold mb-4 text-base-content/80">
             Distribution Overview
           </h3>
           <ResponsiveContainer width="100%" height={260}>
@@ -151,8 +151,8 @@ export default function DashboardHome() {
         </div>
 
         {/* Bar Chart */}
-        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-          <h3 className="text-lg font-semibold mb-4 text-gray-700">
+        <div className="bg-base-100 p-6 rounded-xl shadow-md border border-base-content/10">
+          <h3 className="text-lg font-semibold mb-4 text-base-content/80">
             Monthly Product Added
           </h3>
           <ResponsiveContainer width="100%" height={260}>

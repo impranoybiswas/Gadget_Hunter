@@ -61,17 +61,17 @@ export default function EditProfilePage() {
     <section className="w-full flex justify-center">
       <motion.form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full bg-white rounded-xl shadow-md border border-gray-100 p-6 sm:p-8 md:p-10 space-y-8 transition-all hover:shadow-lg"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
+        className="w-full bg-base-100 rounded-xl shadow-md border border-base-content/10 p-6 sm:p-8 md:p-10 space-y-8 transition-all hover:shadow-lg"
       >
         {/* Title */}
         <div className="text-center mb-2">
-          <h1 className="text-2xl font-semibold text-gray-900">
+          <h1 className="text-2xl font-semibold text-base-content">
             Edit Your Profile
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-base-content/50 text-sm mt-1">
             Update your personal information and profile picture.
           </p>
         </div>
@@ -86,17 +86,17 @@ export default function EditProfilePage() {
           >
             <label
               htmlFor="name"
-              className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+              className="flex items-center gap-2 text-sm font-medium text-base-content/80 mb-2"
             >
-              <FaUser size={16} className="text-indigo-600" /> Full Name{" "}
-              <span className="text-red-500">*</span>
+              <FaUser size={16} className="text-primary" /> Full Name{" "}
+              <span className="text-error font-bold">*</span>
             </label>
             <input
               id="name"
               type="text"
               {...register("name", { required: "Name is required" })}
               placeholder="Enter your full name"
-              className="rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 p-2.5 outline-none transition placeholder:text-gray-400"
+              className="rounded-lg border border-base-content/10 bg-base-100 focus:ring-2 focus:ring-primary focus:border-primary p-2.5 outline-none transition placeholder:text-base-content/30 text-base-content"
             />
           </motion.div>
 
@@ -108,14 +108,14 @@ export default function EditProfilePage() {
           >
             <label
               htmlFor="gender"
-              className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+              className="flex items-center gap-2 text-sm font-medium text-base-content/80 mb-2"
             >
-              <FaVenusMars size={16} className="text-pink-600" /> Gender
+              <FaVenusMars size={16} className="text-secondary" /> Gender
             </label>
             <select
               id="gender"
               {...register("gender")}
-              className="rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 p-2.5 outline-none transition bg-white"
+              className="rounded-lg border border-base-content/10 bg-base-100 focus:ring-2 focus:ring-primary focus:border-primary p-2.5 outline-none transition text-base-content"
             >
               <option value="">Select gender</option>
               <option value="male">Male</option>
@@ -131,8 +131,8 @@ export default function EditProfilePage() {
           whileHover={{ scale: 1.01 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2 sm:mb-0">
-            <FaImage size={16} className="text-blue-500" />
+          <label className="flex items-center gap-2 text-sm font-medium text-base-content/80 mb-2 sm:mb-0">
+            <FaImage size={16} className="text-info" />
             Profile Picture
           </label>
 

@@ -99,7 +99,7 @@ export default function Header() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white rounded-lg border border-primary/20 shadow-sm h-16 flex items-center overflow-hidden"
+        className="bg-base-100 rounded-lg border border-primary/20 shadow-sm h-16 flex items-center overflow-hidden"
       >
         <Marquee speed={50} gradient={false}>
           <div className="flex items-center justify-center gap-10 px-10">
@@ -108,7 +108,7 @@ export default function Header() {
               alt="brand logos"
               width={1000}
               height={1000}
-              className="h-10 md:h-12 w-auto object-contain"
+              className="h-10 md:h-12 w-auto object-contain dark:invert"
             />
           </div>
         </Marquee>

@@ -16,81 +16,94 @@ export default function CartButton({
   maxQuantity,
 }: CartButtonProps) {
   const { currentUser, isLoading: userLoading } = useUserData();
-  const [quantity, setQuantity] = useState(0);
-
   const toggleCart = useToggleCart();
 
-  // Load user's existing cart item if found
+  // Local state for immediate feedback
+  const [quantity, setQuantity] = useState<number | null>(null);
+
+  // Sync quantity from backend user cart
   useEffect(() => {
-    const cartItem = currentUser?.carts?.find(
+    if (!currentUser) {
+      if (!userLoading) setQuantity(0);
+      return;
+    }
+
+    const cartItem = currentUser.carts?.find(
       (c: { productId: string }) => c.productId === productId
     );
-    setQuantity(cartItem?.quantity || 0);
-  }, [currentUser?.carts, productId]);
 
-  // Update cart quantity using useToggleCart
-  const updateCart = (qty: number) => {
-    if (!currentUser?.email) return; // backend handles session
+    setQuantity(cartItem?.quantity ?? 0);
+  }, [currentUser, productId, userLoading]);
 
-    if (qty < 1) {
-      toggleCart.mutate({ productId, quantity: 0 }); // remove item
+  const updateCart = (nextQty: number) => {
+    if (!currentUser?.email) {
+      alert("Please log in to add items to your cart.");
       return;
     }
-    if (qty > maxQuantity) {
-      // Limit check
-      return;
-    }
+    if (nextQty < 0 || nextQty > maxQuantity) return;
+
+    // Optimistically update local state
+    const prevQty = quantity;
+    setQuantity(nextQty);
 
     toggleCart.mutate(
-      { productId, quantity: qty },
+      { productId, quantity: nextQty },
       {
-        onSuccess: () => {
-          setQuantity(qty);
+        onError: () => {
+          // Rollback on error
+          setQuantity(prevQty);
         },
       }
     );
   };
 
-  if (userLoading)
+  const isMutating = toggleCart.isPending;
+
+  if (userLoading || quantity === null) {
     return (
-      <div className="flex justify-center items-center p-2">
-        <LuLoader className="animate-spin text-gray-500" size={20} />
+      <div className="flex justify-center items-center p-2 min-w-[120px]">
+        <LuLoader className="animate-spin text-primary" size={20} />
       </div>
     );
+  }
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="w-fit flex items-center space-x-3 bg-base-100/50 backdrop-blur-sm p-1 rounded-full border border-base-content/5 shadow-sm relative overflow-hidden">
       {/* Minus Button */}
       <button
-        disabled={quantity <= 1}
+        disabled={quantity <= 0 || isMutating}
         onClick={() => updateCart(quantity - 1)}
-        className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer"
+        className="w-8 h-8 rounded-full bg-base-200 hover:bg-base-300 text-base-content/70 flex items-center justify-center transition-all duration-300 disabled:opacity-30 active:scale-90 cursor-pointer"
+        aria-label="Decrease quantity"
       >
-        <FaMinus />
+        <FaMinus size={12} />
       </button>
 
-      {/* Quantity Input */}
-      <input
-        type="number"
-        value={quantity}
-        min={0}
-        max={maxQuantity}
-        onChange={(e) => {
-          const val = parseInt(e.target.value);
-          if (isNaN(val)) return;
-          updateCart(val);
-        }}
-        className="w-14 h-8 text-center border border-gray-300 rounded-full py-1 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
-      />
+      {/* Quantity Display */}
+      <div className="relative w-8 h-8 flex items-center justify-center">
+        {isMutating ? (
+          <LuLoader className="animate-spin text-primary absolute" size={16} />
+        ) : (
+          <span className="text-sm font-bold text-base-content animate-in fade-in duration-300">
+            {quantity}
+          </span>
+        )}
+      </div>
 
       {/* Plus Button */}
       <button
-        disabled={quantity >= maxQuantity}
+        disabled={quantity >= maxQuantity || isMutating}
         onClick={() => updateCart(quantity + 1)}
-        className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer"
+        className="w-8 h-8 rounded-full bg-base-200 hover:bg-base-300 text-base-content/70 flex items-center justify-center transition-all duration-300 disabled:opacity-30 active:scale-90 cursor-pointer"
+        aria-label="Increase quantity"
       >
-        <FaPlus />
+        <FaPlus size={12} />
       </button>
+
+      {/* Subtle Progress Bar (Bottom) */}
+      {isMutating && (
+        <div className="absolute bottom-0 left-0 h-[2px] bg-primary/20 w-full animate-pulse" />
+      )}
     </div>
   );
 }

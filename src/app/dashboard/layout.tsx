@@ -29,9 +29,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <Sidebar />
           <div className="flex-1 px-5 md:px-8 lg:px-10 py-10">
             {/* Header / Breadcrumb */}
-            <div className="pl-5 py-3 bg-white border border-gray-200 rounded-xl shadow text-lg font-semibold flex items-center gap-2 mb-6 md:mb-8">
-              <FaChevronRight className="text-gray-500 w-5 h-5" />
-              <span className="uppercase tracking-wide text-gray-700">
+            <div className="pl-5 py-3 bg-base-100 border border-base-content/10 rounded-xl shadow text-lg font-semibold flex items-center gap-2 mb-6 md:mb-8">
+              <FaChevronRight className="text-base-content/40 w-5 h-5" />
+              <span className="uppercase tracking-wide text-base-content/80">
                 {title || "Dashboard"}
               </span>
             </div>

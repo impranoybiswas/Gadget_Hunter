@@ -84,36 +84,36 @@ export default function SuccessPage() {
   return (
     <Container>
       <Section className="flex items-center flex-col">
-        <h1 className="text-3xl font-semibold text-green-600 my-8">
+        <h1 className="text-3xl font-semibold text-success my-8">
           Payment Successful
         </h1>
 
         {payment && (
-          <div className="mt-4 space-y-3">
-            <div className="text-sm">
+          <div className="mt-4 space-y-3 w-full max-w-2xl bg-base-200/50 p-6 rounded-xl border border-base-content/10">
+            <div className="text-sm text-base-content/70">
               <p>
-                <strong>User Email:</strong> {payment.user}
+                <strong className="text-base-content">User Email:</strong> {payment.user}
               </p>
               <p>
-                <strong>Transaction ID:</strong> {payment.tranId}
+                <strong className="text-base-content">Transaction ID:</strong> {payment.tranId}
               </p>
             </div>
 
             <div className="overflow-x-auto">
               {/* Table */}
-              <table className="w-full text-left border border-gray-200 rounded-lg">
-                <thead className="bg-gray-100">
+              <table className="w-full text-left border border-base-content/10 rounded-lg overflow-hidden">
+                <thead className="bg-base-200">
                   <tr>
-                    <th className="p-2 text-sm font-medium text-gray-700">
+                    <th className="p-3 text-sm font-medium text-base-content/70">
                       Product
                     </th>
-                    <th className="p-2 text-sm font-medium text-gray-700">
+                    <th className="p-3 text-sm font-medium text-base-content/70 text-center">
                       Qty
                     </th>
-                    <th className="p-2 text-sm font-medium text-gray-700">
+                    <th className="p-3 text-sm font-medium text-base-content/70 text-right">
                       Unit Price (BDT)
                     </th>
-                    <th className="p-2 text-sm font-medium text-gray-700">
+                    <th className="p-3 text-sm font-medium text-base-content/70 text-right">
                       Total Price (BDT)
                     </th>
                   </tr>
@@ -121,18 +121,18 @@ export default function SuccessPage() {
                 <tbody>
                   {payment.items.map((item) => (
                     <tr
-                      className="border-b last:border-b-0 hover:bg-gray-50"
+                      className="border-b border-base-content/5 last:border-b-0 hover:bg-base-300/30"
                       key={item.id}
                     >
                       <PaidItem item={item} />
                     </tr>
                   ))}
 
-                  <tr className="text-gray-700 font-semibold">
-                    <td colSpan={3} className="text-right py-2 px-3">
-                      Total Price :
+                  <tr className="text-base-content font-bold">
+                    <td colSpan={3} className="text-right py-4 px-3 border-t border-base-content/10">
+                      Grand Total :
                     </td>
-                    <td className="text-right p-2">
+                    <td className="text-right p-4 border-t border-base-content/10 text-success">
                       BDT {payment.amount.toLocaleString("en-US")}
                     </td>
                   </tr>
@@ -164,7 +164,7 @@ export function PaidItem({ item }: { item: Item }) {
   const { data: product, isLoading } = useGetItem(item.id);
 
   if (isLoading) {
-    return <div className="text-gray-400">Loading item...</div>;
+    return <div className="text-base-content/40 italic p-3">Loading item...</div>;
   }
 
   if (!product) {
@@ -174,22 +174,22 @@ export function PaidItem({ item }: { item: Item }) {
   return (
     <>
       {/* Product */}
-      <td className="p-2 text-gray-800 font-medium text-sm tracking-tight">
+      <td className="p-3 text-base-content font-medium text-sm tracking-tight">
         {product.name}
       </td>
 
       {/* Quantity */}
-      <td className="p-2 text-sm text-gray-700 text-center">
+      <td className="p-3 text-sm text-base-content/70 text-center">
         {item.quantity || 1}
       </td>
 
       {/* Base Price */}
-      <td className="p-2 text-sm text-gray-700 text-right">
+      <td className="p-3 text-sm text-base-content/70 text-right">
         {product.price.toFixed(2)}
       </td>
 
       {/* Total Price */}
-      <td className="p-2 text-sm font-semibold text-green-700 text-right">
+      <td className="p-3 text-sm font-bold text-success text-right">
         {(product.price * (item.quantity || 1)).toFixed(2)}
       </td>
     </>

@@ -3,9 +3,9 @@
 import { ThemeContext } from "@/providers/ThemeProvider";
 import React, { useContext } from "react";
 import { PiMoon, PiSun } from "react-icons/pi";
+import IconButton from "@/ui/IconButton";
 
-
-export default function ThemeToggler({className}: {className?:string}) {
+export default function ThemeToggler({ className }: { className?: string }) {
   const context = useContext(ThemeContext);
 
   if (!context) return null;
@@ -13,18 +13,11 @@ export default function ThemeToggler({className}: {className?:string}) {
   const { theme, toggleTheme } = context;
 
   return (
-    <div
-      role="button"
-      className={`${className}`}
-      title={`Toggle ${theme === "light" ? "Dark" : "Light"}`}
+    <IconButton
       onClick={toggleTheme}
-    >
-      {/* {theme === "light" ? <PiMoon className={`${theme === "light" ? "translate-y-0" : "translate-y-3"}`} /> : <PiSun />} */}
-
-      <span className={`flex flex-col ${theme === "light" ? "translate-y-0" : "-translate-y-8" } transform transition-all duration-500 ease-in-out` }>
-      <span className="size-8 flex justify-center items-center"><PiMoon /></span>
-      <span className="size-8 flex justify-center items-center"><PiSun /></span>
-      </span>
-    </div>
+      className={className}
+      title={`Toggle ${theme === "light" ? "Dark" : "Light"}`}
+      icon={theme === "light" ? <PiMoon /> : <PiSun />}
+    />
   );
 }

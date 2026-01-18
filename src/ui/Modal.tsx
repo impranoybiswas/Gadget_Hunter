@@ -1,49 +1,87 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ReactNode, useState } from "react";
 import { CgClose } from "react-icons/cg";
 
-type ModalProps = {
-  lebel: ReactNode;
-  children: ReactNode;
-};
+interface ModalProps {
+  lebel: ReactNode; // Trigger content
+  children: ReactNode; // Modal content
+  title?: string;
+  size?: "sm" | "md" | "lg" | "xl";
+}
 
-export default function Modal({ lebel, children }: ModalProps) {
+/**
+ * Professional Modal Component (Self-Managed Trigger)
+ * 
+ * Features:
+ * - Built-in trigger mechanism
+ * - Smooth entrance/exit via AnimatePresence
+ * - Backdrop blur and responsive sizing
+ * - Professional header and close button
+ */
+export default function Modal({ lebel, children, title, size = "md" }: ModalProps) {
   const [showModal, setShowModal] = useState(false);
 
+  const containerSizes = {
+    sm: "max-w-md",
+    md: "max-w-xl",
+    lg: "max-w-3xl",
+    xl: "max-w-5xl",
+  };
+
   return (
-    <div className="w-full h-full">
+    <>
       {/* Trigger */}
-      <div onClick={() => setShowModal(true)}>{lebel}</div>
+      <div className="cursor-pointer active:scale-95 transition-transform" onClick={() => setShowModal(true)}>
+        {lebel}
+      </div>
 
-      {/* Overlay */}
-      {showModal && (
-        <div
-          onClick={() => setShowModal(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur flex justify-center items-center z-50"
-        >
-          {/* Modal Container */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.2, delay: 0.1 }}
-            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside modal
-            className="bg-white rounded-lg shadow-lg p-6 max-w-full w-[90%] sm:w-96 relative"
-          >
-            {/* Close Button */}
-            <button
+      <AnimatePresence>
+        {showModal && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               onClick={() => setShowModal(false)}
-              className="absolute top-3 right-3 size-8 rounded-full bg-gray-50 hover:bg-gray-200 cursor-pointer flex items-center justify-center text-gray-600"
-            >
-              <CgClose size={20} />
-            </button>
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            />
 
-            {/* Modal Content */}
-            {children}
-          </motion.div>
-        </div>
-      )}
-    </div>
+            {/* Modal Container */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`
+                relative bg-base-100 rounded-3xl shadow-2xl 
+                w-full ${containerSizes[size]} overflow-hidden flex flex-col
+              `}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-base-content/5">
+                <h3 className="text-xl font-bold text-base-content">
+                  {title || "Modal Details"}
+                </h3>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="size-10 rounded-full flex items-center justify-center text-base-content/40 hover:text-base-content hover:bg-base-200 transition-colors cursor-pointer"
+                >
+                  <CgClose size={22} />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="p-8 overflow-y-auto max-h-[80vh]">
+                {children}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

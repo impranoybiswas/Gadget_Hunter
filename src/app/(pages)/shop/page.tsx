@@ -68,7 +68,7 @@ export default function ShopPage() {
                 setPage(1);
                 setSearch(e.target.value);
               }}
-              className="w-full border border-base-300 rounded-md pl-10 p-3 shadow-sm focus:outline-none focus:ring-1 focus:ring-primary transition duration-300"
+              className="w-full border border-base-content/10 bg-base-100 rounded-md pl-10 p-3 shadow-sm focus:outline-none focus:ring-1 focus:ring-primary transition duration-300 text-base-content"
             />
           </div>
 
@@ -79,7 +79,7 @@ export default function ShopPage() {
               setPage(1);
               setBrand(e.target.value);
             }}
-            className="border border-base-300 rounded-md p-3 shadow-sm focus:ring-1 focus:ring-primary transition duration-300"
+            className="border border-base-content/10 bg-base-100 rounded-md p-3 shadow-sm focus:ring-1 focus:ring-primary transition duration-300 text-base-content"
           >
             <option value="">All Brands</option>
             {allBrands.map((b) => (
@@ -102,11 +102,10 @@ export default function ShopPage() {
                   setPage(1);
                   setCategory(value);
                 }}
-                className={`px-5 py-2 rounded-md whitespace-nowrap border transition-all duration-200 ${
-                  isActive
-                    ? "bg-primary text-white shadow-sm border-primary"
-                    : "bg-base-200 hover:bg-base-300 border-base-300"
-                }`}
+                className={`px-5 py-2 rounded-md whitespace-nowrap border transition-all duration-200 ${isActive
+                    ? "bg-primary text-primary-content shadow-sm border-primary"
+                    : "bg-base-200 hover:bg-base-300 border-base-content/10 text-base-content/70"
+                  }`}
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </button>
@@ -121,7 +120,7 @@ export default function ShopPage() {
               <ProductCard key={product._id} product={product} />
             ))
           ) : (
-            <p className="text-center text-gray-500 col-span-full">
+            <p className="text-center text-base-content/50 col-span-full py-10">
               No products found.
             </p>
           )}
@@ -131,33 +130,33 @@ export default function ShopPage() {
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
             <button
-              className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
+              className="px-4 py-2 bg-base-200 border border-base-content/10 rounded-lg hover:bg-base-300 transition disabled:opacity-50 text-base-content text-sm font-medium"
               onClick={() => setPage(1)}
               disabled={page === 1}
             >
               First
             </button>
             <button
-              className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
+              className="px-4 py-2 bg-base-200 border border-base-content/10 rounded-lg hover:bg-base-300 transition disabled:opacity-50 text-base-content text-sm font-medium"
               onClick={() => setPage((p) => Math.max(p - 1, 1))}
               disabled={page === 1}
             >
               Prev
             </button>
 
-            <span className="font-medium text-gray-700">
+            <span className="font-semibold text-base-content px-4 py-2 bg-base-100 border border-base-content/10 rounded-lg text-sm">
               Page {page} of {totalPages}
             </span>
 
             <button
-              className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
+              className="px-4 py-2 bg-base-200 border border-base-content/10 rounded-lg hover:bg-base-300 transition disabled:opacity-50 text-base-content text-sm font-medium"
               onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
               disabled={page === totalPages}
             >
               Next
             </button>
             <button
-              className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
+              className="px-4 py-2 bg-base-200 border border-base-content/10 rounded-lg hover:bg-base-300 transition disabled:opacity-50 text-base-content text-sm font-medium"
               onClick={() => setPage(totalPages)}
               disabled={page === totalPages}
             >

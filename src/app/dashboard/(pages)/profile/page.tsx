@@ -18,7 +18,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <section className="p-6 flex justify-center items-center min-h-[60vh]">
-        <p className="text-gray-500 text-lg animate-pulse">
+        <p className="text-base-content/50 text-lg animate-pulse">
           Loading profile...
         </p>
       </section>
@@ -47,20 +47,20 @@ export default function ProfilePage() {
     : "N/A";
 
   return (
-    <section className="w-full flex flex-col md:flex-row items-start gap-10 bg-white rounded-2xl shadow-md p-8 border border-gray-100 transition-all hover:shadow-lg duration-300">
+    <section className="w-full flex flex-col md:flex-row items-start gap-10 bg-base-100 rounded-2xl shadow-md p-8 border border-base-content/10 transition-all hover:shadow-lg duration-300">
       {/* Profile Image */}
       <div className="flex-shrink-0 relative w-full h-44 md:w-44 md:h-44 mb-5 md:mb-0">
         <Image
           src={image || "/assets/placeholder-profile.svg"}
           alt={name || "User avatar"}
           fill
-          className="rounded-2xl object-cover border border-gray-200"
+          className="rounded-2xl object-cover border border-base-content/10"
         />
       </div>
 
       {/* Profile Details */}
-      <div className="flex-1 flex flex-col gap-6 text-gray-800">
-        <h2 className="text-2xl font-semibold text-gray-900 border-b pb-2">
+      <div className="flex-1 flex flex-col gap-6 text-base-content">
+        <h2 className="text-2xl font-semibold text-base-content border-b border-base-content/10 pb-2">
           Profile Information
         </h2>
 
@@ -121,11 +121,11 @@ interface ProfileItemProps {
 // ✅ Reusable Info Row Component
 function ProfileItem({ icon, label, value }: ProfileItemProps) {
   return (
-    <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition">
+    <div className="flex items-center gap-4 p-3 bg-base-200 rounded-lg border border-base-content/5 hover:bg-base-300/50 transition">
       <div className="text-xl">{icon}</div>
       <div>
-        <p className="text-sm text-gray-500">{label}</p>
-        <p className="text-base font-medium">{value}</p>
+        <p className="text-sm text-base-content/50">{label}</p>
+        <p className="text-base font-medium text-base-content">{value}</p>
       </div>
     </div>
   );

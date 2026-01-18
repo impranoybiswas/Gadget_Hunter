@@ -18,13 +18,18 @@ const fetchUser = async (): Promise<DBUser> => {
 };
 
 /**
- * Custom hook to fetch the current logged-in user's data
+ * Custom hook to fetch the current logged-in user's data.
+ * 
+ * Uses React Query to cache and manage user state.
+ * Depends on NextAuth session status.
+ * 
+ * @returns {Object} User data query result, session, and authentication status
  */
 export function useUserData() {
   const { data: session, status } = useSession();
 
   const query = useQuery<DBUser>({
-    queryKey: ["user"],
+    queryKey: ["current-user"],
     queryFn: fetchUser,
     enabled: status === "authenticated", // run only if logged in
     staleTime: 5 * 60 * 1000, // 5 min cache

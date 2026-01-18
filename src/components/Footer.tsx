@@ -11,7 +11,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-800 w-full text-white mt-10">
+    <footer className="bg-neutral w-full text-neutral-content mt-10">
       {/* Top section */}
       <div className="px-4 md:px-10 lg:px-20 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Brand */}
@@ -23,7 +23,7 @@ export default function Footer() {
             width={150}
             height={50}
           />
-          <p className="text-gray-300 text-sm leading-6">
+          <p className="text-neutral-content/70 text-sm leading-6">
             Gadget Hunter is your one-stop shop for the latest gadgets, smart
             devices, and accessories. Explore quality tech at the best prices.
           </p>
@@ -31,8 +31,8 @@ export default function Footer() {
 
         {/* Quick Links */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-          <ul className="space-y-2 text-gray-300 text-sm">
+          <h3 className="text-lg font-semibold mb-4 text-neutral-content">Quick Links</h3>
+          <ul className="space-y-2 text-neutral-content/70 text-sm">
             <li>
               <Link
                 href="/"
@@ -70,8 +70,8 @@ export default function Footer() {
 
         {/* Support */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Support</h3>
-          <ul className="space-y-2 text-gray-300 text-sm">
+          <h3 className="text-lg font-semibold mb-4 text-neutral-content">Support</h3>
+          <ul className="space-y-2 text-neutral-content/70 text-sm">
             <li>
               <Link
                 href="/faq"
@@ -109,7 +109,7 @@ export default function Footer() {
 
         {/* Social */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+          <h3 className="text-lg font-semibold mb-4 text-neutral-content">Follow Us</h3>
           <div className="flex space-x-4 text-xl">
             <Link
               href="https://facebook.com"
@@ -151,7 +151,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom section */}
-      <div className="bg-slate-900 border-t border-slate-700 py-4 px-4 md:px-10 lg:px-20 text-sm flex flex-col md:flex-row items-center justify-between gap-2">
+      <div className="bg-neutral-focus py-6 px-4 md:px-10 lg:px-20 text-sm flex flex-col md:flex-row items-center justify-between gap-4 border-t border-neutral-content/10">
         <p>
           © {new Date().getFullYear()} All rights reserved |{" "}
           <Link

@@ -17,8 +17,8 @@ export default function FavoritesTable() {
   // =========================
   if (isLoading)
     return (
-      <div className="flex flex-col justify-center items-center py-16 text-gray-500">
-        <LuLoader className="animate-spin text-4xl mb-3 text-indigo-500" />
+      <div className="flex flex-col justify-center items-center py-16 text-base-content/50">
+        <LuLoader className="animate-spin text-4xl mb-3 text-primary" />
         <p className="text-lg font-medium">Loading your favorites...</p>
       </div>
     );
@@ -39,10 +39,12 @@ export default function FavoritesTable() {
   // =========================
   if (!favorites || favorites.length === 0)
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-gray-500">
-        <FcPackage className="text-6xl mb-3 text-gray-400" />
-        <p className="text-lg font-medium">You haven’t added any favorites yet.</p>
-        <p className="text-sm text-gray-400 mt-1">
+      <div className="flex flex-col items-center justify-center py-20 text-base-content/50">
+        <FcPackage className="text-6xl mb-3 opacity-50" />
+        <p className="text-lg font-medium">
+          You haven’t added any favorites yet.
+        </p>
+        <p className="text-sm text-base-content/40 mt-1">
           Browse products and tap the ♥ icon to save them here.
         </p>
       </div>
@@ -54,10 +56,10 @@ export default function FavoritesTable() {
   // =========================
   return (
     <section className="w-full">
-      <div className="overflow-x-auto bg-white border border-gray-200 shadow-sm rounded-xl">
+      <div className="overflow-x-auto bg-base-100 border border-base-content/10 shadow-sm rounded-xl">
         {/* Table Header */}
         <table className="min-w-full hidden md:table text-sm text-left">
-          <thead className="bg-gray-100 text-gray-700 uppercase text-xs tracking-wider">
+          <thead className="bg-base-200 text-base-content/70 uppercase text-xs tracking-wider">
             <tr>
               <th className="px-5 py-3">Product</th>
               <th className="px-5 py-3">Details</th>
@@ -69,7 +71,7 @@ export default function FavoritesTable() {
             {favorites.map((product) => (
               <tr
                 key={product._id}
-                className="border-t hover:bg-gray-50 transition-colors duration-150"
+                className="border-t border-base-content/5 hover:bg-base-200/50 transition-colors duration-150"
               >
                 {/* Product Image */}
                 <td className="px-5 py-4">
@@ -78,16 +80,16 @@ export default function FavoritesTable() {
                     alt={product.name}
                     width={80}
                     height={80}
-                    className="w-16 h-16 object-cover rounded-md shadow-sm border border-gray-200"
+                    className="w-16 h-16 object-cover rounded-md shadow-sm border border-base-content/10"
                   />
                 </td>
 
                 {/* Product Info */}
                 <td className="px-5 py-4 align-middle">
-                  <h3 className="font-medium text-gray-900 line-clamp-1">
+                  <h3 className="font-medium text-base-content line-clamp-1">
                     {product.name}
                   </h3>
-                  <p className="text-gray-600 mt-1 font-semibold">
+                  <p className="text-base-content font-semibold mt-1">
                     ${product.price.toFixed(2)}
                   </p>
                 </td>
@@ -98,7 +100,7 @@ export default function FavoritesTable() {
                     {/* View Product */}
                     <Link
                       href={`/shop/${product._id}`}
-                      className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
+                      className="p-2 rounded-full bg-info/10 hover:bg-info/20 text-info transition"
                       title="View Details"
                     >
                       <FcInfo size={16} />
@@ -114,11 +116,11 @@ export default function FavoritesTable() {
         </table>
 
         {/* Mobile Card Layout */}
-        <div className="md:hidden divide-y divide-gray-200">
+        <div className="md:hidden divide-y divide-base-content/10">
           {favorites.map((product) => (
             <div
               key={product._id}
-              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 hover:bg-gray-50 transition"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 hover:bg-base-200/50 transition"
             >
               <div className="flex items-center gap-4">
                 <Image
@@ -126,12 +128,12 @@ export default function FavoritesTable() {
                   alt={product.name}
                   width={70}
                   height={70}
-                  className="w-20 h-20 object-cover rounded-md border border-gray-200"
+                  className="w-20 h-20 object-cover rounded-md border border-base-content/10"
                 />
 
                 <div>
-                  <h3 className="font-medium text-gray-900">{product.name}</h3>
-                  <p className="text-gray-600 font-semibold mt-1">
+                  <h3 className="font-medium text-base-content">{product.name}</h3>
+                  <p className="text-base-content/70 font-semibold mt-1">
                     ${product.price.toFixed(2)}
                   </p>
                 </div>
@@ -140,7 +142,7 @@ export default function FavoritesTable() {
               <div className="flex items-center gap-3 self-end sm:self-auto">
                 <Link
                   href={`/shop/${product._id}`}
-                  className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
+                  className="p-2 rounded-full bg-info/10 hover:bg-info/20 text-info transition"
                 >
                   <FcInfo size={16} />
                 </Link>

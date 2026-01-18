@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./custom.css";
 import CoustomLayout from "@/customs/CustomLayout";
+import SmoothScrolling from "@/components/SmoothScrolling";
 
 export const metadata: Metadata = {
   title: "Gadget Hunter",
@@ -12,9 +13,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="light">
-      <body>
-        <CoustomLayout>{children}</CoustomLayout>
+    <html lang="en">
+      <body className="bg-base-100 text-base-content">
+        <SmoothScrolling>
+          <CoustomLayout>{children}</CoustomLayout>
+        </SmoothScrolling>
       </body>
     </html>
   );

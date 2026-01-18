@@ -158,26 +158,26 @@ export default function AddProduct() {
 
         {/* New / Used Toggle */}
         <div>
-          <label className="block text-sm font-medium mb-2">
+          <label className="block text-sm font-medium text-base-content/80 mb-2">
             Product Condition
           </label>
           <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-base-content/70 cursor-pointer">
               <input
                 type="radio"
                 value="true"
                 {...register("isBrandNew")}
-                className="text-blue-600"
+                className="radio radio-primary radio-sm"
               />
               <span>Brand New</span>
             </label>
 
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-base-content/70 cursor-pointer">
               <input
                 type="radio"
                 value="false"
                 {...register("isBrandNew")}
-                className="text-blue-600"
+                className="radio radio-primary radio-sm"
               />
               <span>Used</span>
             </label>
@@ -186,7 +186,7 @@ export default function AddProduct() {
 
         {/* Image Upload */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-4">
+          <label className="block text-sm font-medium text-base-content mb-4">
             Product Images (Up to 3)
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -208,7 +208,7 @@ export default function AddProduct() {
             type="submit"
             whileTap={{ scale: 0.97 }}
             disabled={loading || addProduct.status === "pending"}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition disabled:opacity-50 flex items-center gap-2"
+            className="btn btn-primary px-8"
           >
             {loading || addProduct.status === "pending" ? (
               <>

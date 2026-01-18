@@ -46,12 +46,12 @@ export default function FavouriteButton({ productId }: FavouriteButtonProps) {
     <button
       onClick={handleToggle}
       disabled={userLoading}
-      className={`size-8 rounded-full bg-gray-200 hover:bg-gray-300 text-base flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer`}
+      className={`size-8 rounded-full bg-base-200 hover:bg-base-300 text-base-content flex items-center justify-center transition disabled:opacity-50 active:scale-95 cursor-pointer border border-base-content/5`}
     >
       {isFavourite ? (
-        <GoHeartFill className="text-red-500" />
+        <GoHeartFill className="text-error" />
       ) : (
-        <GoHeart className="text-gray-600" />
+        <GoHeart className="text-base-content/60" />
       )}
     </button>
   );

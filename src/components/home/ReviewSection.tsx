@@ -110,7 +110,7 @@ export default function ReviewSection() {
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="bg-white dark:bg-base-200 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-2 transition-all duration-500 ease-in-out p-5 text-center h-full flex flex-col justify-between"
+              className="bg-base-100 border border-base-content/5 rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-2 transition-all duration-500 ease-in-out p-5 text-center h-full flex flex-col justify-between"
             >
               <div className="flex flex-col items-center">
                 <div className="relative mb-4">
@@ -121,22 +121,22 @@ export default function ReviewSection() {
                     width={80}
                     height={80}
                   />
-                  <span className="absolute -bottom-1 right-0 bg-primary text-white text-xs font-semibold px-2 py-0.5 rounded-full shadow">
+                  <span className="absolute -bottom-1 right-0 bg-primary text-primary-content text-xs font-semibold px-2 py-0.5 rounded-full shadow">
                     ★ {review.rating}
                   </span>
                 </div>
 
-                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+                <h3 className="text-base font-semibold text-base-content">
                   {review.name}
                 </h3>
 
                 <div className="flex justify-center mt-2 mb-3">
                   {Array.from({ length: review.rating }).map((_, i) => (
-                    <FaStar key={i} className="text-yellow-400 text-sm" />
+                    <FaStar key={i} className="text-warning text-sm" />
                   ))}
                 </div>
 
-                <p className="text-sm text-gray-600 dark:text-gray-300 italic leading-relaxed line-clamp-2">
+                <p className="text-sm text-base-content/60 italic leading-relaxed line-clamp-2">
                   “{review.review}”
                 </p>
               </div>

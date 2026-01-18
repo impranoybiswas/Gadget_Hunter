@@ -12,18 +12,18 @@ export default function Transactions() {
   );
 
   if (userLoading || isLoading) {
-    return <p className="text-gray-400 text-sm">Loading transactions...</p>;
+    return <p className="text-base-content/40 text-sm">Loading transactions...</p>;
   }
 
   if (!payments || payments.length === 0) {
-    return <p className="text-gray-500">No transactions found.</p>;
+    return <p className="text-base-content/50">No transactions found.</p>;
   }
 
   return (
-    <section className="bg-white rounded-xl shadow-sm">
+    <section className="bg-base-100 rounded-xl shadow-sm border border-base-content/10 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
-          <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+          <thead className="bg-base-200 text-base-content/70 uppercase text-xs">
             <tr>
               <th className="px-4 py-3">Transaction</th>
               <th className="px-4 py-3">Items</th>
@@ -34,22 +34,22 @@ export default function Transactions() {
 
           <tbody>
             {payments.map((payment) => (
-              <tr key={payment.tranId} className="hover:bg-gray-50 transition">
-                <td className="px-4 py-3 border-t font-mono text-xs border-t-gray-200">
+              <tr key={payment.tranId} className="hover:bg-base-200/50 transition border-t border-base-content/5 first:border-t-0">
+                <td className="px-4 py-3 font-mono text-xs text-base-content/60">
                   {payment.tranId}
                 </td>
 
-                <td className="px-4 py-3 border-t space-y-1 border-t-gray-200">
+                <td className="px-4 py-3 space-y-1">
                   {payment.items.map((item) => (
                     <PaidItem key={item.id} id={item.id} qty={item.quantity} />
                   ))}
                 </td>
 
-                <td className="px-4 py-3 border-t border-t-gray-200 text-right font-semibold text-green-700">
+                <td className="px-4 py-3 text-right font-semibold text-success">
                   ৳ {payment.amount.toLocaleString()}
                 </td>
 
-                <td className="px-4 py-3 border-t border-t-gray-200 text-gray-600">
+                <td className="px-4 py-3 text-base-content/60">
                   {payment.paidAt
                     ? format(new Date(payment.paidAt), "dd MMM yyyy, hh:mm a")
                     : "-"}
@@ -80,9 +80,9 @@ export function PaidItem({ id, qty }: Props) {
   }
 
   return (
-    <div className="flex justify-between gap-2 text-gray-700">
+    <div className="flex justify-between gap-2 text-base-content/80">
       <span className="truncate">{item.name}</span>
-      <span className="text-xs text-gray-500">× {qty}</span>
+      <span className="text-xs text-base-content/40">× {qty}</span>
     </div>
   );
 }

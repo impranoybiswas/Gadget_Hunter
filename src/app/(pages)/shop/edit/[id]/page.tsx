@@ -10,11 +10,11 @@ export default function ProductEdit({ params }: { params: { id: string } }) {
   const updateProduct = useUpdateItem();
 
   if (isLoading) {
-    return <p className="p-4">Loading product...</p>;
+    return <p className="p-4 text-base-content/50 animate-pulse">Loading product...</p>;
   }
 
   if (!product) {
-    return <p className="p-4 text-red-600">Product not found.</p>;
+    return <p className="p-4 text-error font-semibold">Product not found.</p>;
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,33 +44,31 @@ export default function ProductEdit({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="mt-10 p-4">
-      <h2 className="text-xl font-semibold mb-4">
-        Edit Product – {product._id}
+    <div className="mt-10 p-6 bg-base-100 rounded-xl border border-base-content/10 shadow-sm">
+      <h2 className="text-xl font-semibold mb-6 text-base-content">
+        Edit Product – <span className="text-primary font-mono text-sm">{product._id}</span>
       </h2>
 
-      <form onSubmit={handleSubmit} className="flex gap-2 mb-6">
+      <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 mb-6">
         <input
           defaultValue={product.name}
           placeholder="Name"
           name="name"
-          className="border p-2 flex-1"
+          className="input input-bordered flex-1"
         />
         <input
           defaultValue={product.price}
           placeholder="Price"
           name="price"
           type="number"
-          className="border p-2 w-32"
+          className="input input-bordered w-full md:w-32"
         />
         <button
           type="submit"
           disabled={updateProduct.isPending}
-          className={`px-4 py-2 rounded text-white ${
-            updateProduct.isPending ? "bg-gray-400" : "bg-green-600"
-          }`}
+          className={`btn btn-primary ${updateProduct.isPending ? "loading" : ""}`}
         >
-          {updateProduct.isPending ? "Updating..." : "Update"}
+          {updateProduct.isPending ? "Updating..." : "Update Product"}
         </button>
       </form>
     </div>

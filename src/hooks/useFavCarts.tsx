@@ -81,6 +81,7 @@ export function useRemoveCart() {
     onSuccess: (data) => {
       toast.success(data.message || "Item removed from cart!");
       queryClient.invalidateQueries({ queryKey: ["carts"] });
+      queryClient.invalidateQueries({ queryKey: ["current-user"] });
     },
     onError: () => {
       toast.error("Failed to remove item!");
@@ -114,6 +115,7 @@ export function useToggleCart() {
     onSuccess: () => {
       toast.success("Cart updated successfully!");
       queryClient.invalidateQueries({ queryKey: ["carts"] });
+      queryClient.invalidateQueries({ queryKey: ["current-user"] });
     },
     onError: () => {
       toast.error("Failed to update cart!");

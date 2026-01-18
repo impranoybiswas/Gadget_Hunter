@@ -23,3 +23,11 @@ export async function getPaymentsCollection() {
   }
   return collection;
 }
+
+export async function getBlogsCollection() {
+  const collection = await getCollection("blogs");
+  if (!collection) {
+    throw new Error("Failed to connect to collection");
+  }
+  return collection;
+}

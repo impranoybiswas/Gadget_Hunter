@@ -41,12 +41,12 @@ export function ImageUpload({
           type="file"
           onChange={handleChange}
           disabled={loading}
-          className="block text-sm text-gray-500
+          className="block text-sm text-base-content/50
             file:mr-4 file:py-2 file:px-4
             file:rounded-md file:border-0
             file:text-sm file:font-semibold
-            file:bg-primary file:text-white
-            hover:file:bg-primary/90"
+            file:bg-primary file:text-primary-content
+            hover:file:bg-primary/90 transition-all"
         />
       </div>
 

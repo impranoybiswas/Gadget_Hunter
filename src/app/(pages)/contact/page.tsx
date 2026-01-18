@@ -28,7 +28,7 @@ export default function Contact() {
         subtitle="We’re Here to Help"
         className="text-center"
       >
-        <p className="text-gray-700 text-base md:text-lg max-w-2xl mx-auto">
+        <p className="text-base-content/70 text-base md:text-lg max-w-2xl mx-auto">
           Whether you have questions, feedback, or need assistance, our team at Gadget Hunter is ready to provide support. Reach out and we’ll respond promptly.
         </p>
       </Section>
@@ -37,12 +37,12 @@ export default function Contact() {
       <Section className="grid grid-cols-1 md:grid-cols-2 gap-12 py-16">
         {/* Contact Details */}
         <div className="flex flex-col gap-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800">Get in Touch</h2>
-          <p className="text-gray-600 text-base md:text-lg">
+          <h2 className="text-3xl md:text-4xl font-bold text-base-content">Get in Touch</h2>
+          <p className="text-base-content/60 text-base md:text-lg">
             Our team is available to answer any questions you may have. Connect with us through any of the following channels:
           </p>
 
-          <div className="flex flex-col gap-6 text-gray-700">
+          <div className="flex flex-col gap-6 text-base-content/80">
             <div className="flex items-center gap-4">
               <FaMapMarkerAlt className="text-primary text-xl" />
               <span>123 Tech Street, Dhaka, Bangladesh</span>
@@ -67,7 +67,7 @@ export default function Contact() {
         {/* Contact Form */}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition"
+          className="flex flex-col gap-4 bg-base-100 p-8 rounded-xl shadow-md hover:shadow-lg transition border border-base-content/5"
         >
           <input
             type="text"
@@ -76,7 +76,7 @@ export default function Contact() {
             onChange={handleChange}
             placeholder="Full Name"
             required
-            className="border border-gray-300 rounded-md p-3 focus:outline-primary focus:ring-1 focus:ring-primary transition"
+            className="border border-base-content/10 bg-base-100 rounded-md p-3 focus:outline-primary focus:ring-1 focus:ring-primary transition text-base-content"
           />
           <input
             type="email"
@@ -85,7 +85,7 @@ export default function Contact() {
             onChange={handleChange}
             placeholder="Email Address"
             required
-            className="border border-gray-300 rounded-md p-3 focus:outline-primary focus:ring-1 focus:ring-primary transition"
+            className="border border-base-content/10 bg-base-100 rounded-md p-3 focus:outline-primary focus:ring-1 focus:ring-primary transition text-base-content"
           />
           <textarea
             name="message"
@@ -94,7 +94,7 @@ export default function Contact() {
             placeholder="Your Message"
             required
             rows={6}
-            className="border border-gray-300 rounded-md p-3 focus:outline-primary focus:ring-1 focus:ring-primary transition"
+            className="border border-base-content/10 bg-base-100 rounded-md p-3 focus:outline-primary focus:ring-1 focus:ring-primary transition text-base-content"
           ></textarea>
           <Button
             type="submit"
@@ -103,7 +103,7 @@ export default function Contact() {
             isOutline={false}
             className="bg-primary text-white hover:bg-primary-dark transition-colors py-3 rounded-md mt-2"
           />
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-base-content/40 mt-2">
             We respect your privacy. Your information will not be shared.
           </p>
         </form>

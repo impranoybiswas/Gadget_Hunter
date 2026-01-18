@@ -106,7 +106,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/50 hover:text-base-content"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -140,18 +140,18 @@ export default function LoginPage() {
 
         {/* Divider */}
         <div className="flex items-center my-6">
-          <div className="flex-grow border-t border-gray-300"></div>
-          <span className="px-4 text-gray-400 text-sm">Or</span>
-          <div className="flex-grow border-t border-gray-300"></div>
+          <div className="flex-grow border-t border-base-content/10"></div>
+          <span className="px-4 text-base-content/40 text-sm">Or</span>
+          <div className="flex-grow border-t border-base-content/10"></div>
         </div>
 
         {/* Google login */}
         <button
           onClick={() => signIn("google", { callbackUrl })}
-          className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 py-3 rounded-lg shadow-md hover:bg-gray-100 transition"
+          className="w-full flex items-center justify-center gap-3 bg-base-100 border border-base-content/10 py-3 rounded-lg shadow-md hover:bg-base-200 transition"
         >
           <FcGoogle className="w-6 h-6" />
-          <span className="font-medium text-gray-700">Continue with Google</span>
+          <span className="font-medium text-base-content/80">Continue with Google</span>
         </button>
 
         {/* Register */}

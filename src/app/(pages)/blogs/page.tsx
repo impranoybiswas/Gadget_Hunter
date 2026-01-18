@@ -4,90 +4,139 @@ import React, { useState } from "react";
 import Container from "@/ui/Container";
 import Section from "@/ui/Section";
 import Button from "@/ui/Button";
-import BlogCard, { Blog } from "@/components/BlogCard";
+import BlogCard from "@/components/BlogCard";
+import BlogFormModal from "@/components/BlogFormModal";
+import { useGetBlogs } from "@/hooks/useBlogs";
+import { useUserData } from "@/hooks/useUserData";
+import { Blog } from "@/types/blog";
+import { FaPlus, FaSearch } from "react-icons/fa";
 
 export default function Blogs() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [newBlog, setNewBlog] = useState({ title: "", author: "", content: "" });
+  const { currentUser } = useUserData();
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const limit = 6;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setNewBlog({ ...newBlog, [e.target.name]: e.target.value });
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editData, setEditData] = useState<Blog | null>(null);
+
+  const { data, isLoading } = useGetBlogs({
+    page,
+    limit,
+    search,
+  });
+
+  const handleEdit = (blog: Blog) => {
+    setEditData(blog);
+    setIsModalOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newBlog.title.trim() || !newBlog.author.trim() || !newBlog.content.trim()) return;
-    const blog: Blog = { ...newBlog, id: Date.now().toString(), date: new Date().toISOString() };
-    setBlogs([blog, ...blogs]);
-    setNewBlog({ title: "", author: "", content: "" });
-  };
+  const blogs = data?.data || [];
+  const totalPages = data?.totalPages || 1;
 
   return (
     <Container>
       {/* Hero Section */}
       <Section
-        title="Tech Blog"
-        subtitle="Insights, Reviews & Tech Trends"
-        className="text-center"
+        title="Tech Insider"
+        subtitle="Exploring the frontiers of gadgetry and code"
+        className="text-center pt-8"
       >
-        <p className="text-gray-700 text-base md:text-lg max-w-2xl mx-auto">
-          Discover the latest technology trends, gadget reviews, and insights from our community. Share your expertise and connect with other tech enthusiasts.
-        </p>
+        <div className="max-w-3xl mx-auto flex flex-col items-center gap-8">
+          <p className="text-base-content/70 text-lg text-center">
+            Join our community of enthusiasts sharing deep dives, reviews, and
+            the latest trends in the tech world.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+            <div className="relative flex-1 w-full">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                className="w-full pl-11 pr-4 py-3 rounded-full border border-base-content/10 bg-base-100 shadow-sm focus:ring-2 focus:ring-primary outline-none transition-all text-base-content"
+              />
+            </div>
+
+            {currentUser && (
+              <div className="fixed right-10 bottom-20">
+
+                <Button
+                  className="w-11"
+                  rightIcon={<FaPlus />}
+                  isOutline={false}
+                  isLarge={true}
+                  disabled={isModalOpen}
+                  onClick={() => {
+                    setEditData(null);
+                    setIsModalOpen(true);
+                  }}
+                />
+
+              </div>
+            )}
+          </div>
+        </div>
       </Section>
 
-      {/* Add New Blog Form */}
-      <Section className="py-12 max-w-3xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">
-          Share Your Insights
-        </h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="text"
-            name="title"
-            placeholder="Blog Title"
-            value={newBlog.title}
-            onChange={handleChange}
-            className="border border-gray-300 p-3 rounded-md focus:outline-primary focus:ring-1 focus:ring-primary transition"
-          />
-          <input
-            type="text"
-            name="author"
-            placeholder="Author Name"
-            value={newBlog.author}
-            onChange={handleChange}
-            className="border border-gray-300 p-3 rounded-md focus:outline-primary focus:ring-1 focus:ring-primary transition"
-          />
-          <textarea
-            name="content"
-            rows={6}
-            placeholder="Write your blog content here..."
-            value={newBlog.content}
-            onChange={handleChange}
-            className="border border-gray-300 p-3 rounded-md focus:outline-primary focus:ring-1 focus:ring-primary transition"
-          ></textarea>
-          <Button
-            type="submit"
-            label="Post Blog"
-            isLarge={true}
-            isOutline={false}
-            className="bg-primary text-white hover:bg-primary-dark transition py-3 rounded-md"
-          />
-          <p className="text-sm text-gray-500 mt-1">
-            Please ensure your content is informative and relevant to our tech community.
-          </p>
-        </form>
-      </Section>
+      {/* Blog Feed */}
+      <Section className="pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {isLoading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <BlogCard key={i} isLoading />
+            ))
+          ) : blogs.length > 0 ? (
+            blogs.map((blog: Blog) => (
+              <BlogCard
+                key={blog._id}
+                blog={blog}
+                onEdit={handleEdit}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-20 bg-base-200 rounded-3xl border border-dashed border-base-content/10">
+              <p className="text-base-content/50 font-medium">No results found for your search.</p>
+            </div>
+          )}
+        </div>
 
-      {/* Blog Grid */}
-      <Section className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {blogs.length > 0 ? (
-          blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)
-        ) : (
-          <p className="text-center text-gray-500 col-span-full text-lg">
-            No blogs have been posted yet. Be the first to share your insights!
-          </p>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-3 mt-12">
+            <Button
+              label="Prev"
+              isOutline
+              isLarge={false}
+              disabled={page === 1}
+              onClick={() => setPage(p => p - 1)}
+            />
+            <span className="text-sm font-bold text-base-content px-4 py-2 bg-base-200 rounded-full">
+              {page} / {totalPages}
+            </span>
+            <Button
+              label="Next"
+              isOutline
+              isLarge={false}
+              disabled={page === totalPages}
+              onClick={() => setPage(p => p + 1)}
+            />
+          </div>
         )}
       </Section>
+
+      {/* Blog Form Modal */}
+      <BlogFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        editData={editData}
+      />
     </Container>
   );
 }
