@@ -3,19 +3,19 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ThemeContext, PALETTES } from "@/providers/ThemeProvider";
 import { motion } from "framer-motion";
-import { FiSave, FiRefreshCcw, FiCheck, FiSettings, FiLayout } from "react-icons/fi";
+import { FiRefreshCcw, FiCheck, FiSettings, FiLayout } from "react-icons/fi";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 
 export default function Settings() {
-  const context = useContext(ThemeContext);
-  const { data: session, update } = useSession();
+  const context = useContext(ThemeContext)!;
+  const { data: session } = useSession();
 
   const [selectedPalette, setSelectedPalette] = useState("default");
   const [saving, setSaving] = useState(false);
 
-  if (!context) return null;
+  // Context is always provided by ThemeProvider
   const { palette: currentPalette, setPalette } = context;
 
   // Initialize state with current context palette

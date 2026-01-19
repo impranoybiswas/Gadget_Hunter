@@ -31,7 +31,7 @@ export default function ThemeSync() {
 
             fetchUserSettings();
         }
-    }, [status]); // Only run when authentication status changes, not on context updates
+    }, [status, context]); // Include context to satisfy exhaustive deps
 
     return null;
 }
