@@ -20,6 +20,9 @@
 
 ---
 
+## 🔑 Dummy Credentials
+- **Admin Credentials**: `email: apurbo@gmail.com` | `password: Pass1234`
+
 ## 🚀 Features
 
 ### 👤 Role-Based Experience

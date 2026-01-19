@@ -8,7 +8,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
   className?: string;
-  label?: string;
+  label?: string | ReactNode;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   icon?: ReactNode; // Alternative for simple icon buttons
@@ -47,7 +47,7 @@ export default function Button({
   return (
     <motion.button
       whileTap={{ scale: 0.96 }}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -0.1 }}
       onClick={isDisabled ? undefined : onClick}
       type={type}
       disabled={isDisabled}
@@ -57,7 +57,7 @@ export default function Button({
         ${isLarge ? "h-12 px-8 text-base rounded-xl" : "h-10 px-5 text-sm rounded-lg"}
         ${label || icon || leftIcon || rightIcon ? "gap-2" : "p-0"}
         ${isOutline
-          ? "bg-transparent text-primary border-2 border-primary hover:bg-primary/10 shadow-sm"
+          ? "bg-transparent text-primary border-1 border-primary hover:bg-primary/10 shadow-sm"
           : "bg-primary text-primary-content border-transparent shadow-md hover:shadow-primary/30"
         }
         ${isDisabled ? "opacity-50 cursor-not-allowed grayscale-[0.5]" : "cursor-pointer"}

@@ -16,8 +16,9 @@ import {
   FiShield,
   FiPlus,
   FiBriefcase,
-  FiImage
+  FiImage,
 } from "react-icons/fi";
+import Button from "@/ui/Button";
 
 /** Form field types */
 type ProductFormValues = {
@@ -84,26 +85,17 @@ export default function AddProduct() {
     }
   };
 
-  const fieldLabelClass = "flex items-center gap-2 text-sm font-semibold mb-2 text-base-content/80";
-  const inputClass = "input input-bordered w-full bg-base-200/40 focus:input-primary border-base-content/10 transition-all duration-200";
+  const fieldLabelClass =
+    "flex items-center gap-2 text-sm font-semibold mb-2 text-base-content/80";
+  const inputClass =
+    "input input-bordered w-full bg-base-200/40 focus:input-primary border-base-content/10 transition-all duration-200";
 
   return (
     <section className="w-full mx-auto py-4">
-      {/* Header Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-base-content flex items-center gap-3">
-          <div className="p-3 rounded-2xl bg-primary/10 text-primary shadow-inner">
-            <FiPlus className="text-2xl" />
-          </div>
-          Add New Gadget
-        </h1>
-        <p className="text-base-content/60 mt-2 ml-1">Fill in the details to list a new product in your store.</p>
-      </div>
-
       {/* Form */}
       <motion.form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-base-100/60 backdrop-blur-xl border border-base-content/10 shadow-2xl rounded-3xl p-6 sm:p-10 space-y-10"
+        className="bg-base-100/60 backdrop-blur-xl border border-base-content/10 shadow-md rounded-2xl p-6 sm:p-10 space-y-10"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -176,12 +168,17 @@ export default function AddProduct() {
               </label>
               <div className="relative">
                 <input
-                  {...register("price", { required: true, valueAsNumber: true })}
+                  {...register("price", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
                   type="number"
                   placeholder="0.00"
                   className={`${inputClass} pl-10`}
                 />
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/40 font-bold">৳</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/40 font-bold">
+                  ৳
+                </span>
               </div>
             </div>
 
@@ -190,7 +187,10 @@ export default function AddProduct() {
                 <FiTag className="text-primary/70" /> Stock Quantity
               </label>
               <input
-                {...register("quantity", { required: true, valueAsNumber: true })}
+                {...register("quantity", {
+                  required: true,
+                  valueAsNumber: true,
+                })}
                 type="number"
                 placeholder="Available units"
                 className={inputClass}
@@ -200,9 +200,7 @@ export default function AddProduct() {
 
           {/* New / Used Toggle */}
           <div className="bg-base-200/30 p-4 rounded-2xl border border-base-content/5 backdrop-blur-sm">
-            <label className={fieldLabelClass}>
-              Product Condition
-            </label>
+            <label className={fieldLabelClass}>Product Condition</label>
             <div className="flex items-center gap-8 mt-3">
               <label className="flex items-center gap-3 text-base-content/70 cursor-pointer group">
                 <input
@@ -211,7 +209,9 @@ export default function AddProduct() {
                   {...register("isBrandNew")}
                   className="radio radio-primary transition-transform group-hover:scale-110"
                 />
-                <span className="group-hover:text-primary transition-colors">Brand New Item</span>
+                <span className="group-hover:text-primary transition-colors">
+                  Brand New Item
+                </span>
               </label>
 
               <label className="flex items-center gap-3 text-base-content/70 cursor-pointer group">
@@ -221,7 +221,9 @@ export default function AddProduct() {
                   {...register("isBrandNew")}
                   className="radio radio-primary transition-transform group-hover:scale-110"
                 />
-                <span className="group-hover:text-primary transition-colors">Pre-owned / Used</span>
+                <span className="group-hover:text-primary transition-colors">
+                  Pre-owned / Used
+                </span>
               </label>
             </div>
           </div>
@@ -234,9 +236,7 @@ export default function AddProduct() {
             <h2 className="text-lg font-bold">Product Details</h2>
           </div>
           <div className="space-y-1">
-            <label className={fieldLabelClass}>
-              Comprehensive Description
-            </label>
+            <label className={fieldLabelClass}>Comprehensive Description</label>
             <textarea
               {...register("description")}
               placeholder="Describe the key features, specifications, and what makes this gadget stand out..."
@@ -251,7 +251,9 @@ export default function AddProduct() {
             <FiImage className="text-primary" />
             <h2 className="text-lg font-bold">Product Showcase</h2>
           </div>
-          <p className="text-xs text-base-content/50 -mt-4">High-quality images attract 3x more customers. (Minimum 1 Required)</p>
+          <p className="text-xs text-base-content/50 -mt-4">
+            High-quality images attract 3x more customers. (Minimum 1 Required)
+          </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[0, 1, 2].map((i) => (
@@ -269,33 +271,35 @@ export default function AddProduct() {
 
         {/* Submit Button */}
         <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-end border-t border-base-content/5">
-          <button
+          <Button
             type="button"
-            onClick={() => { reset(); setImages(["", "", ""]); }}
-            className="btn btn-ghost px-8 rounded-xl order-2 sm:order-1"
-          >
-            Reset Form
-          </button>
+            label="Reset Form"
+            isOutline
+            isLarge
+            onClick={() => {
+              reset();
+              setImages(["", "", ""]);
+            }}
+          />
 
-          <motion.button
+          <Button
             type="submit"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            disabled={loading || addProduct.status === "pending"}
-            className="btn btn-primary px-12 rounded-xl shadow-lg shadow-primary/20 order-1 sm:order-2"
-          >
-            {loading || addProduct.status === "pending" ? (
-              <>
+            leftIcon={
+              loading || addProduct.status === "pending" ? (
                 <span className="loading loading-spinner loading-sm"></span>
-                Adding Gadget...
-              </>
-            ) : (
-              <>
-                <FiPlus className="text-lg" />
-                List Product
-              </>
-            )}
-          </motion.button>
+              ) : (
+                <FiPlus />
+              )
+            }
+            label={
+              loading || addProduct.status === "pending"
+                ? "Adding Gadget..."
+                : "List Product"
+            }
+            isLarge
+            isOutline={false}
+            disabled={loading || addProduct.status === "pending"}
+          />
         </div>
       </motion.form>
     </section>
