@@ -27,16 +27,18 @@
 
 @plugin "daisyui/theme" {
   name: "light";
-  --color-primary: #0c94e8;
-  --primary-rgb: 12, 148, 232;
-  --color-secondary: #ed254e;
-  --color-accent: #260a2e;
+  /* Managed by ThemeProvider */
+  /* --color-primary: #0c94e8; */
+  /* --primary-rgb: 12, 148, 232; */
+  /* --color-secondary: #ed254e; */
+  /* --color-accent: #260a2e; */
 }
 
 @plugin "daisyui/theme" {
   name: "dark";
-  --color-primary: #0c94e8;
-  --primary-rgb: 12, 148, 232;
-  --color-secondary: #ed254e;
-  --color-accent: #260a2e;
+  /* Managed by ThemeProvider */
+  /* --color-primary: #0c94e8; */
+  /* --primary-rgb: 12, 148, 232; */
+  /* --color-secondary: #ed254e; */
+  /* --color-accent: #260a2e; */
 }

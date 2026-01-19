@@ -11,6 +11,8 @@ import Footer from "@/components/Footer";
 import ScrollProvider from "@/providers/ScrollProvider";
 import GoToTop from "@/components/GoToTop";
 
+import ThemeSync from "@/components/ThemeSync";
+
 export default function CoustomLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const hideLayout =
@@ -20,11 +22,12 @@ export default function CoustomLayout({ children }: { children: ReactNode }) {
     <ThemeProvider>
       <SessionProvider>
         <QueryProvider>
+          <ThemeSync />
           <ScrollProvider>
             <Toaster />
             {hideLayout || <Navbar />}
             {children}
-            <GoToTop/>
+            <GoToTop />
             {hideLayout || <Footer />}
           </ScrollProvider>
         </QueryProvider>

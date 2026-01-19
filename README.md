@@ -1,131 +1,122 @@
 # Gadget Hunter — E-commerce Gadget Shop
 
 > Modern, role-based gadget e-commerce storefront built with Next.js + TypeScript.  
-> Live demo: https://gadget-hunter-pranoy.vercel.app/
+> Live demo: [gadget-hunter-pranoy.vercel.app](https://gadget-hunter-pranoy.vercel.app/)
 
 ---
 
-## Description
+## 📸 Screenshots
 
-A trustable and reliable gadget store with a focus on user experience and security. Built with Next.js, MongoDB, NextAuth.js, and Tailwind CSS. Includes a secure payment gateway, PDF invoice generation, and a responsive UI.
+### Desktop View
+![Home Desktop](./public/screenshots/home_desktop.png)
 
----
+### Mobile View
+![Home Mobile](./public/screenshots/home_mobile.png)
 
-## Features
-
-- Role-based dashboards: Admin, Seller, Customer (protected routes & role checks).
-- Product catalogue: categories, filters, search, pagination.
-- Wishlist (persistent per user).
-- Cart with quantity control and persistence.
-- Order flow and order history.
-- PDF invoice generation for orders (server-side or client-side).
-- Local payment gateway adapter (sandbox & pluggable for production providers).
-- Product reviews & ratings.
-- Image upload support (Cloudinary / S3 / Next Image remote).
-- Notifications via `react-hot-toast`.
-- Auth with NextAuth (Google, Email, etc.) and role management.
-- Security basics: password hashing (bcrypt), input validation, rate limiting suggestions.
-- Responsive UI built with Tailwind CSS and Framer Motion animations.
+### Seller Dashboard (Add Product & Settings)
+| Add Product | Custom Settings |
+| :--- | :--- |
+| ![Add Product Dark](./public/screenshots/add_product_dark.png) | ![Dashboard Settings](./public/screenshots/dashboard_settings.png) |
 
 ---
 
-## Tech Stack
+## 🚀 Features
 
-- **Framework**: Next.js (App Router) with TypeScript
-- **Styling**: Tailwind CSS, Tailwind Forms
-- **Auth**: NextAuth.js
-- **DB**: MongoDB (official driver)
-- **UI Motion**: Framer Motion
-- **Toasts**: react-hot-toast
-- **Hashing**: bcrypt
-- **Forms & Validation**: react-hook-form + zod (recommended)
-- **PDF**: pdf-js / server-side HTML → PDF (puppeteer/playwright)
-- **Images**: ImageKit & Next.js Image with remote patterns
+### 👤 Role-Based Experience
+- **Admin Dashboard**: Full administrative control over products, users, and order management.
+- **Seller Portal**: Dedicated space for sellers to manage products, inventory, and track their sales metrics.
+- **Customer Account**: Personal dashboard for order history, profile management, and persistent wishlists.
+
+### 🛒 Core E-commerce Functionality
+- **Advanced Search & Filtering**: Find products quickly with dynamic search and category-specific filters.
+- **Persistent Cart & Wishlist**: Save items for later; cart contents persist across sessions.
+- **Secure Checkout**: Streamlined multi-step checkout process with real-time validation.
+- **Payment Integration**: Pluggable payment adapter system, currently featuring a robust sandbox simulator.
+- **PDF Invoice Generation**: Automatically generate and download professional PDF invoices for every order.
+
+### 🎨 Design & UX
+- **Responsive UI**: Fully optimized for Desktop, Tablet, and Mobile devices using Tailwind CSS and DaisyUI.
+- **Premium Aesthetics**: Smooth micro-animations powered by Framer Motion and modern typography.
+- **Theme Toggling**: Instant light/dark mode switching for a comfortable viewing experience.
+- **Smooth Scrolling**: Integrated with Lenis for a premium navigation feel.
+
+### 🛠️ Technical Excellence
+- **Next.js 15 (App Router)**: Utilizing the latest React features for optimal performance and SEO.
+- **Efficient Data Handling**: Powered by TanStack Query for smart caching and background synchronization.
+- **Secure Authentication**: Robust session management and role-based protection via NextAuth.js.
+- **Scalable Database**: Leveraging MongoDB for flexible and robust data storage.
 
 ---
 
-## Project Structure
+## 💻 Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [DaisyUI](https://daisyui.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/) + [Lenis](https://lenis.darkroom.engineering/) (Smooth Scroll)
+- **Database**: [MongoDB](https://www.mongodb.com/)
+- **Authentication**: [NextAuth.js](https://next-auth.js.org/)
+- **Data Fetching**: [TanStack Query](https://tanstack.com/query/latest)
+- **Forms**: [React Hook Form](https://react-hook-form.com/)
+- **Assets**: [ImageKit](https://imagekit.io/) (Image Optimization)
+- **PDF Generation**: [jsPDF](https://rawgit.com/MrRio/jsPDF/master/docs/index.html) + [autoTable](https://github.com/simonbengtsson/jsPDF-autotable)
+
+---
+
+## 📁 Project Structure
 
 ```
 /
-├─ app/                      # Next.js App Router pages + layout
-│  ├─ layout.tsx
-│  ├─ page.tsx
-│  ├─ dashboard/
-│  │  ├─ admin/
-│  │  ├─ seller/
-│  │  └─ customer/
-│  └─ products/
-├─ components/               # Reusable UI components
-├─ lib/                      # DB, auth helpers, payment adapters, pdf generators
-├─ hooks/                    # useCart, useWishlist, useAuth
-├─ middleware.ts             # route protection & role checks
-├─ pages/api/                # api routes (if any)
-├─ server/                   # server controllers / services
-├─ scripts/                  # seed scripts
-├─ public/
-├─ styles/
-├─ tests/
-├─ .env.example
-├─ next.config.js
-└─ README.md
+├─ src/
+│  ├─ app/           # App Router (Pages, Layouts, API)
+│  ├─ components/    # Feature-specific components
+│  ├─ ui/            # Reusable primitive UI components
+│  ├─ providers/     # Context & State providers
+│  ├─ lib/           # Utils, DB, Auth configurations
+│  ├─ hooks/         # Custom React hooks
+│  ├─ types/         # TypeScript definitions
+│  └─ styles/        # Global CSS
+├─ public/           # Static assets & screenshots
+└─ .env.local        # Environment variables
 ```
 
-Adjust the structure to match your repository if it differs.
+---
+
+## 🚀 Getting Started
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/impranoybiswas/gadget_hunter.git
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set up Environment Variables**:
+   Create a `.env.local` file with:
+   - `MONGODB_URI`
+   - `NEXTAUTH_SECRET`
+   - `IMAGEKIT_PUBLIC_KEY`
+   - `IMAGEKIT_PRIVATE_KEY`
+   - `IMAGEKIT_URL_ENDPOINT`
+
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Build for production**:
+   ```bash
+   npm run build
+   ```
 
 ---
 
-## Database & Seeding
+## 📧 Contact
 
-- MongoDB (official driver) for data storage.
-- Seed data for products, users, and orders.
+**Pranoy** — Full Stack Web Developer  
+Live Demo: [gadget-hunter-pranoy.vercel.app](https://gadget-hunter-pranoy.vercel.app/)  
+GitHub: [@impranoybiswas](https://github.com/impranoybiswas)
 
----
-
-## Payment Gateway & PDF Billing
-
-- The project uses an **adapter pattern** for payments. A local/sandbox adapter simulates transactions for development.
-- For production, swap adapter to a live provider (Stripe, local bank API, SSL-compliant gateway).
-- PDF invoices: generate server-side using HTML → PDF (puppeteer/playwright) or programmatically with `pdf-js`. Store invoice metadata and a PDF URL on the `orders` document after successful payment.
-
----
-
-## Security & Best Practices
-
-- Hash passwords with `bcrypt` and perform server-side validation.
-- Validate and sanitize all inputs server-side.
-- Use HTTPS in production and secure cookies (`Secure`, `HttpOnly`, `SameSite`).
-- Protect sensitive routes with middleware and role checks.
-- Rate-limit public endpoints (login, signup, checkout).
-- Keep secrets out of version control; use environment variables in Vercel/Github Actions.
-
----
-
-## Deployment
-
-Recommended: **Vercel** for Next.js projects.
-
-1. Push repo to GitHub.
-2. Connect the repository in Vercel.
-3. Set environment variables in Vercel project settings (mirror `.env.local`).
-4. Deploy. For server-side PDF generation using puppeteer, verify the chosen deployment allows headless Chromium or use a separate service.
-
-Other options: Netlify (with adapter changes), self-hosted VM, DigitalOcean App Platform.
-
----
-
-## Roadmap / Suggested Improvements
-
-- Multi-seller marketplace & payouts
-- Real-time order status (WebSocket)
-- Admin analytics (revenue, best sellers)
-- Multi-currency & i18n support
-- PWA support for offline browsing
-- Email notifications (transactional emails)
-
----
-
-## Contact
-
-Maintained by **Pranoy** — Junior Full Stack Web Developer.  
-Live demo: https://gadget-hunter-pranoy.vercel.app/

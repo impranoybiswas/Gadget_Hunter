@@ -61,7 +61,7 @@ export default function CouponSection() {
           transition={{ duration: 0.5, delay: index * 0.1 }}
           className="relative bg-gradient-to-br from-primary to-primary/80 text-white rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500 ease-in-out p-6 flex flex-col items-center justify-between text-center"
         >
-          <div className="bg-yellow-400 text-primary rounded-full size-30 flex flex-col items-center justify-center shadow-inner font-extrabold text-2xl tracking-tight mb-4 border-6 border-primary-content/20">
+          <div className="bg-secondary text-primary rounded-full size-30 flex flex-col items-center justify-center shadow-inner font-extrabold text-2xl tracking-tight mb-4 border-6 border-primary-content/20">
             {coupon.discount}
             <span className="text-sm font-semibold -mt-1 text-primary/80">OFF</span>
           </div>

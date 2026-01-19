@@ -42,10 +42,9 @@ export default function IconButton({
       disabled={isDisabled}
       className={`
         size-9 flex overflow-hidden items-center justify-center rounded-xl 
-        border border-base-content/5
-        bg-base-content/5 backdrop-blur-md text-base-content
-        shadow-sm hover:shadow-lg hover:text-primary hover:border-primary/20
-        active:scale-95
+        border border-base-content/10
+      backdrop-blur-md text-base-content
+        shadow hover:shadow-lg hover:text-primary hover:border-primary/20 active:scale-95
         transition-all duration-300 ${isDisabled ? "opacity-50 grayscale-sm cursor-not-allowed" : "cursor-pointer"} ${className}
       `}
     >

@@ -74,7 +74,7 @@ export default function Drawer({
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto" onClick={closeDrawer}>
                 {children}
               </div>
             </motion.div>

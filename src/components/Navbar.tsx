@@ -54,7 +54,7 @@ export default function Navbar() {
           lebelClose={<IconButton icon={<IoClose />} />}
           className="bg-base-100 text-base-content"
         >
-          <div className="flex flex-col gap-3 items-end text-2xl tracking-[2px] uppercase">
+          <div className="flex flex-col gap-3 items-end text-2xl tracking-[2px] uppercase py-4 px-6">
             {navLink.map((link) => (
               <Link key={link.name} href={link.href}>
                 {link.name}

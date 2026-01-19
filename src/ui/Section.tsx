@@ -31,7 +31,7 @@ export default function Section({
   const content = (
     <section className={`w-full flex flex-col items-center ${containerClassName}`}>
       {title && (
-        <h2 className="text-3xl md:text-4xl lg:text-5xl mb-3 font-extrabold text-base-content tracking-tight text-center">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl mb-3 font-extrabold text-base-content tracking-tight text-center">
           {title}
         </h2>
       )}
